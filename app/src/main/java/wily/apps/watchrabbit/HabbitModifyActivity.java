@@ -12,6 +12,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import wily.apps.watchrabbit.data.database.HabbitDatabase;
+import wily.apps.watchrabbit.data.entity.Habbit;
+
 public class HabbitModifyActivity extends AppCompatActivity {
 
     private LinearLayout layoutChild_check = null;
@@ -91,7 +96,23 @@ public class HabbitModifyActivity extends AppCompatActivity {
         changeViewAtType(TYPE_CHECK);
 
         btnSave = findViewById(R.id.btn_habbit_modify_save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HabbitDatabase db = HabbitDatabase.getAppDatabase(this);
+                db.habbitDao().insert(new Habbit(type, title, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe();
+                finish();
+            }
+        });
         btnCancel = findViewById(R.id.btn_habbit_modify_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void changeViewAtType(int type){
