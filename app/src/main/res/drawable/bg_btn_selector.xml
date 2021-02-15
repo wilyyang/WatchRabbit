@@ -4,24 +4,24 @@
     <item android:state_pressed="true" >
         <shape android:shape="rectangle" >
             <corners android:radius="0dip" />
-            <stroke android:width="1dip" android:color="#d6d6d6" />
-            <solid android:color="#cccccc" />
+            <stroke android:width="@dimen/strokeWidth" android:color="@color/btnSelectorStroke" />
+            <solid android:color="@color/btnPressed" />
         </shape>
     </item>
 
     <item android:state_checked="true">
         <shape android:shape="rectangle" >
             <corners android:radius="0dip" />
-            <stroke android:width="1dip" android:color="#d6d6d6" />
-            <solid android:color="#6c6f74" />
+            <stroke android:width="@dimen/strokeWidth" android:color="@color/btnSelectorStroke" />
+            <solid android:color="@color/btnSelect" />
         </shape>
     </item>
 
-    <item>
+    <item android:state_checked="false">
         <shape android:shape="rectangle"  >
             <corners android:radius="0dip" />
-            <stroke android:width="1dip" android:color="#d6d6d6" />
-            <solid android:color="#fcfcfc" />
+            <stroke android:width="@dimen/strokeWidth" android:color="@color/btnSelectorStroke" />
+            <solid android:color="@color/btnBase" />
         </shape>
     </item>
 </selector>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/child_habbit_modify_check"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_layout_round"
+    android:orientation="vertical"
+    android:weightSum="7">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/marginLayoutAtt"
+        android:layout_marginRight="@dimen/marginLayoutAtt"
+        android:layout_marginTop="@dimen/marginLayoutTop"
+        android:layout_marginBottom="@dimen/marginLayoutBottom"
+        android:orientation="horizontal"
+        android:weightSum="7">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="@string/habbit_modify_timer_goal_text"
+            android:textSize="@dimen/spLayoutBase" />
+
+        <NumberPicker
+            android:id="@+id/timer_picker_goal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:background="@drawable/bg_numberpicker_divider"
+            android:selectionDividerHeight="0dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/marginLayoutAtt"
+        android:layout_marginRight="@dimen/marginLayoutAtt"
+        android:layout_marginTop="@dimen/marginLayoutTop"
+        android:layout_marginBottom="@dimen/marginLayoutBottom"
+        android:orientation="horizontal"
+        android:weightSum="7">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="@string/habbit_modify_timer_init_text"
+            android:textSize="@dimen/spLayoutBase" />
+
+        <NumberPicker
+            android:id="@+id/timer_picker_init"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:background="@drawable/bg_numberpicker_divider"
+            android:selectionDividerHeight="0dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="@dimen/marginLayoutAtt"
+        android:layout_marginRight="@dimen/marginLayoutAtt"
+        android:layout_marginTop="@dimen/marginLayoutTop"
+        android:layout_marginBottom="@dimen/marginLayoutBottom"
+        android:orientation="horizontal"
+        android:weightSum="7">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="@string/habbit_modify_timer_per_text"
+            android:textSize="@dimen/spLayoutBase" />
+
+        <NumberPicker
+            android:id="@+id/timer_picker_per"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:background="@drawable/bg_numberpicker_divider"
+            android:selectionDividerHeight="0dp"/>
+    </LinearLayout>
+</LinearLayout>

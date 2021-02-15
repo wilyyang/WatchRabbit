@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".HabbitModifyActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgLayoutBack"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_marginTop="@dimen/marginLayoutTopParent"
+        android:layout_marginLeft="@dimen/marginLayoutAtt"
+        android:layout_marginRight="@dimen/marginLayoutAtt"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <EditText
+                android:id="@+id/et_title_habbit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:backgroundTint="@color/bgLayoutBackText"
+                android:hint="@string/habbit_modify_title_hint"
+                android:textColorHint="@color/bgLayoutBackText" />
+
+            <Switch
+                android:id="@+id/switch_habbit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/marginLayoutTop"
+            android:paddingBottom="@dimen/marginLayoutBottom"
+            android:paddingLeft="@dimen/marginLayoutAtt"
+            android:paddingRight="@dimen/marginLayoutAtt"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RadioGroup
+                android:id="@+id/radio_group_habbit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RadioButton
+                    android:id="@+id/radio_habbit_check"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_selector"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/habbit_modify_check_text"
+                    android:textColor="@color/color_btn_selector_text" />
+
+                <RadioButton
+                    android:id="@+id/radio_habbit_timer"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_btn_selector"
+                    android:button="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="@string/habbit_modify_timer_text"
+                    android:textColor="@color/color_btn_selector_text" />
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        layout="@layout/child_habbit_modify_check"
+        android:id="@+id/include_habbit_modify_check"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:layout_margin="@dimen/marginLayoutFront" />
+
+    <include
+        layout="@layout/child_habbit_modify_timer"
+        android:id="@+id/include_habbit_modify_timer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:layout_margin="@dimen/marginLayoutFront"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btn_habbit_modify_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/marginBtnBottom"
+            android:background="@drawable/bg_btn_round"
+            android:text="@string/base_btn_cancel"
+            android:textColor="@color/btnBottom"
+            android:textSize="@dimen/spBtnBig" />
+
+        <Button
+            android:id="@+id/btn_habbit_modify_save"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/marginBtnBottom"
+            android:background="@drawable/bg_btn_round"
+            android:text="@string/base_btn_save"
+            android:textColor="@color/btnBottom"
+            android:textSize="@dimen/spBtnBig" />
+
+    </LinearLayout>
+</LinearLayout>

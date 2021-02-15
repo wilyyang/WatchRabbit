@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="strokeWidth">1dp</dimen>
+    <dimen name="cornerRound">15dp</dimen>
+
+    <dimen name="marginLayoutTopParent">40dp</dimen>
+    <dimen name="marginLayoutTop">20dp</dimen>
+    <dimen name="marginLayoutBottom">10dp</dimen>
+    <dimen name="marginLayoutAtt">20dp</dimen>
+
+    <dimen name="marginLayoutFront">8dp</dimen>
+
+    <dimen name="spLayoutBase">16sp</dimen>
+    <dimen name="spBtnBig">18sp</dimen>
+
+    <dimen name="marginBtnBottom">10dp</dimen>
+</resources>

@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#3881CE</color>
+    <color name="colorPrimaryDark">#8B8C8E</color>
+    <color name="colorAccent">#339999</color>
+
+    <color name="colorBottomNavigation">#F5F5F5</color>
+
+    <color name="bgLayoutBack">#F5F5F5</color>
+    <color name="bgLayoutFront">#FFFFFF</color>
+    <color name="strokeColorLayout">#D1D1D1</color>
+
+    <color name="bgLayoutBackText">#BFBFBF</color>
+
+    <color name="btnPressed">#22000000</color>
+    <color name="btnSelect">#8B8C8E</color>
+    <color name="btnBase">#00000000</color>
+
+    <color name="btnSelectorStroke">#D6D6D6</color>
+    <color name="btnBottom">#3881CE</color>
+
+    <color name="btnTextAccent">#993B3B3B</color>
 </resources>
