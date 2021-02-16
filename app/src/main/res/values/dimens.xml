@@ -2,7 +2,7 @@
 <resources>
     <dimen name="strokeWidth">1dp</dimen>
     <dimen name="cornerRound">15dp</dimen>
-    <dimen name="cornerRoundBtnText">24dp</dimen>
+    <dimen name="cornerRoundBtnText">20dp</dimen>
 
     <dimen name="marginLayoutTopParent">40dp</dimen>
     <dimen name="marginLayoutTop">20dp</dimen>

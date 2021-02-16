@@ -34,6 +34,7 @@
                 android:id="@+id/btn_habbit_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:background="@drawable/bg_btn_plain"
                 android:text="+"
                 android:textSize="@dimen/spBtnText"
@@ -50,6 +51,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:background="@drawable/bg_btn_plain"
                 android:text=":"
                 android:textSize="@dimen/spBtnText"
@@ -63,15 +65,26 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="10">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:textSize="@dimen/spBtnBig"
+            android:id="@+id/temp_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
             android:text=""/>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_habbit"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:scrollbarFadeDuration="0"
+            android:scrollbarSize="5dp"
+            android:scrollbarThumbVertical="@android:color/darker_gray"
+            android:scrollbars="vertical"/>
 
     </LinearLayout>
 

@@ -7,6 +7,10 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import wily.apps.watchrabbit.data.database.HabbitDatabase;
+import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.fragment.HabbitFragment;
 import wily.apps.watchrabbit.fragment.TodayFragment;
 
