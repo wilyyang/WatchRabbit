@@ -20,4 +20,6 @@
     <color name="btnBottom">#3881CE</color>
 
     <color name="btnTextAccent">#993B3B3B</color>
+
+    <color name="btnTextColor">#DD000000</color>
 </resources>

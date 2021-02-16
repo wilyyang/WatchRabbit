@@ -99,10 +99,10 @@ public class HabbitModifyActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HabbitDatabase db = HabbitDatabase.getAppDatabase(this);
-                db.habbitDao().insert(new Habbit(type, title, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe();
+//                HabbitDatabase db = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
+//                db.habbitDao().insert(new Habbit(type, title, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe();
                 finish();
             }
         });

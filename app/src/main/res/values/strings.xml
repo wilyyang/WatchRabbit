@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">WatchRabbit</string>
 
-    <string name="habbit_modify_title_hint">등록할 습관의 제목을 입력해주세요</string>
+    <string name="habbit_modify_title_hint">습관명을 입력해주세요</string>
 
     <string name="habbit_modify_check_text">체크</string>
     <string name="habbit_modify_check_goal_text">목표 점수 : </string>
     <string name="habbit_modify_check_init_text">초기 점수 : </string>
-    <string name="habbit_modify_check_per_text">체크당 점수 : </string>
+    <string name="habbit_modify_check_per_text">체크 점수 : </string>
 
     <string name="habbit_modify_timer_text">타이머</string>
     <string name="habbit_modify_timer_goal_text">목표 점수 : </string>

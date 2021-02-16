@@ -2,6 +2,7 @@
 <resources>
     <dimen name="strokeWidth">1dp</dimen>
     <dimen name="cornerRound">15dp</dimen>
+    <dimen name="cornerRoundBtnText">24dp</dimen>
 
     <dimen name="marginLayoutTopParent">40dp</dimen>
     <dimen name="marginLayoutTop">20dp</dimen>
@@ -12,6 +13,7 @@
 
     <dimen name="spLayoutBase">16sp</dimen>
     <dimen name="spBtnBig">18sp</dimen>
+    <dimen name="spBtnText">24sp</dimen>
 
     <dimen name="marginBtnBottom">10dp</dimen>
 </resources>

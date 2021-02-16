@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:background="@drawable/bg_numberpicker_divider"
-            android:selectionDividerHeight="0dp"/>
+            android:selectionDividerHeight="0dp"
+            android:descendantFocusability="blocksDescendants"/>
     </LinearLayout>
 
     <LinearLayout
@@ -60,7 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:background="@drawable/bg_numberpicker_divider"
-            android:selectionDividerHeight="0dp"/>
+            android:selectionDividerHeight="0dp"
+            android:descendantFocusability="blocksDescendants"/>
     </LinearLayout>
 
     <LinearLayout
@@ -88,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:background="@drawable/bg_numberpicker_divider"
-            android:selectionDividerHeight="0dp"/>
+            android:selectionDividerHeight="0dp"
+            android:descendantFocusability="blocksDescendants"/>
     </LinearLayout>
 </LinearLayout>

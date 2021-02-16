@@ -18,7 +18,7 @@ public class HabbitFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_habbit, container, false);
 
-        ImageButton btnHabbitAdd = view.findViewById(R.id.btn_habbit_add);
+        Button btnHabbitAdd = view.findViewById(R.id.btn_habbit_add);
         btnHabbitAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
