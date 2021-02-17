@@ -6,76 +6,41 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:background="@drawable/bg_layout_round"
+    android:weightSum="14">
+
+    <ImageView
+        android:id="@+id/habbit_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/habbit_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:textSize="@dimen/spSmallText"
+        android:text="0"/>
+
+    <TextView
+        android:id="@+id/habbit_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:text="init"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:weightSum="10">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="center"
-            android:text="ID "
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/habbit_id"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAlignment="center"
-            android:text="0"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textAlignment="center"
-            android:text="Type "
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/habbit_type"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAlignment="center"
-            android:text="0"
-            android:textStyle="bold"/>
-
-
-        <TextView
-            android:id="@+id/habbit_active"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:textAlignment="center"
-            android:text="active"
-            android:textStyle="bold"/>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="10">
-
-        <TextView
-            android:id="@+id/habbit_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:textAlignment="center"
-            android:text="init"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
+        android:layout_weight="5"
+        android:weightSum="6">
 
         <TextView
             android:layout_width="0dp"
@@ -83,16 +48,15 @@
             android:layout_weight="1"
             android:textAlignment="center"
             android:text="init"
-            android:textStyle="bold"/>
-
+            android:textSize="@dimen/spSmallText"/>
         <TextView
-            android:id="@+id/habbit_init"
+            android:id="@+id/habbit_init_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
             android:text="0"
-            android:textStyle="bold"/>
+            android:textSize="@dimen/spSmallText"/>
 
         <TextView
             android:layout_width="0dp"
@@ -100,16 +64,16 @@
             android:layout_weight="1"
             android:textAlignment="center"
             android:text="goal"
-            android:textStyle="bold"/>
+            android:textSize="@dimen/spSmallText"/>
 
         <TextView
-            android:id="@+id/habbit_goal"
+            android:id="@+id/habbit_goal_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
             android:text="0"
-            android:textStyle="bold"/>
+            android:textSize="@dimen/spSmallText"/>
 
         <TextView
             android:layout_width="0dp"
@@ -117,15 +81,23 @@
             android:layout_weight="1"
             android:textAlignment="center"
             android:text="per"
-            android:textStyle="bold"/>
+            android:textSize="@dimen/spSmallText"/>
 
         <TextView
-            android:id="@+id/habbit_per"
+            android:id="@+id/habbit_per_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textAlignment="center"
             android:text="0"
-            android:textStyle="bold"/>
+            android:textSize="@dimen/spSmallText"/>
     </LinearLayout>
+
+    <Switch
+        android:id="@+id/habbit_active"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:textAlignment="center"/>
+
 </LinearLayout>

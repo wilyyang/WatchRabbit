@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="strokeWidth">1dp</dimen>
+
+    <dimen name="cornerRoundItem">8dp</dimen>
     <dimen name="cornerRound">15dp</dimen>
     <dimen name="cornerRoundBtnText">20dp</dimen>
 
@@ -11,6 +13,7 @@
 
     <dimen name="marginLayoutFront">8dp</dimen>
 
+    <dimen name="spSmallText">12sp</dimen>
     <dimen name="spLayoutBase">16sp</dimen>
     <dimen name="spBtnBig">18sp</dimen>
     <dimen name="spBtnText">24sp</dimen>

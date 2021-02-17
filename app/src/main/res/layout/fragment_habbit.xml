@@ -68,19 +68,11 @@
         android:orientation="vertical"
         android:weightSum="10">
 
-        <TextView
-            android:id="@+id/temp_text"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:text=""/>
-
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_habbit"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="7"
+            android:layout_weight="10"
             android:scrollbarFadeDuration="0"
             android:scrollbarSize="5dp"
             android:scrollbarThumbVertical="@android:color/darker_gray"

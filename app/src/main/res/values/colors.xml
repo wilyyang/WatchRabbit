@@ -10,6 +10,8 @@
     <color name="bgLayoutFront">#FFFFFF</color>
     <color name="strokeColorLayout">#D1D1D1</color>
 
+    <color name="strokeColorItem">#33D1D1D1</color>
+
     <color name="bgLayoutBackText">#BFBFBF</color>
 
     <color name="btnPressed">#22000000</color>
