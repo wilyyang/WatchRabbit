@@ -12,6 +12,7 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
 @Dao

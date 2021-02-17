@@ -4,18 +4,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
     tools:context=".MainActivity"
     android:orientation="horizontal"
     android:background="@drawable/bg_layout_round"
-    android:weightSum="14">
+    android:gravity="center"
+    android:weightSum="16">
 
     <ImageView
         android:id="@+id/habbit_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textAlignment="center"/>
+        android:textAlignment="center"
+        android:layout_margin="5dp"/>
 
     <TextView
         android:id="@+id/habbit_id"
@@ -30,16 +32,17 @@
         android:id="@+id/habbit_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_weight="6"
         android:text="init"
         android:textSize="18sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textAlignment="viewStart"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_weight="6"
         android:weightSum="6">
 
         <TextView
@@ -54,7 +57,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="center"
             android:text="0"
             android:textSize="@dimen/spSmallText"/>
 
@@ -71,7 +73,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="center"
             android:text="0"
             android:textSize="@dimen/spSmallText"/>
 
@@ -88,7 +89,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAlignment="center"
             android:text="0"
             android:textSize="@dimen/spSmallText"/>
     </LinearLayout>

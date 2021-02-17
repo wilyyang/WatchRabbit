@@ -18,4 +18,6 @@
 
     <string name="menu_bottom_today_tab">점수</string>
     <string name="menu_bottom_habbit_tab">습관</string>
+
+    <string name="database_process">DB 처리중</string>
 </resources>

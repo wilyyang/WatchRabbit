@@ -1,5 +1,6 @@
 package wily.apps.watchrabbit.fragment;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.adapter.HabbitAdapter;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.util.DialogGetter;
 
 public class HabbitFragment extends Fragment {
     private List<Habbit> habbitList;
@@ -63,6 +65,8 @@ public class HabbitFragment extends Fragment {
     }
 
     private void loadHabbits(){
+        AlertDialog dialog = DialogGetter.getProgressDialog(getContext());
+        dialog.show();
         HabbitDatabase db = HabbitDatabase.getAppDatabase(getContext());
         db.habbitDao().getAll().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -71,6 +75,8 @@ public class HabbitFragment extends Fragment {
                     habbitAdapter = new HabbitAdapter(habbitList);
                     habbitRecyclerView.setAdapter(habbitAdapter);
                     habbitAdapter.notifyDataSetChanged();
+
+                    dialog.dismiss();
                 });
     }
 }

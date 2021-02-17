@@ -2,6 +2,8 @@ package wily.apps.watchrabbit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,9 +16,11 @@ import android.widget.Switch;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import wily.apps.watchrabbit.adapter.HabbitAdapter;
 import wily.apps.watchrabbit.data.DataConst;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.util.DialogGetter;
 
 public class HabbitModifyActivity extends AppCompatActivity {
 
@@ -107,7 +111,7 @@ public class HabbitModifyActivity extends AppCompatActivity {
             switch(view.getId()){
                 case R.id.btn_habbit_modify_save:
                     addHabbit();
-                    finish();
+//                    finish();
                     break;
                 case R.id.btn_habbit_modify_cancel:
                     finish();
