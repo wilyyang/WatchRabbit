@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,7 +37,6 @@ public class HabbitFragment extends Fragment {
     }
 
     private void initView(View view) {
-
         LinearLayoutManager layoutMgr = new LinearLayoutManager(getContext());
         habbitRecyclerView = view.findViewById(R.id.list_habbit);
         habbitRecyclerView.setLayoutManager(layoutMgr);
@@ -72,11 +72,33 @@ public class HabbitFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
                     habbitList = item;
-                    habbitAdapter = new HabbitAdapter(habbitList);
+                    habbitAdapter = new HabbitAdapter(habbitList, getContext());
+                    habbitAdapter.setOnItemClickListener(onItemClickListener);
+
                     habbitRecyclerView.setAdapter(habbitAdapter);
                     habbitAdapter.notifyDataSetChanged();
 
                     dialog.dismiss();
                 });
     }
+
+    private HabbitAdapter.OnItemClickListener onItemClickListener = new HabbitAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(int id) {
+            Toast.makeText(getContext(), "click"+id, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onItemLongClick(int pos) {
+            Toast.makeText(getContext(), "LongClick"+pos, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onItemSwitchClick(int id, boolean active) {
+            HabbitDatabase db = HabbitDatabase.getAppDatabase(getContext());
+            db.habbitDao().updateActive(id, active).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
+        }
+    };
 }

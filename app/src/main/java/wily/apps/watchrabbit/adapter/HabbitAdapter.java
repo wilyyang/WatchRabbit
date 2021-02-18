@@ -1,9 +1,11 @@
 package wily.apps.watchrabbit.adapter;
 
+import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -12,14 +14,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import wily.apps.watchrabbit.HabbitModifyActivity;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.DataConst;
+import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
 public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitViewHolder> {
     private List<Habbit> mList;
-    public HabbitAdapter(List<Habbit> list) {
+    private Context mContext;
+    public HabbitAdapter(List<Habbit> list, Context context) {
         this.mList = list;
+        this.mContext = context;
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(int id);
+        void onItemLongClick(int pos);
+        void onItemSwitchClick(int id, boolean active);
+    }
+    private OnItemClickListener mListener = null;
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
     }
 
     @Override
@@ -44,6 +62,7 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
 
         viewholder.txTitle.setText(""+mList.get(position).getTitle());
         viewholder.swtichActive.setChecked(mList.get(position).isActive());
+
         viewholder.txGoalCost.setText(""+mList.get(position).getGoalCost());
         viewholder.txInitCost.setText(""+mList.get(position).getInitCost());
         viewholder.txPerCost.setText(""+mList.get(position).getPerCost());
@@ -63,7 +82,6 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
                 image.setImageResource(R.drawable.ic_snooze);
                 break;
         }
-
     }
 
     public class HabbitViewHolder extends RecyclerView.ViewHolder {
@@ -84,6 +102,32 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
             this.txGoalCost = view.findViewById(R.id.habbit_goal_cost);
             this.txInitCost = view.findViewById(R.id.habbit_init_cost);
             this.txPerCost = view.findViewById(R.id.habbit_per_cost);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(mListener != null){
+                            mListener.onItemClick(Integer.parseInt(txId.getText().toString()));
+                        }
+                    }
+                }
+            });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(mListener != null){
+                            mListener.onItemLongClick(pos);
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            });
         }
     }
 }

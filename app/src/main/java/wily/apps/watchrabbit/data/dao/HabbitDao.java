@@ -1,6 +1,5 @@
 package wily.apps.watchrabbit.data.dao;
 
-
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -12,13 +11,15 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
-import io.reactivex.Maybe;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
 @Dao
 public interface HabbitDao {
     @Query("SELECT * FROM Habbit")
     Flowable<List<Habbit>> getAll();
+
+    @Query("UPDATE Habbit SET active=:act WHERE id = :pid")
+    Completable updateActive(int pid, boolean act);
 
     @Query("SELECT * FROM Habbit")
     Flowable<List<Habbit>> getActiveHabbit();

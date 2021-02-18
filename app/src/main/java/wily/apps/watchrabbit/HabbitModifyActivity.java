@@ -111,7 +111,7 @@ public class HabbitModifyActivity extends AppCompatActivity {
             switch(view.getId()){
                 case R.id.btn_habbit_modify_save:
                     addHabbit();
-//                    finish();
+                    finish();
                     break;
                 case R.id.btn_habbit_modify_cancel:
                     finish();
