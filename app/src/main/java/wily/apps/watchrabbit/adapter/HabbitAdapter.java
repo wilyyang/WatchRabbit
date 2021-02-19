@@ -5,6 +5,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -81,6 +82,7 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
     }
 
     public class HabbitViewHolder extends RecyclerView.ViewHolder {
+        protected CheckBox checkBoxDelete;
         protected TextView txId;
         protected ImageView imageType;
         protected TextView txTitle;
@@ -88,8 +90,24 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         protected TextView txInitCost;
         protected TextView txPerCost;
 
+        public void visibleCheckBox(boolean visible, boolean checked){
+
+            if(checked){
+                checkBoxDelete.setChecked(true);
+            }
+            if(visible){
+                checkBoxDelete.setVisibility(View.VISIBLE);
+                imageType.setVisibility(View.GONE);
+            }else{
+                checkBoxDelete.setVisibility(View.GONE);
+                imageType.setVisibility(View.VISIBLE);
+            }
+        }
+
         public HabbitViewHolder(View view) {
             super(view);
+            this.checkBoxDelete = view.findViewById(R.id.habbit_delete_check);
+            this.checkBoxDelete.setVisibility(View.GONE);
             this.txId = view.findViewById(R.id.habbit_id);
             this.imageType = view.findViewById(R.id.habbit_type);
             this.txTitle = view.findViewById(R.id.habbit_title);

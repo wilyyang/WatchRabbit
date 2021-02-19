@@ -17,11 +17,19 @@
         </shape>
     </item>
 
-    <item android:state_checked="false">
+    <item android:state_checked="false" android:state_enabled="true">
         <shape android:shape="rectangle"  >
             <corners android:radius="0dip" />
             <stroke android:width="@dimen/strokeWidth" android:color="@color/btnSelectorStroke" />
             <solid android:color="@color/btnBase" />
+        </shape>
+    </item>
+
+    <item android:state_checked="false" android:state_enabled="false">
+        <shape android:shape="rectangle"  >
+            <corners android:radius="0dip" />
+            <stroke android:width="0dp" android:color="@color/btnSelectorStroke" />
+            <solid android:color="@color/btnBase_disable"/>
         </shape>
     </item>
 </selector>

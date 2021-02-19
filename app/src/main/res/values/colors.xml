@@ -20,8 +20,9 @@
     <color name="bgLayoutBackText">#BFBFBF</color>
 
     <color name="btnPressed">#22000000</color>
-    <color name="btnSelect">#8B8C8E</color>
+    <color name="btnSelect">#339999</color>
     <color name="btnBase">#00000000</color>
+    <color name="btnBase_disable">#778B8C8E</color>
 
     <color name="btnSelectorStroke">#D6D6D6</color>
     <color name="btnBottom">#3881CE</color>

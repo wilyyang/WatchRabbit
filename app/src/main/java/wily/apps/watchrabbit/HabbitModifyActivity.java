@@ -2,6 +2,7 @@ package wily.apps.watchrabbit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -116,21 +117,38 @@ public class HabbitModifyActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("ResourceType")
     private void setUIData(int id){
         btnSave.setText("업데이트");
-        AlertDialog alertDialog = DialogGetter.getProgressDialog(this);
-        alertDialog.show();
         HabbitDatabase db = HabbitDatabase.getAppDatabase(this);
         db.habbitDao().getHabbit(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
                     if(!item.isEmpty()){
                         Habbit habbit = item.get(0);
+
                         etTitleHabbit.setText(habbit.getTitle());
                         switchHabbit.setChecked(habbit.isActive());
-                    }
 
-                    alertDialog.dismiss();
+                        int type = habbit.getType();
+                        switch(type){
+                            case DataConst.TYPE_HABBIT_CHECK:
+                                radioBtn_check.setChecked(true);
+                                numberPickerGoal_check.setValue(habbit.getGoalCost()- minPickerValue);
+                                numberPickerInit_check.setValue(habbit.getInitCost()- minPickerValue);
+                                numberPickerPer_check.setValue(habbit.getPerCost()- minPickerValue);
+                                break;
+
+                            case DataConst.TYPE_HABBIT_TIMER:
+                                radioBtn_timer.setChecked(true);
+                                numberPickerGoal_timer.setValue(habbit.getGoalCost()- minPickerValue);
+                                numberPickerInit_timer.setValue(habbit.getInitCost()- minPickerValue);
+                                numberPickerPer_timer.setValue(habbit.getPerCost()- minPickerValue);
+                                break;
+                        }
+                        radioBtn_check.setEnabled(false);
+                        radioBtn_timer.setEnabled(false);
+                    }
                 });
     }
 

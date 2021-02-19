@@ -99,7 +99,12 @@ public class HabbitFragment extends Fragment {
 
         @Override
         public void onItemLongClick(int pos) {
-            Toast.makeText(getContext(), "LongClick"+pos, Toast.LENGTH_SHORT).show();
+            for (int i = 0; i < habbitRecyclerView.getChildCount(); ++i) {
+                HabbitAdapter.HabbitViewHolder viewHolder = (HabbitAdapter.HabbitViewHolder) habbitRecyclerView.findViewHolderForAdapterPosition(i);
+                viewHolder.visibleCheckBox(true, (pos==i));
+            }
         }
     };
+
+
 }
