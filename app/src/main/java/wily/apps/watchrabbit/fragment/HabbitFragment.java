@@ -51,6 +51,10 @@ public class HabbitFragment extends Fragment {
             switch (v.getId()){
                 case R.id.btn_habbit_add:
                     Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
+
+                    intent.putExtra("id", -1);
+                    intent.putExtra("update", false);
+
                     startActivity(intent);
                     break;
             }
@@ -85,20 +89,17 @@ public class HabbitFragment extends Fragment {
     private HabbitAdapter.OnItemClickListener onItemClickListener = new HabbitAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(int id) {
-            Toast.makeText(getContext(), "click"+id, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
+
+            intent.putExtra("id", id);
+            intent.putExtra("update", true);
+
+            startActivity(intent);
         }
 
         @Override
         public void onItemLongClick(int pos) {
             Toast.makeText(getContext(), "LongClick"+pos, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onItemSwitchClick(int id, boolean active) {
-            HabbitDatabase db = HabbitDatabase.getAppDatabase(getContext());
-            db.habbitDao().updateActive(id, active).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe();
         }
     };
 }

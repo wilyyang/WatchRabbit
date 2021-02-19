@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -50,11 +51,17 @@ public class HabbitModifyActivity extends AppCompatActivity {
 
     private int type = DataConst.TYPE_HABBIT_CHECK;
 
+    private int mode = DataConst.MODE_MODIFY_ADD;
+    private int id = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habbit_modify);
+
+        Intent intent = getIntent();
+        id = intent.getExtras().getInt("id");
+        mode = (intent.getExtras().getBoolean("update") ? DataConst.MODE_MODIFY_UPDATE : DataConst.MODE_MODIFY_ADD);
 
         initView();
     }
@@ -103,6 +110,28 @@ public class HabbitModifyActivity extends AppCompatActivity {
         btnSave.setOnClickListener(onClickListener);
         btnCancel = findViewById(R.id.btn_habbit_modify_cancel);
         btnCancel.setOnClickListener(onClickListener);
+
+        if(mode == DataConst.MODE_MODIFY_UPDATE){
+            setUIData(id);
+        }
+    }
+
+    private void setUIData(int id){
+        btnSave.setText("업데이트");
+        AlertDialog alertDialog = DialogGetter.getProgressDialog(this);
+        alertDialog.show();
+        HabbitDatabase db = HabbitDatabase.getAppDatabase(this);
+        db.habbitDao().getHabbit(id).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                    if(!item.isEmpty()){
+                        Habbit habbit = item.get(0);
+                        etTitleHabbit.setText(habbit.getTitle());
+                        switchHabbit.setChecked(habbit.isActive());
+                    }
+
+                    alertDialog.dismiss();
+                });
     }
 
     private Button.OnClickListener onClickListener = new Button.OnClickListener() {
@@ -110,7 +139,12 @@ public class HabbitModifyActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch(view.getId()){
                 case R.id.btn_habbit_modify_save:
-                    addHabbit();
+                    if(mode == DataConst.MODE_MODIFY_ADD){
+                        addHabbit();
+                    }else if(mode == DataConst.MODE_MODIFY_UPDATE){
+                        updateHabbit(id);
+                    }
+
                     finish();
                     break;
                 case R.id.btn_habbit_modify_cancel:
@@ -119,6 +153,34 @@ public class HabbitModifyActivity extends AppCompatActivity {
             }
         }
     };
+
+    private void updateHabbit(int id){
+        int type = this.type;
+        String title = (!etTitleHabbit.equals("") ? etTitleHabbit.getText().toString() : "Unknown");
+        boolean active = switchHabbit.isChecked();
+
+        int goalCost = 0;
+        int initCost = 0;
+        int perCost = 0;
+
+        switch (type){
+            case DataConst.TYPE_HABBIT_CHECK:
+                goalCost = numberPickerGoal_check.getValue()+ minPickerValue;
+                initCost = numberPickerInit_check.getValue()+ minPickerValue;
+                perCost = numberPickerPer_check.getValue()+ minPickerValue;
+                break;
+            case DataConst.TYPE_HABBIT_TIMER:
+                goalCost = numberPickerGoal_timer.getValue()+ minPickerValue;
+                initCost = numberPickerInit_timer.getValue()+ minPickerValue;
+                perCost = numberPickerPer_timer.getValue()+ minPickerValue;
+                break;
+        }
+
+        HabbitDatabase db = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
+        db.habbitDao().updateHabbit(id, type, title, active, goalCost, initCost, perCost).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
 
     private void addHabbit(){
         int type = this.type;

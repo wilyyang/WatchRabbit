@@ -8,6 +8,11 @@
 
     <color name="bgLayoutBack">#F5F5F5</color>
     <color name="bgLayoutFront">#FFFFFF</color>
+    <color name="bgLayoutFrontPressed">#33FFFFFF</color>
+
+    <color name="bgLayoutFrontDisabled">#33cccccc</color>
+    <color name="bgLayoutFrontDisabledPressed">#11cccccc</color>
+
     <color name="strokeColorLayout">#D1D1D1</color>
 
     <color name="strokeColorItem">#33D1D1D1</color>

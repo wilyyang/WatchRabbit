@@ -18,11 +18,14 @@ public interface HabbitDao {
     @Query("SELECT * FROM Habbit")
     Flowable<List<Habbit>> getAll();
 
-    @Query("UPDATE Habbit SET active=:act WHERE id = :pid")
-    Completable updateActive(int pid, boolean act);
+    @Query("SELECT * FROM Habbit WHERE id=:p_id")
+    Flowable<List<Habbit>> getHabbit(int p_id);
 
-    @Query("SELECT * FROM Habbit")
-    Flowable<List<Habbit>> getActiveHabbit();
+    @Query("UPDATE Habbit SET type=:p_type, title=:p_title, active=:p_act, goalCost=:p_goalCost, initCost=:p_initCost, perCost=:p_perCost WHERE id = :p_id")
+    Completable updateHabbit(int p_id, int p_type, String p_title, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
+
+//    @Query("SELECT * FROM Habbit")
+//    Flowable<List<Habbit>> getActiveHabbit();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insert(Habbit work);

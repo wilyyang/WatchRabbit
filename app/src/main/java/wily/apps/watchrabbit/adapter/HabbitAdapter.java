@@ -5,7 +5,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -14,12 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import wily.apps.watchrabbit.HabbitModifyActivity;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.DataConst;
-import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
 public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitViewHolder> {
@@ -33,7 +28,6 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
     public interface OnItemClickListener{
         void onItemClick(int id);
         void onItemLongClick(int pos);
-        void onItemSwitchClick(int id, boolean active);
     }
     private OnItemClickListener mListener = null;
     public void setOnItemClickListener(OnItemClickListener listener){
@@ -51,7 +45,6 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
     public void onBindViewHolder(HabbitViewHolder viewholder, int position) {
         viewholder.txId.setGravity(Gravity.CENTER);
         viewholder.txTitle.setGravity(Gravity.CENTER);
-        viewholder.swtichActive.setGravity(Gravity.CENTER);
         viewholder.txGoalCost.setGravity(Gravity.CENTER);
         viewholder.txInitCost.setGravity(Gravity.CENTER);
         viewholder.txPerCost.setGravity(Gravity.CENTER);
@@ -61,11 +54,14 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         setIcon(viewholder.imageType, mList.get(position).getType());
 
         viewholder.txTitle.setText(""+mList.get(position).getTitle());
-        viewholder.swtichActive.setChecked(mList.get(position).isActive());
 
         viewholder.txGoalCost.setText(""+mList.get(position).getGoalCost());
         viewholder.txInitCost.setText(""+mList.get(position).getInitCost());
         viewholder.txPerCost.setText(""+mList.get(position).getPerCost());
+
+        if(!mList.get(position).isActive()){
+            viewholder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
+        }
     }
 
     @Override
@@ -88,7 +84,6 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         protected TextView txId;
         protected ImageView imageType;
         protected TextView txTitle;
-        protected Switch swtichActive;
         protected TextView txGoalCost;
         protected TextView txInitCost;
         protected TextView txPerCost;
@@ -98,7 +93,6 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
             this.txId = view.findViewById(R.id.habbit_id);
             this.imageType = view.findViewById(R.id.habbit_type);
             this.txTitle = view.findViewById(R.id.habbit_title);
-            this.swtichActive = view.findViewById(R.id.habbit_active);
             this.txGoalCost = view.findViewById(R.id.habbit_goal_cost);
             this.txInitCost = view.findViewById(R.id.habbit_init_cost);
             this.txPerCost = view.findViewById(R.id.habbit_per_cost);

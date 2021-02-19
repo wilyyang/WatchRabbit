@@ -43,7 +43,7 @@
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
+        android:layout_weight="7"
         android:weightSum="6">
 
         <TextView
@@ -93,12 +93,5 @@
             android:text="0"
             android:textSize="@dimen/spSmallText"/>
     </LinearLayout>
-
-    <Switch
-        android:id="@+id/habbit_active"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:textAlignment="center"/>
 
 </LinearLayout>
