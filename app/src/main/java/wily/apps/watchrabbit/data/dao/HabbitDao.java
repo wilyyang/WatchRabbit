@@ -11,6 +11,7 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import io.reactivex.Single;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
 @Dao
@@ -22,13 +23,16 @@ public interface HabbitDao {
     Flowable<List<Habbit>> getHabbit(int p_id);
 
     @Query("UPDATE Habbit SET type=:p_type, title=:p_title, active=:p_act, goalCost=:p_goalCost, initCost=:p_initCost, perCost=:p_perCost WHERE id = :p_id")
-    Completable updateHabbit(int p_id, int p_type, String p_title, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
+    Single<Integer> updateHabbit(int p_id, int p_type, String p_title, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
+
+    @Query("DELETE FROM Habbit WHERE id IN (:ids)")
+    Single<Integer> deleteItemByIds(List<Integer> ids);
 
 //    @Query("SELECT * FROM Habbit")
 //    Flowable<List<Habbit>> getActiveHabbit();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insert(Habbit work);
+    Single<Long> insert(Habbit work);
 
     @Update
     Completable update(Habbit work);

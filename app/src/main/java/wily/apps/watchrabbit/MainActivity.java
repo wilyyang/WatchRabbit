@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -17,6 +18,7 @@ import wily.apps.watchrabbit.fragment.TodayFragment;
 public class MainActivity extends AppCompatActivity {
     private TodayFragment todayFragment;
     private HabbitFragment habbitFragment;
+    private BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         todayFragment = new TodayFragment();
         habbitFragment = new HabbitFragment();
 
-        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_menu);
+        bottomNavigation = findViewById(R.id.bottom_menu);
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -47,5 +49,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         bottomNavigation.setSelectedItemId(R.id.habbit_tab);
+    }
+    public void setVisibleNavigation(boolean flag){
+        bottomNavigation.setVisibility(flag ? View.VISIBLE : View.GONE);
     }
 }

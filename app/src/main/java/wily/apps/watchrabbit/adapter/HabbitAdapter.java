@@ -1,17 +1,21 @@
 package wily.apps.watchrabbit.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import wily.apps.watchrabbit.R;
@@ -21,18 +25,16 @@ import wily.apps.watchrabbit.data.entity.Habbit;
 public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitViewHolder> {
     private List<Habbit> mList;
     private Context mContext;
+    private boolean selectableMode = false;
+    private boolean allCheck = false;
+    private OnItemClickListener mListener = null;
+    public int select = -1;
+
+    private ArrayList<HabbitViewHolder> checkedViewHolders = new ArrayList<>();
+
     public HabbitAdapter(List<Habbit> list, Context context) {
         this.mList = list;
         this.mContext = context;
-    }
-
-    public interface OnItemClickListener{
-        void onItemClick(int id);
-        void onItemLongClick(int pos);
-    }
-    private OnItemClickListener mListener = null;
-    public void setOnItemClickListener(OnItemClickListener listener){
-        this.mListener = listener;
     }
 
     @Override
@@ -55,7 +57,6 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         setIcon(viewholder.imageType, mList.get(position).getType());
 
         viewholder.txTitle.setText(""+mList.get(position).getTitle());
-
         viewholder.txGoalCost.setText(""+mList.get(position).getGoalCost());
         viewholder.txInitCost.setText(""+mList.get(position).getInitCost());
         viewholder.txPerCost.setText(""+mList.get(position).getPerCost());
@@ -63,11 +64,47 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         if(!mList.get(position).isActive()){
             viewholder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
         }
+
+        if (!selectableMode) { viewholder.checkBoxDelete.setVisibility(View.GONE); }
+        else { viewholder.checkBoxDelete.setVisibility(View.VISIBLE); }
+        viewholder.checkBoxDelete.setChecked(false);
+
+        if(allCheck || position == select){
+            viewholder.checkBoxDelete.setChecked(true);
+        }
+        checkedViewHolders.add(viewholder);
     }
 
     @Override
     public int getItemCount() {
         return (null != mList ? mList.size() : 0);
+    }
+
+    public void setSelectableMode(boolean flag, int p_select){
+        selectableMode=flag;
+        select = p_select;
+        allCheck = false;
+        notifyDataSetChanged();
+    }
+
+    public void setAllChecked(boolean flag){
+        select = -1;
+        allCheck=flag;
+        notifyDataSetChanged();
+    }
+
+    public boolean isSelectableMode(){
+        return selectableMode;
+    }
+
+    public ArrayList<Integer> getSelectIds(){
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        for(HabbitViewHolder item : checkedViewHolders){
+            if(item.checkBoxDelete.isChecked()){
+                ids.add(Integer.parseInt(item.txId.getText().toString()));
+            }
+        }
+        return ids;
     }
 
     private void setIcon(ImageView image, int type){
@@ -81,6 +118,16 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         }
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(int id);
+        void onItemLongClick(int pos);
+        void onItemCheckChanged(boolean flag);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
+    }
+
     public class HabbitViewHolder extends RecyclerView.ViewHolder {
         protected CheckBox checkBoxDelete;
         protected TextView txId;
@@ -90,24 +137,9 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         protected TextView txInitCost;
         protected TextView txPerCost;
 
-        public void visibleCheckBox(boolean visible, boolean checked){
-
-            if(checked){
-                checkBoxDelete.setChecked(true);
-            }
-            if(visible){
-                checkBoxDelete.setVisibility(View.VISIBLE);
-                imageType.setVisibility(View.GONE);
-            }else{
-                checkBoxDelete.setVisibility(View.GONE);
-                imageType.setVisibility(View.VISIBLE);
-            }
-        }
-
         public HabbitViewHolder(View view) {
             super(view);
             this.checkBoxDelete = view.findViewById(R.id.habbit_delete_check);
-            this.checkBoxDelete.setVisibility(View.GONE);
             this.txId = view.findViewById(R.id.habbit_id);
             this.imageType = view.findViewById(R.id.habbit_type);
             this.txTitle = view.findViewById(R.id.habbit_title);
@@ -115,13 +147,27 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
             this.txInitCost = view.findViewById(R.id.habbit_init_cost);
             this.txPerCost = view.findViewById(R.id.habbit_per_cost);
 
+            checkBoxDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(getAdapterPosition() != RecyclerView.NO_POSITION && mListener != null){
+                        if(compoundButton.isPressed()){
+                            mListener.onItemCheckChanged(b);
+                        }
+                    }
+                }
+            });
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION){
-                        if(mListener != null){
+                    if(getAdapterPosition() != RecyclerView.NO_POSITION && mListener != null){
+                        if(!selectableMode){
                             mListener.onItemClick(Integer.parseInt(txId.getText().toString()));
+                        }else{
+                            checkBoxDelete.setPressed(true);
+                            checkBoxDelete.setChecked(!checkBoxDelete.isChecked());
+                            checkBoxDelete.setPressed(false);
                         }
                     }
                 }
@@ -131,11 +177,16 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
                 @Override
                 public boolean onLongClick(View view) {
                     int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION){
-                        if(mListener != null){
+                    if(pos != RecyclerView.NO_POSITION && mListener != null){
+                        if(!selectableMode){
+                            setSelectableMode(true, pos);
                             mListener.onItemLongClick(pos);
-                            return true;
+                        }else{
+                            checkBoxDelete.setPressed(true);
+                            checkBoxDelete.setChecked(!checkBoxDelete.isChecked());
+                            checkBoxDelete.setPressed(false);
                         }
+                        return true;
                     }
                     return false;
                 }

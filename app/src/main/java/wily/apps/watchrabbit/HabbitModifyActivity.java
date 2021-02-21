@@ -162,8 +162,6 @@ public class HabbitModifyActivity extends AppCompatActivity {
                     }else if(mode == DataConst.MODE_MODIFY_UPDATE){
                         updateHabbit(id);
                     }
-
-                    finish();
                     break;
                 case R.id.btn_habbit_modify_cancel:
                     finish();
@@ -197,7 +195,9 @@ public class HabbitModifyActivity extends AppCompatActivity {
         HabbitDatabase db = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
         db.habbitDao().updateHabbit(id, type, title, active, goalCost, initCost, perCost).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+                .subscribe(item -> {
+                    finish();
+                });
     }
 
     private void addHabbit(){
@@ -223,9 +223,11 @@ public class HabbitModifyActivity extends AppCompatActivity {
         }
 
         HabbitDatabase db = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
-                db.habbitDao().insert(new Habbit(type, title, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe();
+        db.habbitDao().insert(new Habbit(type, title, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                            finish();
+                        });
     }
 
     private void changeViewAtType(int type){
