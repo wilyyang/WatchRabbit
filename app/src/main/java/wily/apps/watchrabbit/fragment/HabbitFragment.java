@@ -31,6 +31,8 @@ import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.util.DialogGetter;
 
 public class HabbitFragment extends Fragment {
+    private LinearLayout habbitLayoutParent;
+
     private List<Habbit> habbitList;
     private HabbitAdapter habbitAdapter;
     private RecyclerView habbitRecyclerView;
@@ -55,6 +57,8 @@ public class HabbitFragment extends Fragment {
     }
 
     private void initView(View view) {
+        habbitLayoutParent = view.findViewById(R.id.layout_fragment_habbit_parent);
+
         LinearLayoutManager layoutMgr = new LinearLayoutManager(getContext());
         habbitRecyclerView = view.findViewById(R.id.list_habbit);
         habbitRecyclerView.setLayoutManager(layoutMgr);
@@ -117,21 +121,19 @@ public class HabbitFragment extends Fragment {
 
     private void setSelectableMode(boolean mode){
         if(mode){
+            habbitLayoutParent.setWeightSum(26);
+
             checkboxHabbitAll.setVisibility(View.VISIBLE);
             btnHabbitAdd.setVisibility(View.INVISIBLE);
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 19f);
-            layoutRecycler.setLayoutParams(params);
 
             layoutDeleteBtn.setVisibility(View.VISIBLE);
             ((MainActivity)getActivity()).setVisibleNavigation(false);
         }else{
+            habbitLayoutParent.setWeightSum(24);
+
             checkboxHabbitAll.setChecked(false);
             checkboxHabbitAll.setVisibility(View.INVISIBLE);
             btnHabbitAdd.setVisibility(View.VISIBLE);
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 21f);
-            layoutRecycler.setLayoutParams(params);
 
             layoutDeleteBtn.setVisibility(View.GONE);
             ((MainActivity)getActivity()).setVisibleNavigation(true);
@@ -165,6 +167,7 @@ public class HabbitFragment extends Fragment {
     }
 
     private void deleteSelectHabbit() {
+        Log.d("WILY", "HABBIT LENGHT : "+habbitAdapter.checkedViewHolders.size());
         List<Integer> list = habbitAdapter.getSelectIds();
 
         AlertDialog dialog = DialogGetter.getProgressDialog(getContext());

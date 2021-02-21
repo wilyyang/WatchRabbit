@@ -30,9 +30,10 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
     private OnItemClickListener mListener = null;
     public int select = -1;
 
-    private ArrayList<HabbitViewHolder> checkedViewHolders = new ArrayList<>();
+    public ArrayList<HabbitViewHolder> checkedViewHolders = new ArrayList<>();
 
     public HabbitAdapter(List<Habbit> list, Context context) {
+        this.checkedViewHolders = new ArrayList<>();
         this.mList = list;
         this.mContext = context;
     }
@@ -84,12 +85,14 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         selectableMode=flag;
         select = p_select;
         allCheck = false;
+        this.checkedViewHolders = new ArrayList<>();
         notifyDataSetChanged();
     }
 
     public void setAllChecked(boolean flag){
         select = -1;
         allCheck=flag;
+        this.checkedViewHolders = new ArrayList<>();
         notifyDataSetChanged();
     }
 

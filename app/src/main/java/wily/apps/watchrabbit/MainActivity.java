@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private TodayFragment todayFragment;
     private HabbitFragment habbitFragment;
     private BottomNavigationView bottomNavigation;
+    private FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fragmentInit(){
+        frameLayout = findViewById(R.id.container);
         todayFragment = new TodayFragment();
         habbitFragment = new HabbitFragment();
 
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation.setSelectedItemId(R.id.habbit_tab);
     }
     public void setVisibleNavigation(boolean flag){
-        bottomNavigation.setVisibility(flag ? View.VISIBLE : View.GONE);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, flag ? 24f:26f);
+        frameLayout.setLayoutParams(params);
     }
 }
