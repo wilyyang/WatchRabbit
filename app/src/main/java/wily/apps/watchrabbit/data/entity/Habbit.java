@@ -1,6 +1,7 @@
 package wily.apps.watchrabbit.data.entity;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -15,6 +16,9 @@ public class Habbit {
     private int goalCost;
     private int initCost;
     private int perCost;
+
+    @Ignore
+    private boolean check;
 
     public Habbit(int type, String title, boolean active, int goalCost, int initCost, int perCost) {
         this.type = type;
@@ -79,6 +83,14 @@ public class Habbit {
 
     public void setPerCost(int perCost) {
         this.perCost = perCost;
+    }
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public void setCheck(boolean check) {
+        this.check = check;
     }
 
     @Override

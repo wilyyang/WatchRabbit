@@ -90,7 +90,7 @@
             android:layout_height="1dp"
             android:background="@color/strokeColorLayout"/>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <ListView
             android:id="@+id/list_habbit"
             android:layout_width="match_parent"
             android:layout_height="0dp"

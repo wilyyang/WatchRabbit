@@ -11,13 +11,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -35,7 +32,7 @@ public class HabbitFragment extends Fragment {
 
     private List<Habbit> habbitList;
     private HabbitAdapter habbitAdapter;
-    private RecyclerView habbitRecyclerView;
+    private ListView habbitListView;
 
     private Button btnHabbitAdd;
     private Button btnDeleteSelect;
@@ -45,7 +42,6 @@ public class HabbitFragment extends Fragment {
 
     private CheckBox checkboxHabbitAll;
 
-    private LinearLayout layoutRecycler;
     private LinearLayout layoutDeleteBtn;
 
     @Override
@@ -59,9 +55,8 @@ public class HabbitFragment extends Fragment {
     private void initView(View view) {
         habbitLayoutParent = view.findViewById(R.id.layout_fragment_habbit_parent);
 
-        LinearLayoutManager layoutMgr = new LinearLayoutManager(getContext());
-        habbitRecyclerView = view.findViewById(R.id.list_habbit);
-        habbitRecyclerView.setLayoutManager(layoutMgr);
+        habbitListView = view.findViewById(R.id.list_habbit);
+        habbitListView.setDividerHeight(0);
 
         btnHabbitAdd = view.findViewById(R.id.btn_habbit_add);
         btnHabbitAdd.setOnClickListener(onClickListener);
@@ -86,7 +81,6 @@ public class HabbitFragment extends Fragment {
             }
         });
 
-        layoutRecycler = view.findViewById(R.id.layout_recycler);
         layoutDeleteBtn = view.findViewById(R.id.layout_btn_delete);
     }
 
@@ -103,7 +97,7 @@ public class HabbitFragment extends Fragment {
                     startActivity(intent);
                     break;
                 case R.id.btn_delete_select:
-                    habbitAdapter.setSelectableMode(!habbitAdapter.isSelectableMode(), -1);
+                    habbitAdapter.setSelectableMode(!habbitAdapter.isSelectableMode());
                     setSelectableMode(habbitAdapter.isSelectableMode());
                     break;
 
@@ -112,7 +106,7 @@ public class HabbitFragment extends Fragment {
                     break;
 
                 case R.id.btn_habbit_delete_cancel:
-                    habbitAdapter.setSelectableMode(false, -1);
+                    habbitAdapter.setSelectableMode(false);
                     setSelectableMode(false);
                     break;
             }
@@ -156,10 +150,10 @@ public class HabbitFragment extends Fragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
                     habbitList = item;
-                    habbitAdapter = new HabbitAdapter(habbitList, getContext());
+                    habbitAdapter = new HabbitAdapter(getContext(), habbitList);
                     habbitAdapter.setOnItemClickListener(onItemClickListener);
 
-                    habbitRecyclerView.setAdapter(habbitAdapter);
+                    habbitListView.setAdapter(habbitAdapter);
                     habbitAdapter.notifyDataSetChanged();
 
                     dialog.dismiss();
@@ -167,8 +161,8 @@ public class HabbitFragment extends Fragment {
     }
 
     private void deleteSelectHabbit() {
-        Log.d("WILY", "HABBIT LENGHT : "+habbitAdapter.checkedViewHolders.size());
-        List<Integer> list = habbitAdapter.getSelectIds();
+
+        List<Integer> list = habbitAdapter.getCheckedIds();
 
         AlertDialog dialog = DialogGetter.getProgressDialog(getContext());
         dialog.show();
@@ -176,14 +170,22 @@ public class HabbitFragment extends Fragment {
         db.habbitDao().deleteItemByIds(list).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
-                            dialog.dismiss();
                             setSelectableMode(false);
+                            habbitAdapter.setSelectableMode(false);
+                            dialog.dismiss();
                             onResume();
                         }
                 );
     }
 
     private HabbitAdapter.OnItemClickListener onItemClickListener = new HabbitAdapter.OnItemClickListener() {
+        @Override
+        public void onItemCheckChanged(boolean flag) {
+            if(flag == false){
+                checkboxHabbitAll.setChecked(false);
+            }
+        }
+
         @Override
         public void onItemClick(int id) {
             Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
@@ -195,15 +197,8 @@ public class HabbitFragment extends Fragment {
         }
 
         @Override
-        public void onItemLongClick(int pos) {
+        public void onItemLongClick(int id) {
             setSelectableMode(true);
-        }
-
-        @Override
-        public void onItemCheckChanged(boolean flag) {
-            if(flag == false){
-                checkboxHabbitAll.setChecked(false);
-            }
         }
     };
 }

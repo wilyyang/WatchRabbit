@@ -35,7 +35,7 @@
         android:layout_weight="1"
         android:textAlignment="center"
         android:textSize="@dimen/spSmallText"
-        android:text="0"/>
+        android:text="0" />
 
     <TextView
         android:id="@+id/habbit_title"
