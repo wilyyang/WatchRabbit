@@ -2,6 +2,7 @@ package wily.apps.watchrabbit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.fragment.HabbitFragment;
 import wily.apps.watchrabbit.fragment.TodayFragment;
+import wily.apps.watchrabbit.service.HabbitService;
 
 public class MainActivity extends AppCompatActivity {
     private TodayFragment todayFragment;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragmentInit();
+        createHabbitService();
     }
 
     private void fragmentInit(){
@@ -54,6 +57,13 @@ public class MainActivity extends AppCompatActivity {
         });
         bottomNavigation.setSelectedItemId(R.id.habbit_tab);
     }
+
+    private void createHabbitService() {
+        Intent intent = new Intent(MainActivity.this, HabbitService.class);
+        intent.setAction(HabbitService.HABBIT_SERVICE_CREATE);
+        startService(intent);
+    }
+
     public void setVisibleNavigation(boolean flag){
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, flag ? 24f:26f);
         frameLayout.setLayoutParams(params);
