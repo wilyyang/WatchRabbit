@@ -17,10 +17,13 @@ import wily.apps.watchrabbit.data.entity.Habbit;
 @Dao
 public interface HabbitDao {
     @Query("SELECT * FROM Habbit")
-    Flowable<List<Habbit>> getAll();
+    Single<List<Habbit>> getAll();
+
+    @Query("SELECT * FROM Habbit WHERE active=:p_active")
+    Single<List<Habbit>> getHabbitActive(boolean p_active);
 
     @Query("SELECT * FROM Habbit WHERE id=:p_id")
-    Flowable<List<Habbit>> getHabbit(int p_id);
+    Single<List<Habbit>> getHabbit(int p_id);
 
     @Query("UPDATE Habbit SET type=:p_type, title=:p_title, active=:p_act, goalCost=:p_goalCost, initCost=:p_initCost, perCost=:p_perCost WHERE id = :p_id")
     Single<Integer> updateHabbit(int p_id, int p_type, String p_title, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);

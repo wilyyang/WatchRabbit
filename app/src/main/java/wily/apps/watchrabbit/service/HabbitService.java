@@ -7,7 +7,13 @@ import android.os.IBinder;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import wily.apps.watchrabbit.adapter.HabbitAdapter;
+import wily.apps.watchrabbit.data.DataConst;
+import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
 public class HabbitService extends Service {
@@ -16,7 +22,7 @@ public class HabbitService extends Service {
     public static final String HABBIT_SERVICE_CREATE    = "HABBIT_SERVICE_CREATE";
     public static final String HABBIT_SERVICE_INIT      = "HABBIT_SERVICE_INIT";
     public static final String HABBIT_SERVICE_EXIT      = "HABBIT_SERVICE_EXIT";
-//    public static final String HABBIT_SERVICE_ADD       = "HABBIT_SERVICE_ADD";
+    public static final String HABBIT_SERVICE_ADD       = "HABBIT_SERVICE_ADD";
 //    public static final String HABBIT_SERVICE_REMOVE    = "HABBIT_SERVICE_REMOVE";
 //    public static final String HABBIT_SERVICE_UPDATE    = "HABBIT_SERVICE_UPDATE";
     public static final String HABBIT_SERVICE_CHECK     = "HABBIT_SERVICE_CHECK";
@@ -26,6 +32,7 @@ public class HabbitService extends Service {
 
     private HabbitNotification mainNoti = null;
     private ArrayList<HabbitNotification> notiList = null;
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -42,8 +49,12 @@ public class HabbitService extends Service {
                 case HABBIT_SERVICE_EXIT:
                     exitService();
                     break;
-//                case HABBIT_SERVICE_ADD:
-//                    break;
+                case HABBIT_SERVICE_ADD:
+                    int id = intent.getIntExtra(DataConst.HABBIT_ID, -1);
+                    String title = intent.getStringExtra(DataConst.HABBIT_TITLE);
+                    int type = intent.getIntExtra(DataConst.HABBIT_TYPE, -1);
+                    addNotification(id, title, type);
+                    break;
 //                case HABBIT_SERVICE_REMOVE:
 //                    break;
 //                case HABBIT_SERVICE_UPDATE:
@@ -61,26 +72,55 @@ public class HabbitService extends Service {
     private void createService(){
         if(isCreate == false){
             isCreate = true;
-            mainNoti = new HabbitNotification(HabbitService.this, -1, "Main Notifiation", true);
+            mainNoti = new HabbitNotification(HabbitService.this, -1, "Main Notifiation", HabbitNotification.TYPE_MAIN_NOTI);
             startForeground(mainNoti.getId(), mainNoti.build());
-            mainNoti.sendNotification("HabbitService create");
-
-            notiList = new ArrayList<HabbitNotification>();
+            initService();
         }
     }
 
     private void initService(){
+        HabbitDatabase db = HabbitDatabase.getAppDatabase(HabbitService.this);
+        db.habbitDao().getHabbitActive(true).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> {
+                    List<Habbit> habbitList = item;
+                    if(notiList != null){
+                        for(HabbitNotification noti : notiList){
+                            noti.cancel();
+                        }
+                    }
+                    notiList = new ArrayList<HabbitNotification>();
 
+                    for(Habbit habbit : habbitList){
+                        notiList.add(new HabbitNotification(HabbitService.this, habbit.getId(), habbit.getTitle(), habbit.getType()));
+                    }
+
+                    for(HabbitNotification noti : notiList){
+                        noti.sendNotification("Notification init");
+                    }
+                    mainNoti.sendNotification("HabbitService init complete : "+notiList.size());
+                });
     }
 
     private void exitService(){
-        for(HabbitNotification noti : notiList){
-            noti.cancel();
+        isCreate = false;
+        if(notiList != null){
+            for(HabbitNotification noti : notiList){
+                noti.cancel();
+            }
         }
         mainNoti.sendNotification("HabbitService exit");
         mainNoti.cancel();
         stopForeground(true);
         stopSelf();
+    }
+
+    private void addNotification(int id, String title, int type){
+        if(id != -1){
+            HabbitNotification noti = new HabbitNotification(HabbitService.this, id, title, type);
+            notiList.add(noti);
+            noti.sendNotification("Notification init");
+        }
     }
 
     @Override

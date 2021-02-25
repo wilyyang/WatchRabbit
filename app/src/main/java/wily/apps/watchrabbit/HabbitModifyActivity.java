@@ -22,6 +22,7 @@ import wily.apps.watchrabbit.adapter.HabbitAdapter;
 import wily.apps.watchrabbit.data.DataConst;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.service.HabbitService;
 import wily.apps.watchrabbit.util.DialogGetter;
 
 public class HabbitModifyActivity extends AppCompatActivity {
@@ -226,8 +227,15 @@ public class HabbitModifyActivity extends AppCompatActivity {
         db.habbitDao().insert(new Habbit(type, title, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
-                            finish();
-                        });
+                    long habbitId = item;
+                    Intent intent = new Intent(getApplicationContext(), HabbitService.class);
+                    intent.setAction(HabbitService.HABBIT_SERVICE_ADD);
+                    intent.putExtra(DataConst.HABBIT_ID, (int)habbitId);
+                    intent.putExtra(DataConst.HABBIT_TITLE, title);
+                    intent.putExtra(DataConst.HABBIT_TYPE, type);
+                    startService(intent);
+                    finish();
+                });
     }
 
     private void changeViewAtType(int type){

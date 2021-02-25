@@ -10,6 +10,7 @@ import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 
 import wily.apps.watchrabbit.R;
+import wily.apps.watchrabbit.data.DataConst;
 
 public class HabbitNotification {
     private Context mContext;
@@ -19,38 +20,52 @@ public class HabbitNotification {
 
     private int mId;
     private String mTitle;
-    private boolean isMain;
+    private int mType;
+    private int mStatus;
 
-    public HabbitNotification(Context context, int id, String title, boolean main) {
+    public static final int TYPE_MAIN_NOTI = -1;
+
+    public static final int STATUS_INIT = -1;
+    public static final int STATUS_START_CHECK = -1;
+    public static final int STATUS_END_CHECK = -1;
+
+    public HabbitNotification(Context context, int id, String title, int type) {
         this.mContext = context;
         this.mId = id;
         this.mTitle = title;
-        this.isMain = main;
+        this.mType = type;
+        this.mStatus = STATUS_INIT;
 
-        mChannel = new NotificationChannel(""+id, title, NotificationManager.IMPORTANCE_HIGH);
-
-        Intent checkIntent = new Intent(mContext, HabbitService.class);
-        checkIntent.setAction(HabbitService.HABBIT_SERVICE_CHECK);
-        PendingIntent checkPending = PendingIntent.getService(mContext, 0, checkIntent, 0);
-
+        mChannel = new NotificationChannel(""+id, mTitle, NotificationManager.IMPORTANCE_HIGH);
         mBuilder = new NotificationCompat.Builder(mContext, ""+id)
-                .setContentTitle(title)
+                .setContentTitle(mTitle)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(false)
-                .setSmallIcon(R.drawable.ic_alarm)
-                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
-                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
-                .addAction(android.R.drawable.btn_default, "Check", checkPending);
+                .setOngoing(true)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
 
-        if(isMain){
+        if(mType == TYPE_MAIN_NOTI){
             Intent exitIntent = new Intent(mContext, HabbitService.class);
             exitIntent.setAction(HabbitService.HABBIT_SERVICE_EXIT);
             PendingIntent exitPending = PendingIntent.getService(mContext, 0, exitIntent, 0);
-            mBuilder.addAction(android.R.drawable.btn_default, "Exit", exitPending);
+            mBuilder.setSmallIcon(R.drawable.ic_alarm).addAction(android.R.drawable.btn_default, "Exit", exitPending);
+        }else{
+            Intent checkIntent = new Intent(mContext, HabbitService.class);
+            checkIntent.setAction(HabbitService.HABBIT_SERVICE_CHECK);
+            PendingIntent checkPending = PendingIntent.getService(mContext, 0, checkIntent, 0);
+
+            switch(mType){
+                case DataConst.TYPE_HABBIT_CHECK:
+                    mBuilder.setSmallIcon(R.drawable.ic_check_circle).addAction(android.R.drawable.btn_default, "CHECK", checkPending);
+                    break;
+                case DataConst.TYPE_HABBIT_TIMER:
+                    mBuilder.setSmallIcon(R.drawable.ic_snooze).addAction(android.R.drawable.btn_default, "START", checkPending);
+                    break;
+            }
         }
     }
 
-    public void sendNotification( String msg) {
+    public void sendNotification(String msg) {
         mBuilder.setContentText(msg);
         NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notifiMgr.createNotificationChannel(mChannel);
@@ -63,6 +78,14 @@ public class HabbitNotification {
 
     public int getId(){
         return mId;
+    }
+
+    public int getStatus(){
+        return mStatus;
+    }
+
+    public int getType(){
+        return mType;
     }
 
     public void cancel(){
