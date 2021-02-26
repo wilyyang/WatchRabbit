@@ -17,6 +17,8 @@ public class Habbit {
     private int initCost;
     private int perCost;
 
+//    private int priority;
+
     @Ignore
     private boolean check;
 
@@ -88,10 +90,15 @@ public class Habbit {
     public boolean isCheck() {
         return check;
     }
-
     public void setCheck(boolean check) {
         this.check = check;
     }
+//    public int getNumber() {
+//        return number;
+//    }
+//    public void setNumber(int number) {
+//        this.number = number;
+//    }
 
     @Override
     public String toString() {

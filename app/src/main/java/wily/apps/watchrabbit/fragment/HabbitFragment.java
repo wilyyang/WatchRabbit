@@ -14,7 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,9 +34,9 @@ import wily.apps.watchrabbit.util.DialogGetter;
 public class HabbitFragment extends Fragment {
     private LinearLayout habbitLayoutParent;
 
-    private List<Habbit> habbitList;
+    private ArrayList<Habbit> habbitList;
     private HabbitAdapter habbitAdapter;
-    private ListView habbitListView;
+    private RecyclerView habbitRecyclerView;
 
     private Button btnHabbitAdd;
     private Button btnDeleteSelect;
@@ -55,8 +59,9 @@ public class HabbitFragment extends Fragment {
     private void initView(View view) {
         habbitLayoutParent = view.findViewById(R.id.layout_fragment_habbit_parent);
 
-        habbitListView = view.findViewById(R.id.list_habbit);
-        habbitListView.setDividerHeight(0);
+        LinearLayoutManager layoutMgr = new LinearLayoutManager(getContext());
+        habbitRecyclerView = view.findViewById(R.id.list_habbit);
+        habbitRecyclerView.setLayoutManager(layoutMgr);
 
         btnHabbitAdd = view.findViewById(R.id.btn_habbit_add);
         btnHabbitAdd.setOnClickListener(onClickListener);
@@ -142,6 +147,7 @@ public class HabbitFragment extends Fragment {
         }
     }
 
+    private ItemTouchHelper mItemTouchHelper;
     private void loadHabbits(){
         AlertDialog dialog = DialogGetter.getProgressDialog(getContext());
         dialog.show();
@@ -149,13 +155,12 @@ public class HabbitFragment extends Fragment {
         db.habbitDao().getAll().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
-                    habbitList = item;
+                    habbitList = (ArrayList)item;
                     habbitAdapter = new HabbitAdapter(getContext(), habbitList);
                     habbitAdapter.setOnItemClickListener(onItemClickListener);
 
-                    habbitListView.setAdapter(habbitAdapter);
+                    habbitRecyclerView.setAdapter(habbitAdapter);
                     habbitAdapter.notifyDataSetChanged();
-
                     dialog.dismiss();
                 });
     }

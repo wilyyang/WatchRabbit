@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.reflect.Array;
@@ -28,47 +29,19 @@ import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.DataConst;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
-public class HabbitAdapter extends BaseAdapter {
-    private List<Habbit> mList;
+public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitViewHolder>{
+
+
+    private ArrayList<Habbit> mList;
     private Context mContext;
     private OnItemClickListener mListener = null;
 
     private boolean selectableMode = false;
-    private boolean allCheck = false;
 
     // Base
-    public HabbitAdapter(Context context, List<Habbit> habbitList) {
+    public HabbitAdapter(Context context, ArrayList<Habbit> habbitList) {
         this.mContext = context;
         this.mList = habbitList;
-    }
-
-    @Override
-    public int getCount() {
-        return (null != mList ? mList.size() : 0);
-    }
-
-    @Override
-    public Object getItem(int pos) {
-        return mList.get(pos);
-    }
-
-    @Override
-    public long getItemId(int pos) {
-        return mList.get(pos).getId();
-    }
-
-    @Override
-    public View getView(int pos, View view, ViewGroup viewGroup) {
-        HabbitViewHolder viewHolder = null;
-        if (view == null) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.item_habbit, viewGroup, false);
-            viewHolder = new HabbitViewHolder(view, pos);
-            view.setTag(viewHolder);
-        } else {
-            viewHolder = (HabbitViewHolder) view.getTag();
-        }
-        viewHolder.setContent(mList.get(pos));
-        return view;
     }
 
     // Listener
@@ -82,6 +55,60 @@ public class HabbitAdapter extends BaseAdapter {
         this.mListener = listener;
     }
 
+    // Item Init
+    @NonNull
+    @Override
+    public HabbitViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_habbit, viewGroup, false);
+        HabbitViewHolder viewHolder = new HabbitViewHolder(view);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull HabbitViewHolder holder, int position) {
+        setContent(holder, mList.get(position));
+    }
+
+    protected void setContent(HabbitViewHolder holder, Habbit phabbit){
+        holder.habbit = phabbit;
+        setIcon(holder.imageType, phabbit.getType());
+        holder.txId.setText(""+phabbit.getId());
+        holder.txTitle.setText(phabbit.getTitle());
+        holder.txGoalCost.setText(""+phabbit.getGoalCost());
+        holder.txInitCost.setText(""+phabbit.getInitCost());
+        holder.txPerCost.setText(""+phabbit.getPerCost());
+        if(!phabbit.isActive()){
+            holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
+        }
+
+        if (!selectableMode) {
+            holder.checkBoxDelete.setVisibility(View.GONE);
+        } else {
+            holder.checkBoxDelete.setVisibility(View.VISIBLE);
+        }
+
+        if (phabbit.isCheck()) {
+            holder.checkBoxDelete.setChecked(true);
+        } else {
+            holder.checkBoxDelete.setChecked(false);
+        }
+    }
+
+    private void setIcon(ImageView image, int type){
+        switch (type){
+            case DataConst.TYPE_HABBIT_CHECK:
+                image.setImageResource(R.drawable.ic_check_circle);
+                break;
+            case DataConst.TYPE_HABBIT_TIMER:
+                image.setImageResource(R.drawable.ic_snooze);
+                break;
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return (null != mList ? mList.size() : 0);
+    }
 
     // CheckMode
     public boolean isSelectableMode(){
@@ -90,7 +117,10 @@ public class HabbitAdapter extends BaseAdapter {
 
     public void setSelectableMode(boolean flag){
         selectableMode = flag;
-//        notifyDataSetChanged();
+        for(Habbit h : mList){
+            h.setCheck(false);
+        }
+        notifyDataSetChanged();
     }
 
     public void setAllChecked(boolean flag){
@@ -110,10 +140,11 @@ public class HabbitAdapter extends BaseAdapter {
         return list;
     }
 
+
+
     // ViewHolder
-    public class HabbitViewHolder {
+    public class HabbitViewHolder extends RecyclerView.ViewHolder  {
         private Habbit habbit;
-        private int pos;
 
         protected View itemView;
         protected CheckBox checkBoxDelete;
@@ -124,9 +155,9 @@ public class HabbitAdapter extends BaseAdapter {
         protected TextView txInitCost;
         protected TextView txPerCost;
 
-        public HabbitViewHolder(View view, int position) {
-            this.pos = position;
 
+        public HabbitViewHolder(View view) {
+            super(view);
             this.itemView = view;
             this.checkBoxDelete = view.findViewById(R.id.habbit_delete_check);
             this.txId = view.findViewById(R.id.habbit_id);
@@ -144,9 +175,8 @@ public class HabbitAdapter extends BaseAdapter {
                     }
 
                     if(compoundButton.isPressed()){
-                        mListener.onItemCheckChanged(b);
-                        if(!b){
-                            allCheck = false;
+                        if(mListener != null) {
+                            mListener.onItemCheckChanged(b);
                         }
                     }
                 }
@@ -159,7 +189,9 @@ public class HabbitAdapter extends BaseAdapter {
                         checkBoxDelete.setPressed(true);
                         checkBoxDelete.setChecked(!checkBoxDelete.isChecked());
                     }else{
-                        mListener.onItemClick(Integer.parseInt(txId.getText().toString()));
+                        if(mListener != null) {
+                            mListener.onItemClick(Integer.parseInt(txId.getText().toString()));
+                        }
                     }
                 }
             });
@@ -173,48 +205,14 @@ public class HabbitAdapter extends BaseAdapter {
                     }else{
                         setSelectableMode(true);
                         checkBoxDelete.setChecked(!checkBoxDelete.isChecked());
-                        mListener.onItemLongClick(Integer.parseInt(txId.getText().toString()));
+                        if(mListener != null){
+                            mListener.onItemLongClick(Integer.parseInt(txId.getText().toString()));
+                        }
+
                     }
                     return true;
                 }
             });
-        }
-
-        protected void setContent(Habbit phabbit){
-            this.habbit = phabbit;
-
-            setIcon(imageType, habbit.getType());
-            txId.setText(""+habbit.getId());
-            txTitle.setText(habbit.getTitle());
-            txGoalCost.setText(""+habbit.getGoalCost());
-            txInitCost.setText(""+habbit.getInitCost());
-            txPerCost.setText(""+habbit.getPerCost());
-            if(!habbit.isActive()){
-                itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
-            }
-
-            if (!selectableMode) {
-                checkBoxDelete.setVisibility(View.GONE);
-            } else {
-                checkBoxDelete.setVisibility(View.VISIBLE);
-            }
-
-            if (habbit.isCheck()) {
-                checkBoxDelete.setChecked(true);
-            } else {
-                checkBoxDelete.setChecked(false);
-            }
-        }
-
-        private void setIcon(ImageView image, int type){
-            switch (type){
-                case DataConst.TYPE_HABBIT_CHECK:
-                    image.setImageResource(R.drawable.ic_check_circle);
-                    break;
-                case DataConst.TYPE_HABBIT_TIMER:
-                    image.setImageResource(R.drawable.ic_snooze);
-                    break;
-            }
         }
     }
 }
