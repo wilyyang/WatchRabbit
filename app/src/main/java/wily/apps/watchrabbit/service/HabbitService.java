@@ -23,8 +23,8 @@ public class HabbitService extends Service {
     public static final String HABBIT_SERVICE_INIT      = "HABBIT_SERVICE_INIT";
     public static final String HABBIT_SERVICE_EXIT      = "HABBIT_SERVICE_EXIT";
     public static final String HABBIT_SERVICE_ADD       = "HABBIT_SERVICE_ADD";
-//    public static final String HABBIT_SERVICE_REMOVE    = "HABBIT_SERVICE_REMOVE";
-//    public static final String HABBIT_SERVICE_UPDATE    = "HABBIT_SERVICE_UPDATE";
+    public static final String HABBIT_SERVICE_UPDATE    = "HABBIT_SERVICE_UPDATE";
+    public static final String HABBIT_SERVICE_REMOVE    = "HABBIT_SERVICE_REMOVE";
     public static final String HABBIT_SERVICE_CHECK     = "HABBIT_SERVICE_CHECK";
 //    public static final String HABBIT_SERVICE_SAVE      = "HABBIT_SERVICE_SAVE";
 
@@ -37,6 +37,10 @@ public class HabbitService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mContext = HabbitService.this;
+        int id = 0;
+        String title = "";
+        int type = 0;
+        boolean active = false;
         if (intent != null) {
             String action = intent.getAction();
             switch (action) {
@@ -50,15 +54,22 @@ public class HabbitService extends Service {
                     exitService();
                     break;
                 case HABBIT_SERVICE_ADD:
-                    int id = intent.getIntExtra(DataConst.HABBIT_ID, -1);
-                    String title = intent.getStringExtra(DataConst.HABBIT_TITLE);
-                    int type = intent.getIntExtra(DataConst.HABBIT_TYPE, -1);
+                    id = intent.getIntExtra(DataConst.HABBIT_ID, -1);
+                    title = intent.getStringExtra(DataConst.HABBIT_TITLE);
+                    type = intent.getIntExtra(DataConst.HABBIT_TYPE, -1);
                     addNotification(id, title, type);
                     break;
-//                case HABBIT_SERVICE_REMOVE:
-//                    break;
-//                case HABBIT_SERVICE_UPDATE:
-//                    break;
+                case HABBIT_SERVICE_UPDATE:
+                    id = intent.getIntExtra(DataConst.HABBIT_ID, -1);
+                    title = intent.getStringExtra(DataConst.HABBIT_TITLE);
+                    type = intent.getIntExtra(DataConst.HABBIT_TYPE, -1);
+                    active = intent.getBooleanExtra(DataConst.HABBIT_ACTIVE, false);
+                    updateNotification(id, title, type, active);
+                    break;
+                case HABBIT_SERVICE_REMOVE:
+                    ArrayList<Integer> remove_list = intent.getIntegerArrayListExtra(DataConst.HABBIT_DELETE_LIST);
+                    removeNotification(remove_list);
+                    break;
                 case HABBIT_SERVICE_CHECK:
                     Log.d("WILY", "HABBIT_SERVICE_CHECK");
                     break;
@@ -120,6 +131,37 @@ public class HabbitService extends Service {
             HabbitNotification noti = new HabbitNotification(HabbitService.this, id, title, type);
             notiList.add(noti);
             noti.sendNotification("Notification init");
+        }
+    }
+
+    private void updateNotification(int id, String title, int type, boolean active){
+        if(id != -1){
+            int idx = notiList.indexOf(HabbitNotification.getDummy(id));
+            Log.d("WatchRabbit", "idx : "+idx+" , "+id+" "+active);
+            if(idx > -1){
+                HabbitNotification noti = notiList.get(idx);
+
+                if(active == false){
+                    noti.cancel();
+                    notiList.remove(idx);
+                }
+            }else{
+                HabbitNotification noti = new HabbitNotification(HabbitService.this, id, title, type);
+                notiList.add(noti);
+                noti.sendNotification("Notification init");
+            }
+        }
+    }
+
+    private void removeNotification(ArrayList<Integer> list){
+        for(Integer id : list){
+            int idx = notiList.indexOf(HabbitNotification.getDummy(id));
+            Log.d("WatchRabbit", "idx : "+idx+" , "+id+" ");
+            if(idx > -1) {
+                HabbitNotification noti = notiList.get(idx);
+                noti.cancel();
+                notiList.remove(idx);
+            }
         }
     }
 

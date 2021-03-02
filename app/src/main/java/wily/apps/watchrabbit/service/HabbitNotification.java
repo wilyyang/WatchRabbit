@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import wily.apps.watchrabbit.R;
@@ -91,5 +92,24 @@ public class HabbitNotification {
     public void cancel(){
         NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notifiMgr.cancel(mId);
+    }
+
+    // temp
+    private HabbitNotification() {}
+    public static HabbitNotification getDummy(int id){
+        HabbitNotification noti = new HabbitNotification();
+        noti.mId = id;
+        return noti;
+    }
+
+    @Override
+    public int hashCode() {
+        return mId%11;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        HabbitNotification noti = (HabbitNotification) obj;
+        return noti.getId() == mId;
     }
 }

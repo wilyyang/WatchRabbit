@@ -27,8 +27,10 @@ import wily.apps.watchrabbit.HabbitModifyActivity;
 import wily.apps.watchrabbit.MainActivity;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.adapter.HabbitAdapter;
+import wily.apps.watchrabbit.data.DataConst;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.service.HabbitService;
 import wily.apps.watchrabbit.util.DialogGetter;
 
 public class HabbitFragment extends Fragment {
@@ -147,7 +149,6 @@ public class HabbitFragment extends Fragment {
         }
     }
 
-    private ItemTouchHelper mItemTouchHelper;
     private void loadHabbits(){
         AlertDialog dialog = DialogGetter.getProgressDialog(getContext());
         dialog.show();
@@ -175,6 +176,10 @@ public class HabbitFragment extends Fragment {
         db.habbitDao().deleteItemByIds(list).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
+                            Intent intent = new Intent(getActivity(), HabbitService.class);
+                            intent.setAction(HabbitService.HABBIT_SERVICE_REMOVE);
+                            intent.putIntegerArrayListExtra(DataConst.HABBIT_DELETE_LIST, (ArrayList<Integer>) list);
+                            getActivity().startService(intent);
                             setSelectableMode(false);
                             habbitAdapter.setSelectableMode(false);
                             dialog.dismiss();

@@ -197,6 +197,14 @@ public class HabbitModifyActivity extends AppCompatActivity {
         db.habbitDao().updateHabbit(id, type, title, active, goalCost, initCost, perCost).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
+                    long habbitId = id;
+                    Intent intent = new Intent(getApplicationContext(), HabbitService.class);
+                    intent.setAction(HabbitService.HABBIT_SERVICE_UPDATE);
+                    intent.putExtra(DataConst.HABBIT_ID, (int)habbitId);
+                    intent.putExtra(DataConst.HABBIT_TITLE, title);
+                    intent.putExtra(DataConst.HABBIT_TYPE, type);
+                    intent.putExtra(DataConst.HABBIT_ACTIVE, active);
+                    startService(intent);
                     finish();
                 });
     }
