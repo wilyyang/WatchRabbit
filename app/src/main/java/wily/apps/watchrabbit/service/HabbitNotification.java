@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import wily.apps.watchrabbit.R;
-import wily.apps.watchrabbit.data.DataConst;
+import wily.apps.watchrabbit.DataConst;
 
 public class HabbitNotification {
     private Context mContext;

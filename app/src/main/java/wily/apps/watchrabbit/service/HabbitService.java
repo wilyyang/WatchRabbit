@@ -11,8 +11,7 @@ import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import wily.apps.watchrabbit.adapter.HabbitAdapter;
-import wily.apps.watchrabbit.data.DataConst;
+import wily.apps.watchrabbit.DataConst;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
@@ -84,8 +83,8 @@ public class HabbitService extends Service {
         if(isCreate == false){
             isCreate = true;
             mainNoti = new HabbitNotification(HabbitService.this, -1, "Main Notifiation", HabbitNotification.TYPE_MAIN_NOTI);
-            startForeground(mainNoti.getId(), mainNoti.build());
             initService();
+            startForeground(mainNoti.getId(), mainNoti.build());
         }
     }
 
@@ -131,6 +130,8 @@ public class HabbitService extends Service {
             HabbitNotification noti = new HabbitNotification(HabbitService.this, id, title, type);
             notiList.add(noti);
             noti.sendNotification("Notification init");
+
+            mainNoti.sendNotification("#"+id+" "+title+" noti added");
         }
     }
 
@@ -140,20 +141,24 @@ public class HabbitService extends Service {
             Log.d("WatchRabbit", "idx : "+idx+" , "+id+" "+active);
             if(idx > -1){
                 HabbitNotification noti = notiList.get(idx);
-
                 if(active == false){
                     noti.cancel();
                     notiList.remove(idx);
+
+                    mainNoti.sendNotification("#"+id+" "+title+" noti disabled");
                 }
             }else{
                 HabbitNotification noti = new HabbitNotification(HabbitService.this, id, title, type);
                 notiList.add(noti);
                 noti.sendNotification("Notification init");
+
+                mainNoti.sendNotification("#"+id+" "+title+" noti actived");
             }
         }
     }
 
     private void removeNotification(ArrayList<Integer> list){
+        int count = 0;
         for(Integer id : list){
             int idx = notiList.indexOf(HabbitNotification.getDummy(id));
             Log.d("WatchRabbit", "idx : "+idx+" , "+id+" ");
@@ -161,8 +166,11 @@ public class HabbitService extends Service {
                 HabbitNotification noti = notiList.get(idx);
                 noti.cancel();
                 notiList.remove(idx);
+                ++count;
             }
         }
+
+        mainNoti.sendNotification("Noti removed : "+count);
     }
 
     @Override

@@ -3,8 +3,6 @@ package wily.apps.watchrabbit;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,12 +16,9 @@ import android.widget.Switch;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import wily.apps.watchrabbit.adapter.HabbitAdapter;
-import wily.apps.watchrabbit.data.DataConst;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.service.HabbitService;
-import wily.apps.watchrabbit.util.DialogGetter;
 
 public class HabbitModifyActivity extends AppCompatActivity {
 
@@ -211,7 +206,8 @@ public class HabbitModifyActivity extends AppCompatActivity {
 
     private void addHabbit(){
         int type = this.type;
-        String title = (!etTitleHabbit.equals("") ? etTitleHabbit.getText().toString() : "Unknown");
+        String temp = etTitleHabbit.getText().toString();
+        String title = (!temp.equals("") ? etTitleHabbit.getText().toString() : "Unknown");
         boolean active = switchHabbit.isChecked();
 
         int goalCost = 0;

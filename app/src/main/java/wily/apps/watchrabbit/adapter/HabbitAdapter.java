@@ -1,32 +1,22 @@
 package wily.apps.watchrabbit.adapter;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.TreeSet;
 
 import wily.apps.watchrabbit.R;
-import wily.apps.watchrabbit.data.DataConst;
+import wily.apps.watchrabbit.DataConst;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
 public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitViewHolder>{
@@ -77,7 +67,9 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         holder.txGoalCost.setText(""+phabbit.getGoalCost());
         holder.txInitCost.setText(""+phabbit.getInitCost());
         holder.txPerCost.setText(""+phabbit.getPerCost());
-        if(!phabbit.isActive()){
+        if(phabbit.isActive()){
+            holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round));
+        }else{
             holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
         }
 

@@ -1,7 +1,9 @@
-package wily.apps.watchrabbit.data;
+package wily.apps.watchrabbit;
 
 public final class DataConst {
     private DataConst(){}
+
+    public static final String TAG = "WatchRabbit";
 
     public static final int TYPE_HABBIT_CHECK = 0;
     public static final int TYPE_HABBIT_TIMER = 1;
