@@ -141,10 +141,14 @@ public class HabbitService extends Service {
             Log.d("WatchRabbit", "idx : "+idx+" , "+id+" "+active);
             if(idx > -1){
                 HabbitNotification noti = notiList.get(idx);
-                if(active == false){
+                if(active){
+                    if(!noti.getTitle().equals(title)){
+                        noti.changeTitle(title);
+                    }
+
+                }else{
                     noti.cancel();
                     notiList.remove(idx);
-
                     mainNoti.sendNotification("#"+id+" "+title+" noti disabled");
                 }
             }else{

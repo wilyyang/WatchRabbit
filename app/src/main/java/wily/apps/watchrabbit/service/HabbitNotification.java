@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -44,6 +45,8 @@ public class HabbitNotification {
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+//                .setGroup(DataConst.GROUP_KEY_HABBIT_NOTI)
+//                .setGroupSummary(true);
 
         if(mType == TYPE_MAIN_NOTI){
             Intent exitIntent = new Intent(mContext, HabbitService.class);
@@ -64,17 +67,37 @@ public class HabbitNotification {
                     break;
             }
         }
+
+        NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        notifiMgr.createNotificationChannel(mChannel);
+    }
+
+    public void changeTitle(String title) {
+        mBuilder.setContentText("Noti Title changed "+mTitle + " to "+title);
+        mTitle = title;
+        mBuilder.setContentTitle(mTitle);
+
+        NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+//        notifiMgr.createNotificationChannel(mChannel);
+        notifiMgr.notify(mId, mBuilder.build());
     }
 
     public void sendNotification(String msg) {
         mBuilder.setContentText(msg);
         NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifiMgr.createNotificationChannel(mChannel);
-        notifiMgr.notify(mId, mBuilder.build());
+//        notifiMgr.createNotificationChannel(mChannel);
+
+        Notification noti = mBuilder.build();
+        Log.d(DataConst.TAG, ""+noti.getGroup());
+        notifiMgr.notify(mId, noti);
     }
 
     public Notification build(){
         return mBuilder.build();
+    }
+
+    public String getTitle(){
+        return mTitle;
     }
 
     public int getId(){

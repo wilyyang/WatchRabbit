@@ -5,6 +5,8 @@ public final class DataConst {
 
     public static final String TAG = "WatchRabbit";
 
+    public static final String GROUP_KEY_HABBIT_NOTI = "wily.apps.watchrabbit.WatchRabbit";
+
     public static final int TYPE_HABBIT_CHECK = 0;
     public static final int TYPE_HABBIT_TIMER = 1;
 
