@@ -16,6 +16,7 @@ public final class DataConst {
     public static final String HABBIT_ID = "id";
     public static final String HABBIT_TITLE = "title";
     public static final String HABBIT_TYPE = "type";
+    public static final String HABBIT_PRIORITY = "priority";
     public static final String HABBIT_ACTIVE = "active";
     public static final String HABBIT_DELETE_LIST = "delete_list";
 }

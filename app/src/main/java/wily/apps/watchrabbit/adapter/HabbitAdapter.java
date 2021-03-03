@@ -20,8 +20,6 @@ import wily.apps.watchrabbit.DataConst;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
 public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitViewHolder>{
-
-
     private ArrayList<Habbit> mList;
     private Context mContext;
     private OnItemClickListener mListener = null;
@@ -64,6 +62,7 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         setIcon(holder.imageType, phabbit.getType());
         holder.txId.setText(""+phabbit.getId());
         holder.txTitle.setText(phabbit.getTitle());
+        holder.txPriority.setText(""+phabbit.getPriority());
         holder.txGoalCost.setText(""+phabbit.getGoalCost());
         holder.txInitCost.setText(""+phabbit.getInitCost());
         holder.txPerCost.setText(""+phabbit.getPerCost());
@@ -143,6 +142,7 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         protected TextView txId;
         protected ImageView imageType;
         protected TextView txTitle;
+        protected TextView txPriority;
         protected TextView txGoalCost;
         protected TextView txInitCost;
         protected TextView txPerCost;
@@ -155,6 +155,7 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
             this.txId = view.findViewById(R.id.habbit_id);
             this.imageType = view.findViewById(R.id.habbit_type);
             this.txTitle = view.findViewById(R.id.habbit_title);
+            this.txPriority = view.findViewById(R.id.habbit_priority);
             this.txGoalCost = view.findViewById(R.id.habbit_goal_cost);
             this.txInitCost = view.findViewById(R.id.habbit_init_cost);
             this.txPerCost = view.findViewById(R.id.habbit_per_cost);

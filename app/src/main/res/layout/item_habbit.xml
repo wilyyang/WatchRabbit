@@ -40,7 +40,7 @@
         android:id="@+id/habbit_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
+        android:layout_weight="5"
         android:text="init"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -50,53 +50,63 @@
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="7"
-        android:weightSum="6">
+        android:layout_weight="8"
+        android:weightSum="3.5">
+
+
+        <TextView
+            android:id="@+id/habbit_priority"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="0"
+            android:textStyle="bold"
+            android:textSize="@dimen/spSmallText"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.4"
             android:textAlignment="center"
-            android:text="goal"
-            android:textSize="@dimen/spSmallText"/>
+            android:text="go"
+            android:textSize="@dimen/spSoSmallText"/>
 
         <TextView
             android:id="@+id/habbit_goal_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.6"
             android:text="0"
             android:textSize="@dimen/spSmallText"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.4"
             android:textAlignment="center"
             android:text="init"
-            android:textSize="@dimen/spSmallText"/>
+            android:textSize="@dimen/spSoSmallText"/>
         <TextView
             android:id="@+id/habbit_init_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.6"
             android:text="0"
             android:textSize="@dimen/spSmallText"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.4"
             android:textAlignment="center"
             android:text="per"
-            android:textSize="@dimen/spSmallText"/>
+            android:textSize="@dimen/spSoSmallText"/>
 
         <TextView
             android:id="@+id/habbit_per_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.6"
             android:text="0"
             android:textSize="@dimen/spSmallText"/>
     </LinearLayout>

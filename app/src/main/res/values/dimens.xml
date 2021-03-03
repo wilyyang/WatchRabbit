@@ -8,6 +8,8 @@
 
     <dimen name="marginLayoutTopParent">40dp</dimen>
     <dimen name="marginLayoutTop">20dp</dimen>
+
+    <dimen name="marginLayoutTopLight">10dp</dimen>
     <dimen name="marginLayoutBottom">10dp</dimen>
     <dimen name="marginLayoutAtt">20dp</dimen>
 
@@ -15,6 +17,7 @@
 
     <dimen name="marginLayoutTitleLeft">25dp</dimen>
 
+    <dimen name="spSoSmallText">9sp</dimen>
     <dimen name="spSmallText">11sp</dimen>
     <dimen name="spLayoutBase">16sp</dimen>
     <dimen name="spBtnBig">18sp</dimen>

@@ -24,6 +24,7 @@ public class HabbitNotification {
     private String mTitle;
     private int mType;
     private int mStatus;
+    private int mPriority;
 
     public static final int TYPE_MAIN_NOTI = -1;
 
@@ -31,12 +32,13 @@ public class HabbitNotification {
     public static final int STATUS_START_CHECK = -1;
     public static final int STATUS_END_CHECK = -1;
 
-    public HabbitNotification(Context context, int id, String title, int type) {
+    public HabbitNotification(Context context, int id, String title, int type, int priority) {
         this.mContext = context;
         this.mId = id;
         this.mTitle = title;
         this.mType = type;
         this.mStatus = STATUS_INIT;
+        this.mPriority = priority;
 
         mChannel = new NotificationChannel(""+id, mTitle, NotificationManager.IMPORTANCE_HIGH);
         mBuilder = new NotificationCompat.Builder(mContext, ""+id)
@@ -44,20 +46,21 @@ public class HabbitNotification {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(false)
                 .setOngoing(true)
-                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
-//                .setGroup(DataConst.GROUP_KEY_HABBIT_NOTI)
-//                .setGroupSummary(true);
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                .setGroup(DataConst.GROUP_KEY_HABBIT_NOTI)
+                .setSortKey(""+priority);
 
         if(mType == TYPE_MAIN_NOTI){
-            Intent exitIntent = new Intent(mContext, HabbitService.class);
-            exitIntent.setAction(HabbitService.HABBIT_SERVICE_EXIT);
-            PendingIntent exitPending = PendingIntent.getService(mContext, 0, exitIntent, 0);
-            mBuilder.setSmallIcon(R.drawable.ic_alarm).addAction(android.R.drawable.btn_default, "Exit", exitPending);
+//            Intent exitIntent = new Intent(mContext, HabbitService.class);
+//            exitIntent.setAction(HabbitService.HABBIT_SERVICE_EXIT);
+//            PendingIntent exitPending = PendingIntent.getService(mContext, 0, exitIntent, 0);
+//            mBuilder.addAction(android.R.drawable.btn_default, "Exit", exitPending);
+            mBuilder.setSmallIcon(R.drawable.ic_alarm);
+            mBuilder.setGroupSummary(true);
         }else{
             Intent checkIntent = new Intent(mContext, HabbitService.class);
             checkIntent.setAction(HabbitService.HABBIT_SERVICE_CHECK);
             PendingIntent checkPending = PendingIntent.getService(mContext, 0, checkIntent, 0);
-
             switch(mType){
                 case DataConst.TYPE_HABBIT_CHECK:
                     mBuilder.setSmallIcon(R.drawable.ic_check_circle).addAction(android.R.drawable.btn_default, "CHECK", checkPending);
@@ -72,13 +75,18 @@ public class HabbitNotification {
         notifiMgr.createNotificationChannel(mChannel);
     }
 
-    public void changeTitle(String title) {
-        mBuilder.setContentText("Noti Title changed "+mTitle + " to "+title);
-        mTitle = title;
-        mBuilder.setContentTitle(mTitle);
+    public void changeNotiInfo(String title, int priority) {
+        if(!mTitle.equals(title)){
+            this.mTitle = title;
+            this.mBuilder.setContentTitle(mTitle);
+        }
+
+        if(mPriority != priority){
+            this.mPriority = priority;
+            this.mBuilder.setSortKey(""+priority);
+        }
 
         NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-//        notifiMgr.createNotificationChannel(mChannel);
         notifiMgr.notify(mId, mBuilder.build());
     }
 
@@ -94,6 +102,10 @@ public class HabbitNotification {
 
     public Notification build(){
         return mBuilder.build();
+    }
+
+    public int getPriority(){
+        return mPriority;
     }
 
     public String getTitle(){

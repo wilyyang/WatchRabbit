@@ -38,7 +38,8 @@
                 android:id="@+id/switch_habbit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2" />
+                android:layout_weight="2"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </LinearLayout>
 
@@ -88,21 +89,118 @@
         </LinearLayout>
     </LinearLayout>
 
-    <include
-        layout="@layout/child_habbit_modify_check"
-        android:id="@+id/include_habbit_modify_check"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"
-        android:layout_margin="@dimen/marginLayoutFront" />
+        android:layout_margin="@dimen/marginLayoutFront"
+        android:orientation="vertical"
+        android:background="@drawable/bg_layout_round"
+        android:weightSum="5">
 
-    <include
-        layout="@layout/child_habbit_modify_timer"
-        android:id="@+id/include_habbit_modify_timer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7"
-        android:layout_margin="@dimen/marginLayoutFront"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/marginLayoutAtt"
+            android:layout_marginRight="@dimen/marginLayoutAtt"
+            android:layout_marginTop="@dimen/marginLayoutTopLight"
+            android:layout_marginBottom="@dimen/marginLayoutBottom"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/habbit_modify_prio_text"
+                android:textSize="@dimen/spLayoutBase" />
+
+            <NumberPicker
+                android:id="@+id/habbit_picker_prio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="@drawable/bg_numberpicker_divider"
+                android:selectionDividerHeight="0dp"
+                android:descendantFocusability="blocksDescendants"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/marginLayoutAtt"
+            android:layout_marginRight="@dimen/marginLayoutAtt"
+            android:layout_marginTop="@dimen/marginLayoutTopLight"
+            android:layout_marginBottom="@dimen/marginLayoutBottom"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/habbit_modify_init_text"
+                android:textSize="@dimen/spLayoutBase" />
+
+            <NumberPicker
+                android:id="@+id/habbit_picker_init"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="@drawable/bg_numberpicker_divider"
+                android:selectionDividerHeight="0dp"
+                android:descendantFocusability="blocksDescendants"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/marginLayoutAtt"
+            android:layout_marginRight="@dimen/marginLayoutAtt"
+            android:layout_marginTop="@dimen/marginLayoutTopLight"
+            android:layout_marginBottom="@dimen/marginLayoutBottom"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:text="@string/habbit_modify_goal_text"
+                android:textSize="@dimen/spLayoutBase" />
+
+            <NumberPicker
+                android:id="@+id/habbit_picker_goal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="@drawable/bg_numberpicker_divider"
+                android:selectionDividerHeight="0dp"
+                android:descendantFocusability="blocksDescendants"/>
+        </LinearLayout>
+
+        <include
+            layout="@layout/child_habbit_modify_check"
+            android:id="@+id/include_habbit_modify_check"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_margin="@dimen/marginLayoutFront" />
+
+        <include
+            layout="@layout/child_habbit_modify_timer"
+            android:id="@+id/include_habbit_modify_timer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_margin="@dimen/marginLayoutFront"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

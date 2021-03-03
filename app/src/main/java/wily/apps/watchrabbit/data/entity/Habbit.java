@@ -17,13 +17,14 @@ public class Habbit {
     private int initCost;
     private int perCost;
 
-//    private int priority;
+    private int priority;
 
     @Ignore
     private boolean check;
 
-    public Habbit(int type, String title, boolean active, int goalCost, int initCost, int perCost) {
+    public Habbit(int type, int priority, String title, boolean active, int goalCost, int initCost, int perCost) {
         this.type = type;
+        this.priority = priority;
         this.title = title;
         this.active = active;
         this.goalCost = goalCost;
@@ -46,6 +47,10 @@ public class Habbit {
     public void setType(int type) {
         this.type = type;
     }
+
+    public int getPriority() { return priority; }
+
+    public void setPriority(int priority) { this.priority = priority; }
 
     public String getTitle() {
         return title;
@@ -93,16 +98,11 @@ public class Habbit {
     public void setCheck(boolean check) {
         this.check = check;
     }
-//    public int getNumber() {
-//        return number;
-//    }
-//    public void setNumber(int number) {
-//        this.number = number;
-//    }
+
 
     @Override
     public String toString() {
-        return "id= " + this.id + " , type= " + this.type + " , title= " + this.title+ " , active= " + this.active+
+        return "id= " + this.id + " , type= " + this.type + " , priority= " + this.priority + " , title= " + this.title+ " , active= " + this.active+
                 " , goalCost= " + this.goalCost+ " , initCost= " + this.initCost+ " , perCost= " + this.perCost;
     }
 }

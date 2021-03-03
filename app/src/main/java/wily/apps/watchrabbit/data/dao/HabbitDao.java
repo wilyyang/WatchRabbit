@@ -25,8 +25,8 @@ public interface HabbitDao {
     @Query("SELECT * FROM Habbit WHERE id=:p_id")
     Single<List<Habbit>> getHabbit(int p_id);
 
-    @Query("UPDATE Habbit SET type=:p_type, title=:p_title, active=:p_act, goalCost=:p_goalCost, initCost=:p_initCost, perCost=:p_perCost WHERE id = :p_id")
-    Single<Integer> updateHabbit(int p_id, int p_type, String p_title, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
+    @Query("UPDATE Habbit SET type=:p_type, priority=:p_prio, title=:p_title, active=:p_act, goalCost=:p_goalCost, initCost=:p_initCost, perCost=:p_perCost WHERE id = :p_id")
+    Single<Integer> updateHabbit(int p_id, int p_type, int p_prio, String p_title, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
 
     @Query("DELETE FROM Habbit WHERE id IN (:ids)")
     Single<Integer> deleteItemByIds(List<Integer> ids);

@@ -39,6 +39,7 @@ public class HabbitService extends Service {
         int id = 0;
         String title = "";
         int type = 0;
+        int priority = 0;
         boolean active = false;
         if (intent != null) {
             String action = intent.getAction();
@@ -56,14 +57,16 @@ public class HabbitService extends Service {
                     id = intent.getIntExtra(DataConst.HABBIT_ID, -1);
                     title = intent.getStringExtra(DataConst.HABBIT_TITLE);
                     type = intent.getIntExtra(DataConst.HABBIT_TYPE, -1);
-                    addNotification(id, title, type);
+                    priority = intent.getIntExtra(DataConst.HABBIT_PRIORITY, -1);
+                    addNotification(id, title, type, priority);
                     break;
                 case HABBIT_SERVICE_UPDATE:
                     id = intent.getIntExtra(DataConst.HABBIT_ID, -1);
                     title = intent.getStringExtra(DataConst.HABBIT_TITLE);
                     type = intent.getIntExtra(DataConst.HABBIT_TYPE, -1);
                     active = intent.getBooleanExtra(DataConst.HABBIT_ACTIVE, false);
-                    updateNotification(id, title, type, active);
+                    priority = intent.getIntExtra(DataConst.HABBIT_PRIORITY, -1);
+                    updateNotification(id, title, type, active, priority);
                     break;
                 case HABBIT_SERVICE_REMOVE:
                     ArrayList<Integer> remove_list = intent.getIntegerArrayListExtra(DataConst.HABBIT_DELETE_LIST);
@@ -82,7 +85,7 @@ public class HabbitService extends Service {
     private void createService(){
         if(isCreate == false){
             isCreate = true;
-            mainNoti = new HabbitNotification(HabbitService.this, -1, "Main Notifiation", HabbitNotification.TYPE_MAIN_NOTI);
+            mainNoti = new HabbitNotification(HabbitService.this, -1, "Main Notifiation", HabbitNotification.TYPE_MAIN_NOTI, 11);
             initService();
             startForeground(mainNoti.getId(), mainNoti.build());
         }
@@ -102,7 +105,7 @@ public class HabbitService extends Service {
                     notiList = new ArrayList<HabbitNotification>();
 
                     for(Habbit habbit : habbitList){
-                        notiList.add(new HabbitNotification(HabbitService.this, habbit.getId(), habbit.getTitle(), habbit.getType()));
+                        notiList.add(new HabbitNotification(HabbitService.this, habbit.getId(), habbit.getTitle(), habbit.getType(), habbit.getPriority()));
                     }
 
                     for(HabbitNotification noti : notiList){
@@ -125,9 +128,9 @@ public class HabbitService extends Service {
         stopSelf();
     }
 
-    private void addNotification(int id, String title, int type){
+    private void addNotification(int id, String title, int type, int priority){
         if(id != -1){
-            HabbitNotification noti = new HabbitNotification(HabbitService.this, id, title, type);
+            HabbitNotification noti = new HabbitNotification(HabbitService.this, id, title, type, priority);
             notiList.add(noti);
             noti.sendNotification("Notification init");
 
@@ -135,24 +138,21 @@ public class HabbitService extends Service {
         }
     }
 
-    private void updateNotification(int id, String title, int type, boolean active){
+    private void updateNotification(int id, String title, int type, boolean active, int priority){
         if(id != -1){
             int idx = notiList.indexOf(HabbitNotification.getDummy(id));
             Log.d("WatchRabbit", "idx : "+idx+" , "+id+" "+active);
             if(idx > -1){
                 HabbitNotification noti = notiList.get(idx);
                 if(active){
-                    if(!noti.getTitle().equals(title)){
-                        noti.changeTitle(title);
-                    }
-
+                    noti.changeNotiInfo(title, priority);
                 }else{
                     noti.cancel();
                     notiList.remove(idx);
                     mainNoti.sendNotification("#"+id+" "+title+" noti disabled");
                 }
             }else{
-                HabbitNotification noti = new HabbitNotification(HabbitService.this, id, title, type);
+                HabbitNotification noti = new HabbitNotification(HabbitService.this, id, title, type, priority);
                 notiList.add(noti);
                 noti.sendNotification("Notification init");
 
