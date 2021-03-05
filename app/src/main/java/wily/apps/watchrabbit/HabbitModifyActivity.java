@@ -222,9 +222,10 @@ public class HabbitModifyActivity extends AppCompatActivity {
                 perCost = numberPickerPer_timer.getValue()+ minPickerValue;
                 break;
         }
+        long currentTime = System.currentTimeMillis();
 
         HabbitDatabase db = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
-        db.habbitDao().insert(new Habbit(type, priority, title, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
+        db.habbitDao().insert(new Habbit(type, currentTime, priority, title, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
                     if(active == true){

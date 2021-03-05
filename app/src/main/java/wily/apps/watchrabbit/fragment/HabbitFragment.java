@@ -52,7 +52,6 @@ public class HabbitFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_habbit, container, false);
         initView(view);
-        loadHabbits();
         return view;
     }
 
@@ -157,6 +156,10 @@ public class HabbitFragment extends Fragment {
                     habbitList = (ArrayList)item;
                     habbitAdapter = new HabbitAdapter(getContext(), habbitList);
                     habbitAdapter.setOnItemClickListener(onItemClickListener);
+
+                    for(Habbit h : habbitList){
+                        Log.d("WILY", ""+h);
+                    }
 
                     habbitRecyclerView.setAdapter(habbitAdapter);
                     habbitAdapter.notifyDataSetChanged();

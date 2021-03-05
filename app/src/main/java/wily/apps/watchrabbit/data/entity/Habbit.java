@@ -4,10 +4,15 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Entity
 public class Habbit {
     @PrimaryKey(autoGenerate = true)
     private int id;
+    private long time;
 
     private int type;
     private String title;
@@ -19,11 +24,13 @@ public class Habbit {
 
     private int priority;
 
+
     @Ignore
     private boolean check;
 
-    public Habbit(int type, int priority, String title, boolean active, int goalCost, int initCost, int perCost) {
+    public Habbit(int type, long time, int priority, String title, boolean active, int goalCost, int initCost, int perCost) {
         this.type = type;
+        this.time = time;
         this.priority = priority;
         this.title = title;
         this.active = active;
@@ -38,6 +45,14 @@ public class Habbit {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public int getType() {
@@ -99,10 +114,10 @@ public class Habbit {
         this.check = check;
     }
 
-
     @Override
     public String toString() {
-        return "id= " + this.id + " , type= " + this.type + " , priority= " + this.priority + " , title= " + this.title+ " , active= " + this.active+
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return "id= " + this.id + ", time= "+format.format(new Date(time))+" , type= " + this.type + " , priority= " + this.priority + " , title= " + this.title+ " , active= " + this.active+
                 " , goalCost= " + this.goalCost+ " , initCost= " + this.initCost+ " , perCost= " + this.perCost;
     }
 }

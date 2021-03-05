@@ -31,9 +31,6 @@ public interface HabbitDao {
     @Query("DELETE FROM Habbit WHERE id IN (:ids)")
     Single<Integer> deleteItemByIds(List<Integer> ids);
 
-//    @Query("SELECT * FROM Habbit")
-//    Flowable<List<Habbit>> getActiveHabbit();
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<Long> insert(Habbit work);
 
