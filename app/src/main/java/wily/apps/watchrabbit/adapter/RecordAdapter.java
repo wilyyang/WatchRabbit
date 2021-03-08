@@ -1,6 +1,7 @@
 package wily.apps.watchrabbit.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import wily.apps.watchrabbit.DataConst;
@@ -26,11 +28,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     private OnItemClickListener mListener = null;
 
     private boolean selectableMode = false;
+    private HashMap<Long, Long> stopHash = null;
 
     // Base
-    public RecordAdapter(Context context, ArrayList<Record> habbitList) {
+    public RecordAdapter(Context context, ArrayList<Record> recordList, HashMap<Long, Long> stopTime) {
         this.mContext = context;
-        this.mList = habbitList;
+        this.mList = recordList;
+        this.stopHash = stopTime;
     }
 
     // Listener
@@ -65,8 +69,23 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
         holder.txTime.setText(DateUtil.getDateString(precord.getTime()));
         holder.txHid.setText(""+precord.getHid());
-        holder.txState.setText(""+precord.getState());
-        holder.txPairId.setText(""+precord.getPair());
+        holder.txState.setText(getStateText(precord.getState()));
+
+        //
+        if(precord.getState()==DataConst.HABBIT_STATE_TIMER_START){
+            Long stop = stopHash.get(precord.getId());
+            if(stop != null){
+                Long due = stop - precord.getTime();
+                holder.txPairId.setText(""+ (due / 1000));
+            }else{
+                holder.txPairId.setText("진행중");
+            }
+
+        }else{
+            holder.txPairId.setText(""+precord.getPair());
+        }
+        //
+
         if(precord.getState()==DataConst.HABBIT_STATE_TIMER_STOP){
             holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
         }else{
@@ -94,6 +113,19 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             case DataConst.TYPE_HABBIT_TIMER:
                 image.setImageResource(R.drawable.ic_snooze);
                 break;
+        }
+    }
+
+    private String getStateText(int state){
+        switch (state){
+            case DataConst.HABBIT_STATE_CHECK:
+                return mContext.getString(R.string.record_state_check);
+            case DataConst.HABBIT_STATE_TIMER_START:
+                return mContext.getString(R.string.record_state_timer_start);
+            case DataConst.HABBIT_STATE_TIMER_STOP:
+                return mContext.getString(R.string.record_state_timer_stop);
+            default:
+                return "Unknown";
         }
     }
 

@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import wily.apps.watchrabbit.DataConst;
 import wily.apps.watchrabbit.MainActivity;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.adapter.RecordAdapter;
@@ -147,20 +147,25 @@ public class TodayFragment extends Fragment {
         AlertDialog dialog = DialogGetter.getProgressDialog(getContext());
         dialog.show();
         RecordDatabase db = RecordDatabase.getAppDatabase(getContext());
-        db.recordDao().getAll().subscribeOn(Schedulers.io())
+        db.recordDao().getAllNotStop().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
-                    recordList = (ArrayList)item;
-                    recordAdapter = new RecordAdapter(getContext(), recordList);
-                    recordAdapter.setOnItemClickListener(onItemClickListener);
+                    recordList = (ArrayList) item;
 
-                    for(Record r : recordList){
-                        Log.d("WILY", ""+r);
-                    }
+                    db.recordDao().getAllStop().subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(stops -> {
+                                HashMap<Long, Long> stopMap = new HashMap<>();
+                                for(Record r : stops){
+                                    stopMap.put(r.getPair(), r.getTime());
+                                }
 
-                    recordRecyclerView.setAdapter(recordAdapter);
-                    recordAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
+                                recordAdapter = new RecordAdapter(getContext(), recordList, stopMap);
+                                recordAdapter.setOnItemClickListener(onItemClickListener);
+                                recordRecyclerView.setAdapter(recordAdapter);
+                                recordAdapter.notifyDataSetChanged();
+                                dialog.dismiss();
+                            });
                 });
     }
 

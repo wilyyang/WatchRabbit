@@ -28,16 +28,16 @@
         android:layout_margin="5dp"/>
 
     <TextView
-        android:id="@+id/record_id"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0" />
-
-    <TextView
         android:id="@+id/record_hid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1.5"
+        android:layout_weight="0.75" />
+
+    <TextView
+        android:id="@+id/record_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.75"
         android:text="0"
         android:textAlignment="center"
         android:textSize="@dimen/spSmallText"
@@ -81,9 +81,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
+            android:text="due"
             android:textAlignment="center"
-            android:text="pair"
-            android:textSize="@dimen/spSoSmallText"/>
+            android:textSize="@dimen/spSoSmallText" />
         <TextView
             android:id="@+id/record_pair"
             android:layout_width="0dp"

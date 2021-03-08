@@ -18,14 +18,20 @@ public interface RecordDao {
     @Query("SELECT * FROM Record")
     Single<List<Record>> getAll();
 
+    @Query("SELECT * FROM Record WHERE state != 2002")
+    Single<List<Record>> getAllNotStop();
+
+    @Query("SELECT * FROM Record WHERE state = 2002")
+    Single<List<Record>> getAllStop();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<Long> insert(Record work);
 
     @Query("DELETE FROM Record WHERE id IN (:ids)")
     Single<Integer> deleteItemByIds(List<Long> ids);
 
-    @Query("DELETE FROM Record WHERE hid=:p_hid")
-    Single<Integer> deleteItemByHid(int p_hid);
+    @Query("DELETE FROM Record WHERE hid IN (:hids)")
+    Single<Integer> deleteItemByHids(List<Integer> hids);
 
     @Query("UPDATE Record SET time=:p_time WHERE id = :p_id")
     Single<Integer> updateTime(long p_id, long p_time);
