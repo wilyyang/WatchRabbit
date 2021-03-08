@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="50dp"
     tools:context=".MainActivity"
     android:orientation="horizontal"
     android:background="@drawable/bg_layout_round"
@@ -31,51 +31,49 @@
         android:id="@+id/record_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="0" />
+
+    <TextView
+        android:id="@+id/record_hid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:text="0"
         android:textAlignment="center"
         android:textSize="@dimen/spSmallText"
-        android:text="0" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/record_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
-        android:text="0000/00/00 00:00"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textAlignment="viewStart"/>
+        android:layout_weight="7.5"
+        android:text="00/00/00 00:00:00"
+        android:textAlignment="viewStart"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="7"
-        android:weightSum="2.5">
-
-
-        <TextView
-            android:id="@+id/record_hid"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="hid"
-            android:textStyle="bold"
-            android:textSize="@dimen/spSmallText"/>
+        android:layout_weight="5"
+        android:weightSum="2">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
+            android:text="stat"
             android:textAlignment="center"
-            android:text="state"
-            android:textSize="@dimen/spSoSmallText"/>
+            android:textSize="@dimen/spSoSmallText" />
 
         <TextView
             android:id="@+id/record_state"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
+            android:textAlignment="center"
             android:text="2001"
             android:textSize="@dimen/spSmallText"/>
 
@@ -91,6 +89,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
+            android:textAlignment="center"
             android:text="345"
             android:textSize="@dimen/spSmallText"/>
     </LinearLayout>

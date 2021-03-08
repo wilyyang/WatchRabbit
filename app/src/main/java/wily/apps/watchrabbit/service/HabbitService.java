@@ -1,5 +1,6 @@
 package wily.apps.watchrabbit.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,8 @@ import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
+
+import static wily.apps.watchrabbit.DataConst.TAG;
 
 public class HabbitService extends Service {
     private Context mContext = null;
@@ -44,7 +47,6 @@ public class HabbitService extends Service {
         int type = 0;
         int priority = 0;
         boolean active = false;
-        int state = 0;
         if (intent != null) {
             String action = intent.getAction();
             switch (action) {
@@ -79,8 +81,10 @@ public class HabbitService extends Service {
                 case HABBIT_SERVICE_CHECK:
                     id = intent.getIntExtra(DataConst.HABBIT_ID, -1);
                     type = intent.getIntExtra(DataConst.HABBIT_TYPE, -1);
-                    state = intent.getIntExtra(DataConst.HABBIT_STATE, -1);
-                    checkAction(id, type, state);
+
+//                    HabbitNotification noti = notiList.get(notiList.indexOf(HabbitNotification.getDummy(id)));
+
+                    checkAction(id, type);
                     break;
 //                case HABBIT_SERVICE_SAVE:
 //                    break;
@@ -184,14 +188,33 @@ public class HabbitService extends Service {
         mainNoti.sendNotification("Noti removed : "+count);
     }
 
-    private void checkAction(int hid, int type, int state){
+    @SuppressLint("RestrictedApi")
+    private void checkAction(int hid, int type){
         long now = System.currentTimeMillis();
-
+        HabbitNotification noti = notiList.get(notiList.indexOf(HabbitNotification.getDummy(hid)));
+        long pair = noti.getPair();
+        int state = noti.getStatus();
         RecordDatabase db = RecordDatabase.getAppDatabase(this);
-        db.recordDao().insert(new Record(hid, type, now, state, -1)).subscribeOn(Schedulers.io())
+        db.recordDao().insert(new Record(hid, type, now, state, pair)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
-        notiList.get(notiList.indexOf(HabbitNotification.getDummy(hid))).sendNotification("#"+hid+" "+ DateUtil.getDateString(now)+" "+state);
+                .subscribe(item -> {
+                    String message = "#"+hid+" "+ DateUtil.getDateString(now)+" ";
+                    if(state == DataConst.HABBIT_STATE_TIMER_START){
+                        noti.setPair(item);
+                        noti.setStatus(DataConst.HABBIT_STATE_TIMER_STOP);
+                        noti.getBuilder().mActions.get(0).title = "STOP";
+                        message+="start";
+                    }else if(state == DataConst.HABBIT_STATE_TIMER_STOP){
+                        noti.setPair(-1);
+                        noti.setStatus(DataConst.HABBIT_STATE_TIMER_START);
+                        noti.getBuilder().mActions.get(0).title = "START";
+                        message+="stop";
+                    }else{
+                        noti.setPair(-1);
+                        message+="checked";
+                    }
+                    noti.sendNotification(message);
+                });
     }
 
     @Override

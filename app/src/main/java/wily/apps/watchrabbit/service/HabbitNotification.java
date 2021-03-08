@@ -30,18 +30,24 @@ public class HabbitNotification {
     private int mStatus;
     private int mPriority;
 
+    private long mPair;
+
     public static final int TYPE_MAIN_NOTI = -1;
 
     public static final int STATUS_INIT = -1;
-    public static final int STATUS_START_CHECK = -1;
-    public static final int STATUS_END_CHECK = -1;
 
     public HabbitNotification(Context context, int id, String title, int type, int priority) {
         this.mContext = context;
         this.mId = id;
         this.mTitle = title;
         this.mType = type;
-        this.mStatus = STATUS_INIT;
+        this.mPair = -1;
+
+        if(type==DataConst.TYPE_HABBIT_CHECK){
+            mStatus = DataConst.HABBIT_STATE_CHECK;
+        }else{
+            mStatus = DataConst.HABBIT_STATE_TIMER_START;
+        }
         this.mPriority = priority;
 
         mChannel = new NotificationChannel(""+id, mTitle, NotificationManager.IMPORTANCE_HIGH);
@@ -66,8 +72,8 @@ public class HabbitNotification {
             checkIntent.setAction(HabbitService.HABBIT_SERVICE_CHECK);
             checkIntent.putExtra(HABBIT_ID, mId);
             checkIntent.putExtra(HABBIT_TYPE, mType);
-            checkIntent.putExtra(HABBIT_STATE, mStatus);
-            PendingIntent checkPending = PendingIntent.getService(mContext, 0, checkIntent, 0);
+//            Log.d(TAG, "id "+mId+" "+mTitle);
+            PendingIntent checkPending = PendingIntent.getService(mContext, mId, checkIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             switch(mType){
                 case DataConst.TYPE_HABBIT_CHECK:
                     mBuilder.setSmallIcon(R.drawable.ic_check_circle)
@@ -108,6 +114,10 @@ public class HabbitNotification {
         notifiMgr.notify(mId, noti);
     }
 
+    public NotificationCompat.Builder getBuilder(){
+        return mBuilder;
+    }
+
     public Notification build(){
         return mBuilder.build();
     }
@@ -128,6 +138,11 @@ public class HabbitNotification {
         return mStatus;
     }
 
+    public void setStatus(int status){
+        this.mStatus = status;
+    }
+
+
     public int getType(){
         return mType;
     }
@@ -135,6 +150,14 @@ public class HabbitNotification {
     public void cancel(){
         NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notifiMgr.cancel(mId);
+    }
+
+    public long getPair() {
+        return mPair;
+    }
+
+    public void setPair(long mPair) {
+        this.mPair = mPair;
     }
 
     // temp

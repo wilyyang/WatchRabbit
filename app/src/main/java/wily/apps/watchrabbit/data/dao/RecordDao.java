@@ -42,6 +42,18 @@ public interface RecordDao {
     @Query("SELECT * FROM Record WHERE time>=:start AND time<=:stop")
     Single<List<Record>> getTermRecords(long start, long stop);
 
+    @Query("SELECT * FROM Record WHERE hid=:p_hid")
+    Single<List<Record>> getHabbitRecords(int p_hid);
+
+    @Query("SELECT * FROM Record WHERE hid=:p_hid AND time>=:start AND time<=:stop")
+    Single<List<Record>> getHabbitTermRecords(int p_hid, long start, long stop);
+
+    @Query("SELECT * FROM Record WHERE hid=:p_hid AND time>=:start AND time<=:stop AND state = 2001")
+    Single<List<Record>> getHabbitTermStartRecords(int p_hid, long start, long stop);
+
+    @Query("UPDATE Record SET pair=:p_pair WHERE id = :p_id")
+    Single<Integer> updatePair(long p_id, long p_pair);
+
     @Update
     Completable update(Record work);
 
