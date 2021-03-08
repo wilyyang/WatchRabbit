@@ -13,7 +13,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.DataConst;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
+import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.data.entity.Record;
+import wily.apps.watchrabbit.util.DateUtil;
 
 public class HabbitService extends Service {
     private Context mContext = null;
@@ -41,6 +44,7 @@ public class HabbitService extends Service {
         int type = 0;
         int priority = 0;
         boolean active = false;
+        int state = 0;
         if (intent != null) {
             String action = intent.getAction();
             switch (action) {
@@ -73,7 +77,10 @@ public class HabbitService extends Service {
                     removeNotification(remove_list);
                     break;
                 case HABBIT_SERVICE_CHECK:
-                    Log.d("WILY", "HABBIT_SERVICE_CHECK");
+                    id = intent.getIntExtra(DataConst.HABBIT_ID, -1);
+                    type = intent.getIntExtra(DataConst.HABBIT_TYPE, -1);
+                    state = intent.getIntExtra(DataConst.HABBIT_STATE, -1);
+                    checkAction(id, type, state);
                     break;
 //                case HABBIT_SERVICE_SAVE:
 //                    break;
@@ -175,6 +182,16 @@ public class HabbitService extends Service {
         }
 
         mainNoti.sendNotification("Noti removed : "+count);
+    }
+
+    private void checkAction(int hid, int type, int state){
+        long now = System.currentTimeMillis();
+
+        RecordDatabase db = RecordDatabase.getAppDatabase(this);
+        db.recordDao().insert(new Record(hid, type, now, state, -1)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+        notiList.get(notiList.indexOf(HabbitNotification.getDummy(hid))).sendNotification("#"+hid+" "+ DateUtil.getDateString(now)+" "+state);
     }
 
     @Override

@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        bottomNavigation.setSelectedItemId(R.id.habbit_tab);
+        bottomNavigation.setSelectedItemId(R.id.today_tab);
     }
 
     private void createHabbitService() {

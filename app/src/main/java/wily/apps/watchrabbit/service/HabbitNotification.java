@@ -14,6 +14,10 @@ import androidx.core.app.NotificationCompat;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.DataConst;
 
+import static wily.apps.watchrabbit.DataConst.HABBIT_ID;
+import static wily.apps.watchrabbit.DataConst.HABBIT_TYPE;
+import static wily.apps.watchrabbit.DataConst.HABBIT_STATE;
+
 public class HabbitNotification {
     private Context mContext;
 
@@ -60,10 +64,14 @@ public class HabbitNotification {
         }else{
             Intent checkIntent = new Intent(mContext, HabbitService.class);
             checkIntent.setAction(HabbitService.HABBIT_SERVICE_CHECK);
+            checkIntent.putExtra(HABBIT_ID, mId);
+            checkIntent.putExtra(HABBIT_TYPE, mType);
+            checkIntent.putExtra(HABBIT_STATE, mStatus);
             PendingIntent checkPending = PendingIntent.getService(mContext, 0, checkIntent, 0);
             switch(mType){
                 case DataConst.TYPE_HABBIT_CHECK:
-                    mBuilder.setSmallIcon(R.drawable.ic_check_circle).addAction(android.R.drawable.btn_default, "CHECK", checkPending);
+                    mBuilder.setSmallIcon(R.drawable.ic_check_circle)
+                            .addAction(android.R.drawable.btn_default, "CHECK", checkPending);
                     break;
                 case DataConst.TYPE_HABBIT_TIMER:
                     mBuilder.setSmallIcon(R.drawable.ic_snooze).addAction(android.R.drawable.btn_default, "START", checkPending);
