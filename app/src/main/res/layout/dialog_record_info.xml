@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="6">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_margin="5dp"
+
+                android:gravity="bottom"
+                android:text="#0 Title"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+        <RadioGroup
+            android:id="@+id/radio_group_habbit"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RadioButton
+                android:id="@+id/radio_habbit_check"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn_selector"
+                android:button="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/habbit_modify_check_text"
+                android:textColor="@color/color_btn_selector_text" />
+
+            <RadioButton
+                android:id="@+id/radio_habbit_timer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn_selector"
+                android:button="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/habbit_modify_timer_text"
+                android:textColor="@color/color_btn_selector_text" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4.3"
+        android:orientation="vertical"
+        android:weightSum="4"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:background="@drawable/bg_layout_round">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:gravity="bottom"
+            android:text="시작 시간 : "
+            android:textSize="@dimen/spLayoutBase" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <DatePicker
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_gravity="center_vertical"
+                android:descendantFocusability="blocksDescendants"
+                style="@android:style/Widget.DatePicker"/>
+            <TimePicker
+                android:id="@+id/timePicker_record"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:layout_gravity="center_vertical"
+                android:descendantFocusability="blocksDescendants"
+                android:timePickerMode="spinner"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:text="시간경과 : "
+                android:textSize="@dimen/spLayoutBase" />
+
+            <NumberPicker
+                android:id="@+id/record_due_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/bg_numberpicker_divider"
+                android:descendantFocusability="blocksDescendants"
+                android:selectionDividerHeight="0dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/btn_record_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_round"
+            android:text="@string/base_btn_cancel"
+            android:textColor="@color/btnBottom"
+            android:textSize="@dimen/spBtnBig" />
+
+        <Button
+            android:id="@+id/btn_record_save"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_round"
+            android:text="@string/base_btn_save"
+            android:textColor="@color/btnBottom"
+            android:textSize="@dimen/spBtnBig" />
+
+    </LinearLayout>
+</LinearLayout>

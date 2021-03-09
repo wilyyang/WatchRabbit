@@ -27,6 +27,7 @@ import wily.apps.watchrabbit.adapter.RecordAdapter;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DialogGetter;
+import wily.apps.watchrabbit.util.RecordDialog;
 
 public class TodayFragment extends Fragment {
     private LinearLayout recordLayoutParent;
@@ -90,12 +91,9 @@ public class TodayFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_record_add:
-//                    Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
-//
-//                    intent.putExtra("id", -1);
-//                    intent.putExtra("update", false);
-//
-//                    startActivity(intent);
+
+                    RecordDialog recordDialog = new RecordDialog(getContext());
+                    recordDialog.show();
                     break;
                 case R.id.btn_record_delete_select:
                     recordAdapter.setSelectableMode(!recordAdapter.isSelectableMode());
