@@ -19,6 +19,8 @@
 
     <dimen name="spSoSmallText">9sp</dimen>
     <dimen name="spSmallText">11sp</dimen>
+
+    <dimen name="spMidText">13sp</dimen>
     <dimen name="spLayoutBase">16sp</dimen>
     <dimen name="spBtnBig">18sp</dimen>
     <dimen name="spBtnText">24sp</dimen>

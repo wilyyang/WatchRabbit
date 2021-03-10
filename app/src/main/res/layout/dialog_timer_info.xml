@@ -3,96 +3,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="6">
+    android:background="@drawable/bg_layout_round"
+    android:weightSum="10">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="20dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:weightSum="2">
+        android:orientation="horizontal"
+        android:weightSum="8"
+        android:gravity="bottom">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="15dp"
-            android:orientation="horizontal"
-            android:weightSum="7">
+        <ImageView
+            android:id="@+id/record_dialog_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_snooze"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_margin="5dp"
-
-                android:gravity="bottom"
-                android:text="#0 Title"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-        <RadioGroup
-            android:id="@+id/radio_group_habbit"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <RadioButton
-                android:id="@+id/radio_habbit_check"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/bg_btn_selector"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/habbit_modify_check_text"
-                android:textColor="@color/color_btn_selector_text" />
-
-            <RadioButton
-                android:id="@+id/radio_habbit_timer"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/bg_btn_selector"
-                android:button="@android:color/transparent"
-                android:gravity="center"
-                android:text="@string/habbit_modify_timer_text"
-                android:textColor="@color/color_btn_selector_text" />
-        </RadioGroup>
+        <TextView
+            android:id="@+id/record_dialog_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="7"
+            android:textSize="18sp"
+            android:text="#1 Title"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4.3"
+        android:layout_weight="8"
         android:orientation="vertical"
-        android:weightSum="4"
+        android:weightSum="8"
         android:layout_margin="10dp"
         android:padding="10dp"
         android:background="@drawable/bg_layout_round">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:gravity="bottom"
             android:text="시작 시간 : "
-            android:textSize="@dimen/spLayoutBase" />
+            android:textSize="@dimen/spMidText" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_weight="4"
             android:orientation="horizontal"
-            android:weightSum="1">
+            android:weightSum="2">
 
             <DatePicker
+                android:id="@+id/datePicker_record"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:descendantFocusability="blocksDescendants"
                 style="@android:style/Widget.DatePicker"/>
@@ -100,16 +68,17 @@
                 android:id="@+id/timePicker_record"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:descendantFocusability="blocksDescendants"
                 android:timePickerMode="spinner"/>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_due_time"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="3"
             android:orientation="horizontal"
             android:weightSum="7">
 
@@ -119,8 +88,8 @@
                 android:layout_weight="2"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:text="시간경과 : "
-                android:textSize="@dimen/spLayoutBase" />
+                android:text="시간 경과 : "
+                android:textSize="@dimen/spMidText" />
 
             <NumberPicker
                 android:id="@+id/record_due_time"
@@ -138,7 +107,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
+        android:layout_weight="1"
         android:orientation="horizontal"
         android:layout_marginBottom="5dp"
         android:weightSum="2">
@@ -162,6 +131,5 @@
             android:text="@string/base_btn_save"
             android:textColor="@color/btnBottom"
             android:textSize="@dimen/spBtnBig" />
-
     </LinearLayout>
 </LinearLayout>

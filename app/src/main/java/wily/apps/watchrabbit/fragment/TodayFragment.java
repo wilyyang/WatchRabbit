@@ -91,8 +91,7 @@ public class TodayFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_record_add:
-
-                    RecordDialog recordDialog = new RecordDialog(getContext());
+                    RecordDialog recordDialog = new RecordDialog(getContext(), 1, true, null);
                     recordDialog.show();
                     break;
                 case R.id.btn_record_delete_select:
@@ -195,6 +194,8 @@ public class TodayFragment extends Fragment {
 
         @Override
         public void onItemClick(int id) {
+            RecordDialog recordDialog = new RecordDialog(getContext(), 1, false, null);
+            recordDialog.show();
 //            Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
 //
 //            intent.putExtra("id", id);
