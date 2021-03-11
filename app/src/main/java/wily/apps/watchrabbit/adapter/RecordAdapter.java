@@ -69,20 +69,22 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
         holder.txTime.setText(DateUtil.getDateString(precord.getTime()));
         holder.txHid.setText(""+precord.getHid());
-        holder.txState.setText(getStateText(precord.getState()));
 
         //
         if(precord.getState()==DataConst.HABBIT_STATE_TIMER_START){
+            holder.txLabelTime.setVisibility(View.VISIBLE);
+            holder.txTimeDuration.setVisibility(View.VISIBLE);
             Long stop = stopHash.get(precord.getId());
             if(stop != null){
                 Long due = stop - precord.getTime();
-                holder.txPairId.setText(""+ (due / 1000));
+                holder.txTimeDuration.setText(""+ (due / 1000));
             }else{
-                holder.txPairId.setText("진행중");
+                holder.txTimeDuration.setText("진행중");
             }
 
         }else{
-            holder.txPairId.setText(""+precord.getPair());
+            holder.txLabelTime.setVisibility(View.INVISIBLE);
+            holder.txTimeDuration.setVisibility(View.INVISIBLE);
         }
         //
 
@@ -173,11 +175,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         protected TextView txId;
         protected ImageView imageType;
 
+        protected TextView txLabelTime;
+
         protected TextView txTime;
         protected TextView txHid;
-        protected TextView txState;
-        protected TextView txPairId;
-
+        protected TextView txTimeDuration;
 
         public RecordViewHolder(View view) {
             super(view);
@@ -185,10 +187,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             this.checkBoxDelete = view.findViewById(R.id.record_delete_check);
             this.txId = view.findViewById(R.id.record_id);
             this.imageType = view.findViewById(R.id.record_type);
+
+            this.txLabelTime = view.findViewById(R.id.label_time_min);
             this.txTime = view.findViewById(R.id.record_time);
             this.txHid = view.findViewById(R.id.record_hid);
-            this.txState = view.findViewById(R.id.record_state);
-            this.txPairId = view.findViewById(R.id.record_pair);
+            this.txTimeDuration = view.findViewById(R.id.record_time_duration);
 
             checkBoxDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

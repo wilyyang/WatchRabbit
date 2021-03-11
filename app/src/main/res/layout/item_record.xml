@@ -31,13 +31,13 @@
         android:id="@+id/record_hid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.75" />
+        android:layout_weight="0" />
 
     <TextView
         android:id="@+id/record_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.75"
+        android:layout_weight="2"
         android:text="0"
         android:textAlignment="center"
         android:textSize="@dimen/spSmallText"
@@ -47,7 +47,7 @@
         android:id="@+id/record_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="7.5"
+        android:layout_weight="8"
         android:text="00/00/00 00:00:00"
         android:textAlignment="viewStart"
         android:textSize="15sp"
@@ -57,41 +57,26 @@
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
-        android:weightSum="2">
+        android:layout_weight="4"
+        android:weightSum="2"
+        android:layout_gravity="center_vertical">
 
         <TextView
+            android:id="@+id/label_time_min"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:text="stat"
-            android:textAlignment="center"
-            android:textSize="@dimen/spSoSmallText" />
+            android:layout_weight="1"
+            android:text="@string/record_state_timer_duration"
+            android:textSize="@dimen/spSmallText" />
 
         <TextView
-            android:id="@+id/record_state"
+            android:id="@+id/record_time_duration"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
+            android:layout_weight="1"
+            android:text="34"
             android:textAlignment="center"
-            android:text="2001"
-            android:textSize="@dimen/spSmallText"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:text="due"
-            android:textAlignment="center"
-            android:textSize="@dimen/spSoSmallText" />
-        <TextView
-            android:id="@+id/record_pair"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:textAlignment="center"
-            android:text="345"
-            android:textSize="@dimen/spSmallText"/>
+            android:textSize="@dimen/spSmallText" />
     </LinearLayout>
 
 </LinearLayout>
