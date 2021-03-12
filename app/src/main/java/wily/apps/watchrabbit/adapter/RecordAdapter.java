@@ -30,6 +30,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     private boolean selectableMode = false;
     private HashMap<Long, Long> stopHash = null;
 
+    private long MINUTE = 60 * 1000;
+
     // Base
     public RecordAdapter(Context context, ArrayList<Record> recordList, HashMap<Long, Long> stopTime) {
         this.mContext = context;
@@ -39,7 +41,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
     // Listener
     public interface OnItemClickListener{
-        void onItemClick(int id);
+        void onItemClick(int type, long time, long duration);
         void onItemLongClick(int pos);
         void onItemCheckChanged(boolean flag);
     }
@@ -76,9 +78,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             holder.txTimeDuration.setVisibility(View.VISIBLE);
             Long stop = stopHash.get(precord.getId());
             if(stop != null){
-                Long due = stop - precord.getTime();
-                holder.txTimeDuration.setText(""+ (due / 1000));
+                Long due = (stop - precord.getTime())/MINUTE;
+                holder.duration = due;
+                holder.txTimeDuration.setText(""+ due);
             }else{
+                holder.duration = -1;
                 holder.txTimeDuration.setText("진행중");
             }
 
@@ -181,6 +185,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         protected TextView txHid;
         protected TextView txTimeDuration;
 
+        protected long duration;
+
         public RecordViewHolder(View view) {
             super(view);
             this.itemView = view;
@@ -196,12 +202,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             checkBoxDelete.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(record != null){
+                    if (record != null) {
                         record.setCheck(b);
                     }
 
-                    if(compoundButton.isPressed()){
-                        if(mListener != null) {
+                    if (compoundButton.isPressed()) {
+                        if (mListener != null) {
                             mListener.onItemCheckChanged(b);
                         }
                     }
@@ -211,12 +217,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(selectableMode){
+                    if (selectableMode) {
                         checkBoxDelete.setPressed(true);
                         checkBoxDelete.setChecked(!checkBoxDelete.isChecked());
-                    }else{
-                        if(mListener != null) {
-                            mListener.onItemClick(Integer.parseInt(txId.getText().toString()));
+                    } else {
+                        if (mListener != null) {
+                            mListener.onItemClick(record.getType(), record.getTime(), duration);
                         }
                     }
                 }
@@ -225,13 +231,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    if(selectableMode){
+                    if (selectableMode) {
                         checkBoxDelete.setPressed(true);
                         checkBoxDelete.setChecked(!checkBoxDelete.isChecked());
-                    }else{
+                    } else {
                         setSelectableMode(true);
                         checkBoxDelete.setChecked(!checkBoxDelete.isChecked());
-                        if(mListener != null){
+                        if (mListener != null) {
                             mListener.onItemLongClick(Integer.parseInt(txId.getText().toString()));
                         }
 

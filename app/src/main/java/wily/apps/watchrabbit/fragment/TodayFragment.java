@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import wily.apps.watchrabbit.DataConst;
 import wily.apps.watchrabbit.MainActivity;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.adapter.RecordAdapter;
@@ -91,7 +93,7 @@ public class TodayFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_record_add:
-                    RecordDialog recordDialog = new RecordDialog(getContext(), 1, true, null);
+                    RecordDialog recordDialog = new RecordDialog(getContext(), true, DataConst.TYPE_HABBIT_TIMER, -1, -1);
                     recordDialog.show();
                     break;
                 case R.id.btn_record_delete_select:
@@ -193,9 +195,12 @@ public class TodayFragment extends Fragment {
         }
 
         @Override
-        public void onItemClick(int id) {
-            RecordDialog recordDialog = new RecordDialog(getContext(), 1, false, null);
-            recordDialog.show();
+        public void onItemClick(int type, long time, long duration) {
+            if(duration != -1){
+                RecordDialog recordDialog = new RecordDialog(getContext(), false, type, time, duration);
+                recordDialog.show();
+            }
+
 //            Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
 //
 //            intent.putExtra("id", id);

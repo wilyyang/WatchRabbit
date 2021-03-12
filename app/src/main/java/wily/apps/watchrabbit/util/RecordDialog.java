@@ -16,6 +16,9 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
 import wily.apps.watchrabbit.DataConst;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Record;
@@ -28,20 +31,35 @@ public class RecordDialog extends Dialog {
     private TextView recordTitle = null;
     private DatePicker datePickerRecord = null;
     private TimePicker timePickerRecord = null;
+
+    private TextView recordDueTimeLabel = null;
     private NumberPicker numberPickerRecord = null;
+
+
     private Button btnCancel = null;
     private Button btnSave = null;
 
-    public RecordDialog(@NonNull Context context, int type, boolean isAdd, Record record) {
+    public RecordDialog(@NonNull Context context, boolean isAdd, int type, long time, long duration) {
         super(context);
-        setContentView(R.layout.dialog_timer_info);
+        setContentView(R.layout.dialog_record_info);
 
         this.dialog = this;
         this.context = context;
-        initUIComponent(type, isAdd);
+        initUIComponent(type);
+
+        if(isAdd){
+            setRecord(type, System.currentTimeMillis(), 0);
+        }else{
+            if(duration == -1){
+                return;
+            }else{
+                setRecord(type, time, duration);
+            }
+
+        }
     }
 
-    private void initUIComponent(int type, boolean isAdd){
+    private void initUIComponent(int type){
         // Parent Layout
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
@@ -69,6 +87,7 @@ public class RecordDialog extends Dialog {
         timePickerRecord = findViewById(R.id.timePicker_record);
         timePickerRecord.setIs24HourView(true);
 
+        recordDueTimeLabel = findViewById(R.id.record_due_time_label);
         numberPickerRecord = findViewById(R.id.record_due_time);
         numberPickerInit(numberPickerRecord);
 
@@ -81,8 +100,26 @@ public class RecordDialog extends Dialog {
         });
 
         setIcon(recordType, type);
-        if(isAdd){
-            findViewById(R.id.layout_due_time).setVisibility(View.GONE);
+        if(type == DataConst.TYPE_HABBIT_CHECK){
+            recordDueTimeLabel.setVisibility(View.INVISIBLE);
+            numberPickerRecord.setVisibility(View.INVISIBLE);
+        }else if(type == DataConst.TYPE_HABBIT_TIMER){
+            recordDueTimeLabel.setVisibility(View.VISIBLE);
+            numberPickerRecord.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setRecord(int type, long time, long duration){
+
+        int hour = DateUtil.getDateNum(time, Calendar.HOUR);
+        int minute = DateUtil.getDateNum(time, Calendar.MINUTE);
+        int second = DateUtil.getDateNum(time, Calendar.SECOND);
+
+        timePickerRecord.setHour(hour);
+        timePickerRecord.setMinute(minute);
+
+        if(type == DataConst.TYPE_HABBIT_TIMER){
+            numberPickerRecord.setValue((int)duration);
         }
     }
 
