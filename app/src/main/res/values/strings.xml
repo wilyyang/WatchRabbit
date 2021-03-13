@@ -27,4 +27,7 @@
     <string name="record_state_check">체크</string>
     <string name="record_state_timer_start">타임</string>
     <string name="record_state_timer_stop">진행중</string>
+
+    <string name="record_btn_add">추가</string>
+    <string name="record_btn_update">업데이트</string>
 </resources>

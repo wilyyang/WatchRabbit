@@ -16,16 +16,22 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.DataConst;
 import wily.apps.watchrabbit.R;
+import wily.apps.watchrabbit.adapter.RecordAdapter;
+import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Record;
 
 public class RecordDialog extends Dialog {
     private RecordDialog dialog;
-    private Context context;
+    private Context mContext;
 
     private ImageView recordType = null;
     private TextView recordTitle = null;
@@ -35,24 +41,67 @@ public class RecordDialog extends Dialog {
     private TextView recordDueTimeLabel = null;
     private NumberPicker numberPickerRecord = null;
 
-
     private Button btnCancel = null;
     private Button btnSave = null;
+
+    private int mType = 0;
+
+    private long MINUTE = 60 * 1000;
 
     public RecordDialog(@NonNull Context context, boolean isAdd, int type, long time, long duration) {
         super(context);
         setContentView(R.layout.dialog_record_info);
 
         this.dialog = this;
-        this.context = context;
+        this.mContext = context;
+        this.mType = type;
         initUIComponent(type);
 
         if(isAdd){
+            btnSave.setText(R.string.record_btn_add);
+            btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RecordDatabase db = RecordDatabase.getAppDatabase(mContext);
+                    if(mType == DataConst.TYPE_HABBIT_CHECK){
+                        long time = DateUtil.getDateLong(datePickerRecord.getYear(), datePickerRecord.getMonth(), datePickerRecord.getDayOfMonth(),
+                                timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
+
+                        db.recordDao().insert(new Record(-1, mType, time, DataConst.HABBIT_STATE_CHECK, -1)).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(item2 ->{dialog.dismiss();});
+                    }else if(mType == DataConst.TYPE_HABBIT_TIMER){
+                        long time = DateUtil.getDateLong(datePickerRecord.getYear(), datePickerRecord.getMonth(), datePickerRecord.getDayOfMonth(),
+                                timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
+
+                        db.recordDao().insert(new Record(-1, mType, time, DataConst.HABBIT_STATE_TIMER_START, -1)).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(item -> {
+                                    long stopTime = time+(numberPickerRecord.getValue()*MINUTE);
+                                    db.recordDao().insert(new Record(-1, mType, stopTime, DataConst.HABBIT_STATE_TIMER_STOP, item)).subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(item2 ->{dialog.dismiss();});
+                                });
+                    }
+                }
+            });
             setRecord(type, System.currentTimeMillis(), 0);
         }else{
+
             if(duration == -1){
                 return;
             }else{
+                btnSave.setText(R.string.record_btn_update);
+                btnSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(mType == DataConst.TYPE_HABBIT_CHECK){
+
+                        }else if(mType == DataConst.TYPE_HABBIT_TIMER){
+
+                        }
+                    }
+                });
                 setRecord(type, time, duration);
             }
 
@@ -61,7 +110,7 @@ public class RecordDialog extends Dialog {
 
     private void initUIComponent(int type){
         // Parent Layout
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -91,7 +140,8 @@ public class RecordDialog extends Dialog {
         numberPickerRecord = findViewById(R.id.record_due_time);
         numberPickerInit(numberPickerRecord);
 
-        btnCancel = findViewById(R.id.btn_record_cancel);
+        btnSave = findViewById(R.id.btn_record_dialog_add);
+        btnCancel = findViewById(R.id.btn_record_dialog_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

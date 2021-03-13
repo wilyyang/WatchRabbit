@@ -25,4 +25,10 @@ public class DateUtil {
 
         return cal.get(type);
     }
+
+    public static long getDateLong(int year, int month, int day, int hour, int minute, int secord){
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day, hour, minute, secord);
+        return cal.getTimeInMillis();
+    }
 }
