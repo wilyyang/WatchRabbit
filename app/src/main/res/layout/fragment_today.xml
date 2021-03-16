@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/bgLayoutBack"
+    android:background="@color/bg_layout_back"
     android:weightSum="24">
 
     <LinearLayout
@@ -25,11 +25,11 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/marginLayoutAtt"
+                android:layout_marginLeft="@dimen/margin_layout_mid"
                 android:layout_weight="7"
                 android:gravity="center_vertical"
-                android:text="@string/menu_bottom_today_tab"
-                android:textSize="@dimen/spBarTitle" />
+                android:text="@string/menu_bottom_evaluation_tab"
+                android:textSize="@dimen/sp_bar_h2" />
         </LinearLayout>
 
         <LinearLayout
@@ -56,10 +56,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/bg_btn_plain"
+                android:background="@drawable/bg_btn_round"
                 android:text="+"
-                android:textColor="@color/btnTextColor"
-                android:textSize="@dimen/spBtnText"
+                android:textColor="@color/color_text_btn"
+                android:textSize="@dimen/sp_btn_big"
                 android:typeface="monospace" />
 
             <Button
@@ -67,10 +67,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/bg_btn_plain"
+                android:background="@drawable/bg_btn_round"
                 android:text=":"
-                android:textColor="@color/btnTextColor"
-                android:textSize="@dimen/spBtnText"
+                android:textColor="@color/color_text_btn"
+                android:textSize="@dimen/sp_btn_big"
                 android:typeface="monospace" />
 
         </LinearLayout>
@@ -88,7 +88,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/strokeColorLayout"/>
+            android:background="@color/color_stroke_base"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_record"
@@ -103,7 +103,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/strokeColorLayout"/>
+            android:background="@color/color_stroke_base"/>
     </LinearLayout>
 
 
@@ -122,22 +122,22 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_margin="@dimen/marginBtnBottom"
+            android:layout_margin="@dimen/margin_layout_narr"
             android:background="@drawable/bg_btn_round"
             android:text="@string/base_btn_cancel"
-            android:textColor="@color/btnBottom"
-            android:textSize="@dimen/spBtnBig" />
+            android:textColor="@color/color_text_btn"
+            android:textSize="@dimen/sp_btn_mid" />
 
         <Button
             android:id="@+id/btn_record_delete"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_margin="@dimen/marginBtnBottom"
+            android:layout_margin="@dimen/margin_layout_narr"
             android:background="@drawable/bg_btn_round"
             android:text="@string/base_btn_delete"
-            android:textColor="@color/btnBottom"
-            android:textSize="@dimen/spBtnBig" />
+            android:textColor="@color/color_text_btn"
+            android:textSize="@dimen/sp_btn_mid" />
 
     </LinearLayout>
 

@@ -5,9 +5,9 @@ import android.content.Context;
 
 public class DialogGetter {
 
-    public static AlertDialog getProgressDialog(Context context){
+    public static AlertDialog getProgressDialog(Context context, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Loading ...");
+        builder.setMessage(message);
         AlertDialog alertDialog = builder.create();
 
         alertDialog.setCancelable(false);

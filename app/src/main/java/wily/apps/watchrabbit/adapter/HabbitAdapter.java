@@ -67,7 +67,7 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         holder.txInitCost.setText(""+phabbit.getInitCost());
         holder.txPerCost.setText(""+phabbit.getPerCost());
         if(phabbit.isActive()){
-            holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round));
+            holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_enabled));
         }else{
             holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
         }
@@ -88,10 +88,10 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
     private void setIcon(ImageView image, int type){
         switch (type){
             case DataConst.TYPE_HABBIT_CHECK:
-                image.setImageResource(R.drawable.ic_check_circle);
+                image.setImageResource(R.drawable.ic_type_check);
                 break;
             case DataConst.TYPE_HABBIT_TIMER:
-                image.setImageResource(R.drawable.ic_snooze);
+                image.setImageResource(R.drawable.ic_type_timer);
                 break;
         }
     }

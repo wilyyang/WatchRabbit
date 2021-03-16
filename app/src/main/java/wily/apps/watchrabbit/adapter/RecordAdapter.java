@@ -1,7 +1,6 @@
 package wily.apps.watchrabbit.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
 
     // Listener
     public interface OnItemClickListener{
-        void onItemClick(int type, long time, long duration);
+        void onItemClick(int type, long id, long time, long duration);
         void onItemLongClick(int pos);
         void onItemCheckChanged(boolean flag);
     }
@@ -95,7 +94,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         if(precord.getState()==DataConst.HABBIT_STATE_TIMER_STOP){
             holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
         }else{
-            holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round));
+            holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_enabled));
         }
 
         if (!selectableMode) {
@@ -114,10 +113,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     private void setIcon(ImageView image, int type){
         switch (type){
             case DataConst.TYPE_HABBIT_CHECK:
-                image.setImageResource(R.drawable.ic_check_circle);
+                image.setImageResource(R.drawable.ic_type_check);
                 break;
             case DataConst.TYPE_HABBIT_TIMER:
-                image.setImageResource(R.drawable.ic_snooze);
+                image.setImageResource(R.drawable.ic_type_timer);
                 break;
         }
     }
@@ -127,9 +126,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             case DataConst.HABBIT_STATE_CHECK:
                 return mContext.getString(R.string.record_state_check);
             case DataConst.HABBIT_STATE_TIMER_START:
-                return mContext.getString(R.string.record_state_timer_start);
+                return mContext.getString(R.string.record_state_timer_complete);
             case DataConst.HABBIT_STATE_TIMER_STOP:
-                return mContext.getString(R.string.record_state_timer_stop);
+                return mContext.getString(R.string.record_state_timer_inprogress);
             default:
                 return "Unknown";
         }
@@ -222,7 +221,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
                         checkBoxDelete.setChecked(!checkBoxDelete.isChecked());
                     } else {
                         if (mListener != null) {
-                            mListener.onItemClick(record.getType(), record.getTime(), duration);
+                            mListener.onItemClick(record.getType(), record.getId(), record.getTime(), duration);
                         }
                     }
                 }

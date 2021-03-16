@@ -1,13 +1,18 @@
 package wily.apps.watchrabbit.service;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -31,7 +36,7 @@ public class HabbitService extends Service {
     public static final String HABBIT_SERVICE_UPDATE    = "HABBIT_SERVICE_UPDATE";
     public static final String HABBIT_SERVICE_REMOVE    = "HABBIT_SERVICE_REMOVE";
     public static final String HABBIT_SERVICE_CHECK     = "HABBIT_SERVICE_CHECK";
-//    public static final String HABBIT_SERVICE_SAVE      = "HABBIT_SERVICE_SAVE";
+    public static final String HABBIT_SERVICE_EVAL      = "HABBIT_SERVICE_EVAL";
 
     private boolean isCreate = false;
 
@@ -81,13 +86,11 @@ public class HabbitService extends Service {
                 case HABBIT_SERVICE_CHECK:
                     id = intent.getIntExtra(DataConst.HABBIT_ID, -1);
                     type = intent.getIntExtra(DataConst.HABBIT_TYPE, -1);
-
-//                    HabbitNotification noti = notiList.get(notiList.indexOf(HabbitNotification.getDummy(id)));
-
                     checkAction(id, type);
                     break;
-//                case HABBIT_SERVICE_SAVE:
-//                    break;
+                case HABBIT_SERVICE_EVAL:
+                    addEvaluation();
+                    break;
             }
         }
         return START_STICKY;
@@ -124,7 +127,25 @@ public class HabbitService extends Service {
                     }
                     mainNoti.sendNotification("HabbitService init complete : "+notiList.size());
                 });
+        setAlarm(this);
     }
+
+    public static void setAlarm(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, HabbitService.class);
+        intent.setAction(HABBIT_SERVICE_EVAL);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 1);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    public static void addEvaluation() {
+    }
+
 
     private void exitService(){
         isCreate = false;

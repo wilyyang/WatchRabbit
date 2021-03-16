@@ -11,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,7 +28,7 @@ import wily.apps.watchrabbit.adapter.RecordAdapter;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DialogGetter;
-import wily.apps.watchrabbit.util.RecordDialog;
+import wily.apps.watchrabbit.RecordDialog;
 
 public class TodayFragment extends Fragment {
     private LinearLayout recordLayoutParent;
@@ -93,7 +92,7 @@ public class TodayFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_record_add:
-                    RecordDialog recordDialog = new RecordDialog(getContext(), true, DataConst.TYPE_HABBIT_TIMER, -1, -1);
+                    RecordDialog recordDialog = new RecordDialog(getContext(), -1, true, DataConst.TYPE_HABBIT_TIMER, -1, -1);
                     recordDialog.show();
                     break;
                 case R.id.btn_record_delete_select:
@@ -143,7 +142,7 @@ public class TodayFragment extends Fragment {
     }
 
     private void loadRecords(){
-        AlertDialog dialog = DialogGetter.getProgressDialog(getContext());
+        AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
         RecordDatabase db = RecordDatabase.getAppDatabase(getContext());
         db.recordDao().getAllNotStop().subscribeOn(Schedulers.io())
@@ -172,7 +171,7 @@ public class TodayFragment extends Fragment {
 
         List<Long> list = recordAdapter.getCheckedIds();
 
-        AlertDialog dialog = DialogGetter.getProgressDialog(getContext());
+        AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
         RecordDatabase db = RecordDatabase.getAppDatabase(getContext());
         db.recordDao().deleteItemByIds(list).subscribeOn(Schedulers.io())
@@ -195,9 +194,9 @@ public class TodayFragment extends Fragment {
         }
 
         @Override
-        public void onItemClick(int type, long time, long duration) {
+        public void onItemClick(int type, long id, long time, long duration) {
             if(duration != -1){
-                RecordDialog recordDialog = new RecordDialog(getContext(), false, type, time, duration);
+                RecordDialog recordDialog = new RecordDialog(getContext(), id, false, type, time, duration);
                 recordDialog.show();
             }
 

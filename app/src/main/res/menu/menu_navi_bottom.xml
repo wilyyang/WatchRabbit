@@ -5,7 +5,7 @@
     <item
         android:id="@+id/today_tab"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="@string/menu_bottom_today_tab"
+        android:title="@string/menu_bottom_evaluation_tab"
         app:showAsAction="ifRoom" />
 
     <item

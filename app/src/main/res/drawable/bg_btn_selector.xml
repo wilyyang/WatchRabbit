@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item android:state_pressed="true" >
-        <shape android:shape="rectangle" >
-            <corners android:radius="0dip" />
-            <stroke android:width="@dimen/strokeWidth" android:color="@color/btnSelectorStroke" />
-            <solid android:color="@color/btnPressed" />
-        </shape>
-    </item>
-
-    <item android:state_checked="true">
-        <shape android:shape="rectangle" >
-            <corners android:radius="0dip" />
-            <stroke android:width="@dimen/strokeWidth" android:color="@color/btnSelectorStroke" />
-            <solid android:color="@color/btnSelect" />
-        </shape>
-    </item>
-
     <item android:state_checked="false" android:state_enabled="true">
         <shape android:shape="rectangle"  >
             <corners android:radius="0dip" />
-            <stroke android:width="@dimen/strokeWidth" android:color="@color/btnSelectorStroke" />
-            <solid android:color="@color/btnBase" />
+            <stroke android:width="@dimen/width_stroke" android:color="@color/color_stroke_selector" />
+            <solid android:color="@color/bg_selector_enable_uncheck" />
+        </shape>
+    </item>
+
+    <item android:state_checked="true" android:state_enabled="true">
+        <shape android:shape="rectangle" >
+            <corners android:radius="0dip" />
+            <stroke android:width="@dimen/width_stroke" android:color="@color/color_stroke_selector" />
+            <solid android:color="@color/bg_selector_enable_check" />
         </shape>
     </item>
 
     <item android:state_checked="false" android:state_enabled="false">
         <shape android:shape="rectangle"  >
             <corners android:radius="0dip" />
-            <stroke android:width="0dp" android:color="@color/btnSelectorStroke" />
-            <solid android:color="@color/btnBase_disable"/>
+            <stroke android:width="@dimen/width_stroke" android:color="@color/color_stroke_selector" />
+            <solid android:color="@color/bg_selector_disable_uncheck"/>
         </shape>
     </item>
+
+    <item android:state_checked="true" android:state_enabled="false">
+        <shape android:shape="rectangle" >
+            <corners android:radius="0dip" />
+            <stroke android:width="@dimen/width_stroke" android:color="@color/color_stroke_selector" />
+            <solid android:color="@color/bg_selector_disable_check" />
+        </shape>
+    </item>
+
 </selector>

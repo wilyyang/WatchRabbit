@@ -16,7 +16,6 @@ import wily.apps.watchrabbit.DataConst;
 
 import static wily.apps.watchrabbit.DataConst.HABBIT_ID;
 import static wily.apps.watchrabbit.DataConst.HABBIT_TYPE;
-import static wily.apps.watchrabbit.DataConst.HABBIT_STATE;
 
 public class HabbitNotification {
     private Context mContext;
@@ -65,7 +64,7 @@ public class HabbitNotification {
 //            exitIntent.setAction(HabbitService.HABBIT_SERVICE_EXIT);
 //            PendingIntent exitPending = PendingIntent.getService(mContext, 0, exitIntent, 0);
 //            mBuilder.addAction(android.R.drawable.btn_default, "Exit", exitPending);
-            mBuilder.setSmallIcon(R.drawable.ic_alarm);
+            mBuilder.setSmallIcon(R.drawable.ic_service_top);
             mBuilder.setGroupSummary(true);
         }else{
             Intent checkIntent = new Intent(mContext, HabbitService.class);
@@ -76,11 +75,11 @@ public class HabbitNotification {
             PendingIntent checkPending = PendingIntent.getService(mContext, mId, checkIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             switch(mType){
                 case DataConst.TYPE_HABBIT_CHECK:
-                    mBuilder.setSmallIcon(R.drawable.ic_check_circle)
+                    mBuilder.setSmallIcon(R.drawable.ic_type_check)
                             .addAction(android.R.drawable.btn_default, "CHECK", checkPending);
                     break;
                 case DataConst.TYPE_HABBIT_TIMER:
-                    mBuilder.setSmallIcon(R.drawable.ic_snooze).addAction(android.R.drawable.btn_default, "START", checkPending);
+                    mBuilder.setSmallIcon(R.drawable.ic_type_timer).addAction(android.R.drawable.btn_default, "START", checkPending);
                     break;
             }
         }

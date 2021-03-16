@@ -7,7 +7,7 @@
     android:layout_height="50dp"
     tools:context=".MainActivity"
     android:orientation="horizontal"
-    android:background="@drawable/bg_layout_round"
+    android:background="@drawable/bg_layout_round_enabled"
     android:gravity="center"
     android:weightSum="16.2"
     android:layout_marginRight="5dp">
@@ -40,7 +40,7 @@
         android:layout_weight="2"
         android:text="0"
         android:textAlignment="center"
-        android:textSize="@dimen/spSmallText"
+        android:textSize="@dimen/sp_base_s1"
         android:textStyle="bold" />
 
     <TextView
@@ -66,8 +66,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/record_state_timer_duration"
-            android:textSize="@dimen/spSmallText" />
+            android:text="@string/record_timer_term"
+            android:textSize="@dimen/sp_base_s2" />
 
         <TextView
             android:id="@+id/record_time_duration"
@@ -76,7 +76,7 @@
             android:layout_weight="1"
             android:text="34"
             android:textAlignment="center"
-            android:textSize="@dimen/spSmallText" />
+            android:textSize="@dimen/sp_base_s2" />
     </LinearLayout>
 
 </LinearLayout>

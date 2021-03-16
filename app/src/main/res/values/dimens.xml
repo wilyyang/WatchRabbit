@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="strokeWidth">1dp</dimen>
+    <dimen name="width_stroke">1dp</dimen>
 
-    <dimen name="cornerRoundItem">8dp</dimen>
-    <dimen name="cornerRound">15dp</dimen>
-    <dimen name="cornerRoundBtnText">20dp</dimen>
+    <dimen name="angle_round_item">8dp</dimen>
+    <dimen name="angle_round_base">15dp</dimen>
+    <dimen name="angle_round_btn">15dp</dimen>
 
-    <dimen name="marginLayoutTopParent">40dp</dimen>
-    <dimen name="marginLayoutTop">20dp</dimen>
+    <dimen name="margin_layout_wide">40dp</dimen>
+    <dimen name="margin_layout_mid">20dp</dimen>
+    <dimen name="margin_layout_narr">10dp</dimen>
 
-    <dimen name="marginLayoutTopLight">10dp</dimen>
-    <dimen name="marginLayoutBottom">10dp</dimen>
-    <dimen name="marginLayoutAtt">20dp</dimen>
+    <dimen name="sp_base_s3">8sp</dimen>
+    <dimen name="sp_base_s2">10sp</dimen>
+    <dimen name="sp_base_s1">12sp</dimen>
+    <dimen name="sp_base_m3">14sp</dimen>
+    <dimen name="sp_base_m2">16sp</dimen>
+    <dimen name="sp_base_m1">18sp</dimen>
 
-    <dimen name="marginLayoutFront">8dp</dimen>
+    <dimen name="sp_btn_mid">18sp</dimen>
+    <dimen name="sp_btn_big">24sp</dimen>
 
-    <dimen name="marginLayoutTitleLeft">25dp</dimen>
-
-    <dimen name="spSoSmallText">9sp</dimen>
-    <dimen name="spSmallText">11sp</dimen>
-
-    <dimen name="spMidText">13sp</dimen>
-    <dimen name="spLayoutBase">16sp</dimen>
-    <dimen name="spBtnBig">18sp</dimen>
-    <dimen name="spBtnText">24sp</dimen>
-
-    <dimen name="spBarTitle">18sp</dimen>
-
-    <dimen name="marginBtnBottom">10dp</dimen>
+    <dimen name="sp_bar_h2">18sp</dimen>
+    <dimen name="sp_bar_h1">24sp</dimen>
 </resources>

@@ -36,6 +36,9 @@ public interface RecordDao {
     @Query("UPDATE Record SET time=:p_time WHERE id = :p_id")
     Single<Integer> updateTime(long p_id, long p_time);
 
+    @Query("UPDATE Record SET time=:p_time WHERE pair = :p_pair")
+    Single<Integer> updateTimePair(long p_pair, long p_time);
+
     @Query("SELECT * FROM Record WHERE id=:p_id")
     Single<List<Record>> getRecord(long p_id);
 

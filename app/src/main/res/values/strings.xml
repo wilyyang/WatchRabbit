@@ -1,33 +1,28 @@
 <resources>
     <string name="app_name">WatchRabbit</string>
 
-    <string name="habbit_modify_title_hint">습관명을 입력해주세요</string>
+    <string name="base_btn_save">저장</string>
+    <string name="base_btn_cancel">취소</string>
+    <string name="base_btn_delete">삭제</string>
+    <string name="base_btn_add">추가</string>
+    <string name="base_btn_update">업데이트</string>
 
+    <string name="base_dialog_database_inprogress">DB 처리중 ...</string>
+
+    <string name="menu_bottom_evaluation_tab">평가</string>
+    <string name="menu_bottom_habbit_tab">습관</string>
+
+    <string name="habbit_modify_title_hint">습관명을 입력해주세요</string>
     <string name="habbit_modify_check_text">체크</string>
     <string name="habbit_modify_timer_text">타이머</string>
-
     <string name="habbit_modify_prio_text">우선 순위 : </string>
     <string name="habbit_modify_goal_text">목표 점수 : </string>
     <string name="habbit_modify_init_text">초기 점수 : </string>
     <string name="habbit_modify_check_per_text">체크 점수 : </string>
     <string name="habbit_modify_timer_per_text">분당 점수 : </string>
 
-
-    <string name="base_btn_save">저장</string>
-    <string name="base_btn_cancel">취소</string>
-    <string name="base_btn_delete">삭제</string>
-
-    <string name="menu_bottom_today_tab">점수</string>
-    <string name="menu_bottom_habbit_tab">습관</string>
-
-    <string name="database_process">DB 처리중</string>
-
-    <string name="record_state_timer_duration">시간(분):</string>
-
+    <string name="record_timer_term">시간(분):</string>
     <string name="record_state_check">체크</string>
-    <string name="record_state_timer_start">타임</string>
-    <string name="record_state_timer_stop">진행중</string>
-
-    <string name="record_btn_add">추가</string>
-    <string name="record_btn_update">업데이트</string>
+    <string name="record_state_timer_complete">타임</string>
+    <string name="record_state_timer_inprogress">진행중</string>
 </resources>

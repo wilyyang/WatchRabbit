@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_layout_round"
+    android:background="@drawable/bg_dialog_round"
     android:weightSum="10">
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:id="@+id/record_dialog_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_snooze"/>
+            android:background="@drawable/ic_type_timer"/>
 
         <TextView
             android:id="@+id/record_dialog_title"
@@ -39,7 +39,7 @@
         android:weightSum="8"
         android:layout_margin="10dp"
         android:padding="10dp"
-        android:background="@drawable/bg_layout_round">
+        android:background="@drawable/bg_layout_round_enabled">
 
         <TextView
             android:layout_width="match_parent"
@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:gravity="bottom"
             android:text="시작 시간 : "
-            android:textSize="@dimen/spMidText" />
+            android:textSize="@dimen/sp_base_m2" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                 android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:text="시간 경과 : "
-                android:textSize="@dimen/spMidText" />
+                android:textSize="@dimen/sp_base_m2" />
 
             <NumberPicker
                 android:id="@+id/record_due_time"
@@ -110,7 +110,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:layout_marginBottom="5dp"
+        android:layout_margin="5dp"
         android:weightSum="2">
 
         <Button
@@ -120,8 +120,8 @@
             android:layout_weight="1"
             android:background="@drawable/bg_btn_round"
             android:text="@string/base_btn_cancel"
-            android:textColor="@color/btnBottom"
-            android:textSize="@dimen/spBtnBig" />
+            android:textColor="@color/color_text_btn"
+            android:textSize="@dimen/sp_btn_mid" />
 
         <Button
             android:id="@+id/btn_record_dialog_add"
@@ -129,8 +129,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/bg_btn_round"
-            android:text="@string/record_btn_add"
-            android:textColor="@color/btnBottom"
-            android:textSize="@dimen/spBtnBig" />
+            android:text="@string/base_btn_add"
+            android:textColor="@color/color_text_btn"
+            android:textSize="@dimen/sp_btn_mid" />
     </LinearLayout>
 </LinearLayout>

@@ -4,7 +4,7 @@
     tools:context=".HabbitModifyActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgLayoutBack"
+    android:background="@color/bg_layout_back"
     android:orientation="vertical"
     android:weightSum="10">
 
@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:layout_marginTop="@dimen/marginLayoutTop"
-        android:layout_marginLeft="@dimen/marginLayoutAtt"
-        android:layout_marginRight="@dimen/marginLayoutAtt"
+        android:layout_marginTop="@dimen/margin_layout_mid"
+        android:layout_marginLeft="@dimen/margin_layout_mid"
+        android:layout_marginRight="@dimen/margin_layout_mid"
         android:orientation="vertical"
         android:weightSum="2">
 
@@ -30,9 +30,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8"
-                android:backgroundTint="@color/bgLayoutBackText"
+                android:backgroundTint="@color/color_text_layout_back"
                 android:hint="@string/habbit_modify_title_hint"
-                android:textColorHint="@color/bgLayoutBackText" />
+                android:textColorHint="@color/color_text_layout_back" />
 
             <Switch
                 android:id="@+id/switch_habbit"
@@ -47,10 +47,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:paddingTop="@dimen/marginLayoutTop"
-            android:paddingBottom="@dimen/marginLayoutBottom"
-            android:paddingLeft="@dimen/marginLayoutAtt"
-            android:paddingRight="@dimen/marginLayoutAtt"
+            android:paddingTop="@dimen/margin_layout_mid"
+            android:paddingBottom="@dimen/margin_layout_narr"
+            android:paddingLeft ="@dimen/margin_layout_mid"
+            android:paddingRight="@dimen/margin_layout_mid"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -73,7 +73,7 @@
                     android:button="@android:color/transparent"
                     android:gravity="center"
                     android:text="@string/habbit_modify_check_text"
-                    android:textColor="@color/color_btn_selector_text" />
+                    android:textColor="@color/color_text_selector" />
 
                 <RadioButton
                     android:id="@+id/radio_habbit_timer"
@@ -84,7 +84,7 @@
                     android:button="@android:color/transparent"
                     android:gravity="center"
                     android:text="@string/habbit_modify_timer_text"
-                    android:textColor="@color/color_btn_selector_text" />
+                    android:textColor="@color/color_text_selector" />
             </RadioGroup>
         </LinearLayout>
     </LinearLayout>
@@ -93,19 +93,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"
-        android:layout_margin="@dimen/marginLayoutFront"
+        android:layout_margin="@dimen/margin_layout_narr"
         android:orientation="vertical"
-        android:background="@drawable/bg_layout_round"
+        android:background="@drawable/bg_layout_round_enabled"
         android:weightSum="5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginLeft="@dimen/marginLayoutAtt"
-            android:layout_marginRight="@dimen/marginLayoutAtt"
-            android:layout_marginTop="@dimen/marginLayoutTopLight"
-            android:layout_marginBottom="@dimen/marginLayoutBottom"
+            android:layout_marginLeft="@dimen/margin_layout_mid"
+            android:layout_marginRight="@dimen/margin_layout_mid"
+            android:layout_marginTop="@dimen/margin_layout_mid"
+            android:layout_marginBottom="@dimen/margin_layout_narr"
             android:orientation="horizontal"
             android:weightSum="7">
 
@@ -115,7 +115,7 @@
                 android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:text="@string/habbit_modify_prio_text"
-                android:textSize="@dimen/spLayoutBase" />
+                android:textSize="@dimen/sp_base_m2" />
 
             <NumberPicker
                 android:id="@+id/habbit_picker_prio"
@@ -131,10 +131,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginLeft="@dimen/marginLayoutAtt"
-            android:layout_marginRight="@dimen/marginLayoutAtt"
-            android:layout_marginTop="@dimen/marginLayoutTopLight"
-            android:layout_marginBottom="@dimen/marginLayoutBottom"
+            android:layout_marginLeft="@dimen/margin_layout_mid"
+            android:layout_marginRight="@dimen/margin_layout_mid"
+            android:layout_marginTop="@dimen/margin_layout_mid"
+            android:layout_marginBottom="@dimen/margin_layout_narr"
             android:orientation="horizontal"
             android:weightSum="7">
 
@@ -144,7 +144,7 @@
                 android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:text="@string/habbit_modify_init_text"
-                android:textSize="@dimen/spLayoutBase" />
+                android:textSize="@dimen/sp_base_m2" />
 
             <NumberPicker
                 android:id="@+id/habbit_picker_init"
@@ -160,10 +160,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginLeft="@dimen/marginLayoutAtt"
-            android:layout_marginRight="@dimen/marginLayoutAtt"
-            android:layout_marginTop="@dimen/marginLayoutTopLight"
-            android:layout_marginBottom="@dimen/marginLayoutBottom"
+            android:layout_marginLeft="@dimen/margin_layout_mid"
+            android:layout_marginRight="@dimen/margin_layout_mid"
+            android:layout_marginTop="@dimen/margin_layout_mid"
+            android:layout_marginBottom="@dimen/margin_layout_narr"
             android:orientation="horizontal"
             android:weightSum="7">
 
@@ -173,7 +173,7 @@
                 android:layout_weight="2"
                 android:gravity="center_vertical"
                 android:text="@string/habbit_modify_goal_text"
-                android:textSize="@dimen/spLayoutBase" />
+                android:textSize="@dimen/sp_base_m2" />
 
             <NumberPicker
                 android:id="@+id/habbit_picker_goal"
@@ -191,7 +191,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:layout_margin="@dimen/marginLayoutFront" />
+            android:layout_margin="@dimen/margin_layout_narr" />
 
         <include
             layout="@layout/child_habbit_modify_timer"
@@ -199,7 +199,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:layout_margin="@dimen/marginLayoutFront"/>
+            android:layout_margin="@dimen/margin_layout_narr"/>
     </LinearLayout>
 
     <LinearLayout
@@ -214,22 +214,22 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_margin="@dimen/marginBtnBottom"
+            android:layout_margin="@dimen/margin_layout_narr"
             android:background="@drawable/bg_btn_round"
             android:text="@string/base_btn_cancel"
-            android:textColor="@color/btnBottom"
-            android:textSize="@dimen/spBtnBig" />
+            android:textColor="@color/color_text_btn_accent"
+            android:textSize="@dimen/sp_btn_mid" />
 
         <Button
             android:id="@+id/btn_habbit_modify_save"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_margin="@dimen/marginBtnBottom"
+            android:layout_margin="@dimen/margin_layout_narr"
             android:background="@drawable/bg_btn_round"
             android:text="@string/base_btn_save"
-            android:textColor="@color/btnBottom"
-            android:textSize="@dimen/spBtnBig" />
+            android:textColor="@color/color_text_btn_accent"
+            android:textSize="@dimen/sp_btn_mid" />
 
     </LinearLayout>
 </LinearLayout>

@@ -149,7 +149,7 @@ public class HabbitFragment extends Fragment {
     }
 
     private void loadHabbits(){
-        AlertDialog dialog = DialogGetter.getProgressDialog(getContext());
+        AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
         HabbitDatabase db = HabbitDatabase.getAppDatabase(getContext());
         db.habbitDao().getAll().subscribeOn(Schedulers.io())
@@ -173,7 +173,7 @@ public class HabbitFragment extends Fragment {
 
         List<Integer> list = habbitAdapter.getCheckedIds();
 
-        AlertDialog dialog = DialogGetter.getProgressDialog(getContext());
+        AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
         HabbitDatabase h_db = HabbitDatabase.getAppDatabase(getContext());
         h_db.habbitDao().deleteItemByIds(list).subscribeOn(Schedulers.io())

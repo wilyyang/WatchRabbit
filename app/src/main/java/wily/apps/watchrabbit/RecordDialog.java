@@ -1,4 +1,4 @@
-package wily.apps.watchrabbit.util;
+package wily.apps.watchrabbit;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,18 +16,13 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import wily.apps.watchrabbit.DataConst;
-import wily.apps.watchrabbit.R;
-import wily.apps.watchrabbit.adapter.RecordAdapter;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Record;
+import wily.apps.watchrabbit.util.DateUtil;
 
 public class RecordDialog extends Dialog {
     private RecordDialog dialog;
@@ -48,7 +43,7 @@ public class RecordDialog extends Dialog {
 
     private long MINUTE = 60 * 1000;
 
-    public RecordDialog(@NonNull Context context, boolean isAdd, int type, long time, long duration) {
+    public RecordDialog(@NonNull Context context, long id, boolean isAdd, int type, long time, long duration) {
         super(context);
         setContentView(R.layout.dialog_record_info);
 
@@ -58,21 +53,20 @@ public class RecordDialog extends Dialog {
         initUIComponent(type);
 
         if(isAdd){
-            btnSave.setText(R.string.record_btn_add);
+            btnSave.setText(R.string.base_btn_add);
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     RecordDatabase db = RecordDatabase.getAppDatabase(mContext);
+                    long time = DateUtil.getDateLong(datePickerRecord.getYear(), datePickerRecord.getMonth(), datePickerRecord.getDayOfMonth(),
+                            timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
                     if(mType == DataConst.TYPE_HABBIT_CHECK){
-                        long time = DateUtil.getDateLong(datePickerRecord.getYear(), datePickerRecord.getMonth(), datePickerRecord.getDayOfMonth(),
-                                timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
+
 
                         db.recordDao().insert(new Record(-1, mType, time, DataConst.HABBIT_STATE_CHECK, -1)).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(item2 ->{dialog.dismiss();});
                     }else if(mType == DataConst.TYPE_HABBIT_TIMER){
-                        long time = DateUtil.getDateLong(datePickerRecord.getYear(), datePickerRecord.getMonth(), datePickerRecord.getDayOfMonth(),
-                                timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
 
                         db.recordDao().insert(new Record(-1, mType, time, DataConst.HABBIT_STATE_TIMER_START, -1)).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -91,14 +85,20 @@ public class RecordDialog extends Dialog {
             if(duration == -1){
                 return;
             }else{
-                btnSave.setText(R.string.record_btn_update);
+                btnSave.setText(R.string.base_btn_update);
                 btnSave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        RecordDatabase db = RecordDatabase.getAppDatabase(mContext);
+                        long time = DateUtil.getDateLong(datePickerRecord.getYear(), datePickerRecord.getMonth(), datePickerRecord.getDayOfMonth(),
+                                timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
+
                         if(mType == DataConst.TYPE_HABBIT_CHECK){
-
+                            db.recordDao().updateTime(id, time);
                         }else if(mType == DataConst.TYPE_HABBIT_TIMER){
-
+                            long stopTime = time+(numberPickerRecord.getValue()*MINUTE);
+                            db.recordDao().updateTime(id, time);
+                            db.recordDao().updateTimePair(id, stopTime);
                         }
                     }
                 });
@@ -176,10 +176,10 @@ public class RecordDialog extends Dialog {
     private void setIcon(ImageView image, int type){
         switch (type){
             case DataConst.TYPE_HABBIT_CHECK:
-                image.setImageResource(R.drawable.ic_check_circle);
+                image.setImageResource(R.drawable.ic_type_check);
                 break;
             case DataConst.TYPE_HABBIT_TIMER:
-                image.setImageResource(R.drawable.ic_snooze);
+                image.setImageResource(R.drawable.ic_type_timer);
                 break;
         }
     }
@@ -187,8 +187,8 @@ public class RecordDialog extends Dialog {
     private final int maxPickerValue = 1440;
     private final int minPickerValue = 1;
     private void numberPickerInit(NumberPicker numberPicker){
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(maxPickerValue - minPickerValue);
+        numberPicker.setMinValue(minPickerValue);
+        numberPicker.setMaxValue(maxPickerValue);
         numberPicker.setWrapSelectorWheel(false);
         numberPicker.setValue(10);
     }

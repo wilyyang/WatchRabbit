@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3881CE</color>
-    <color name="colorPrimaryDark">#8B8C8E</color>
-    <color name="colorAccent">#339999</color>
+    <color name="color_primary">#FF3881CE</color>
+    <color name="color_select">#FF339999</color>
+    <color name="color_disable">#778B8C8E</color>
 
-    <color name="colorBottomNavigation">#EEEFEF</color>
+    <color name="bg_navi">#FFEEEFEF</color>
+    <color name="color_text_navi_check">#FF121212</color>
+    <color name="color_text_navi_not_check">#FFCCCCCC</color>
 
-    <color name="bgLayoutBack">#F5F5F5</color>
-    <color name="bgLayoutFront">#FFFFFF</color>
-    <color name="bgLayoutFrontPressed">#33FFFFFF</color>
+    <color name="bg_layout_back">#FFF5F5F5</color>
+    <color name="bg_layout_enable_front">#FFFFFFFF</color>
+    <color name="bg_layout_enable_press">#33FFFFFF</color>
+    <color name="bg_layout_disable_front">#33CCCCCC</color>
+    <color name="bg_layout_disable_press">#11CCCCCC</color>
 
-    <color name="bgLayoutFrontDisabled">#33cccccc</color>
-    <color name="bgLayoutFrontDisabledPressed">#11cccccc</color>
+    <color name="color_stroke_base">#FFD1D1D1</color>
+    <color name="color_stroke_item">#33D1D1D1</color>
 
-    <color name="strokeColorLayout">#D1D1D1</color>
+    <color name="color_text_layout_back">#FFBFBFBF</color>
 
-    <color name="strokeColorItem">#33D1D1D1</color>
+    <color name="color_stroke_selector">#FFD6D6D6</color>
 
-    <color name="bgLayoutBackText">#BFBFBF</color>
+    <color name="bg_selector_enable_uncheck">#FF7B7C7E</color>
+    <color name="bg_selector_enable_check">#FF339999</color>
+    <color name="color_text_selector_enable_uncheck">#FFEBEBEB</color>
+    <color name="color_text_selector_enable_check">#FFEBEBEB</color>
 
-    <color name="btnPressed">#22000000</color>
-    <color name="btnSelect">#339999</color>
-    <color name="btnBase">#00000000</color>
-    <color name="btnBase_disable">#778B8C8E</color>
+    <color name="bg_selector_disable_uncheck">#FF4B4C4E</color>
+    <color name="bg_selector_disable_check">#FF339999</color>
+    <color name="color_text_selector_disable_uncheck">#FFEBEBEB</color>
+    <color name="color_text_selector_disable_check">#FFEBEBEB</color>
 
-    <color name="btnSelectorStroke">#D6D6D6</color>
-    <color name="btnBottom">#3881CE</color>
 
-    <color name="btnTextAccent">#993B3B3B</color>
+    <color name="bg_btn_press">#22000000</color>
+    <color name="bg_btn_base">#00000000</color>
 
-    <color name="btnTextColor">#DD000000</color>
+    <color name="color_text_btn_accent">#993B3B3B</color>
+    <color name="color_text_btn">#DD000000</color>
 </resources>

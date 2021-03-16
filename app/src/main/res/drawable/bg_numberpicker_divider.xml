@@ -2,20 +2,20 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item >
         <shape android:shape="rectangle">
-            <solid android:color="@color/bgLayoutFront"/>
-            <corners android:radius="@dimen/cornerRound" />
+            <solid android:color="@color/bg_layout_enable_front"/>
+            <corners android:radius="@dimen/angle_round_base" />
         </shape>
     </item>
 
     <item android:top="-25sp">
         <shape android:shape="line">
-            <stroke android:color="@color/strokeColorLayout" android:width="@dimen/strokeWidth" />
+            <stroke android:color="@color/color_stroke_base" android:width="@dimen/width_stroke" />
         </shape>
     </item>
 
     <item android:top="25sp">
         <shape android:shape="line">
-            <stroke android:color="@color/strokeColorLayout" android:width="@dimen/strokeWidth" />
+            <stroke android:color="@color/color_stroke_base" android:width="@dimen/width_stroke" />
         </shape>
     </item>
 </layer-list>

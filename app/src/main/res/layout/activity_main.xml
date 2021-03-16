@@ -19,16 +19,16 @@
         android:id="@+id/div_nav"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/strokeColorLayout"/>
+        android:background="@color/color_stroke_base"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_menu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:background="@color/colorBottomNavigation"
-        app:itemBackground="@color/colorBottomNavigation"
-        app:itemIconTint="@color/color_nav_bottom_item"
-        app:itemTextColor="@color/color_nav_bottom_item"
+        android:background="@color/bg_navi"
+        app:itemBackground="@color/bg_navi"
+        app:itemIconTint="@color/color_text_navi"
+        app:itemTextColor="@color/color_text_navi"
         app:menu="@menu/menu_navi_bottom" />
 </LinearLayout>
