@@ -30,6 +30,7 @@ import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.service.HabbitService;
 import wily.apps.watchrabbit.util.DialogGetter;
+import wily.apps.watchrabbit.util.Utils;
 
 public class HabbitFragment extends Fragment {
     private LinearLayout habbitLayoutParent;
@@ -146,10 +147,12 @@ public class HabbitFragment extends Fragment {
                     recordDB.recordDao().deleteRecordByHids(list).subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(sub_item -> {
-                                Intent intent = new Intent(getActivity(), HabbitService.class);
-                                intent.setAction(HabbitService.HABBIT_SERVICE_DELETE);
-                                intent.putIntegerArrayListExtra(AppConst.INTENT_SERVICE_DELETE_LIST, (ArrayList<Integer>) list);
-                                getActivity().startService(intent);
+                                if(Utils.isServiceRunning(getContext(), HabbitService.class.getName())){
+                                    Intent intent = new Intent(getActivity(), HabbitService.class);
+                                    intent.setAction(HabbitService.HABBIT_SERVICE_DELETE);
+                                    intent.putIntegerArrayListExtra(AppConst.INTENT_SERVICE_DELETE_LIST, (ArrayList<Integer>) list);
+                                    getActivity().startService(intent);
+                                }
                                 setSelectableMode(false);
                                 habbitAdapter.setSelectableMode(false);
                                 dialog.dismiss();

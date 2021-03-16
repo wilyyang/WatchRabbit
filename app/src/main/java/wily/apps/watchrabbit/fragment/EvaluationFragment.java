@@ -2,6 +2,7 @@ package wily.apps.watchrabbit.fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,9 +129,11 @@ public class EvaluationFragment extends Fragment {
                     recordDB.recordDao().getStopRecords().subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(stops -> {
+                                Log.d(AppConst.TAG, "LAST");
                                 HashMap<Long, Long> completeHash = new HashMap<>();
                                 for(Record r : stops){
                                     completeHash.put(r.getPair(), r.getTime());
+                                    Log.d(AppConst.TAG, " "+r.getPair()+" "+r.getTime());
                                 }
 
                                 recordAdapter = new RecordAdapter(getContext(), recordList, completeHash);

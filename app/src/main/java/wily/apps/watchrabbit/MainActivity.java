@@ -15,10 +15,11 @@ import wily.apps.watchrabbit.fragment.EvaluationFragment;
 import wily.apps.watchrabbit.service.HabbitService;
 
 public class MainActivity extends AppCompatActivity {
+    private FrameLayout frameLayout;
+    private BottomNavigationView bottomNavigation;
+
     private EvaluationFragment evaluationFragment;
     private HabbitFragment habbitFragment;
-    private BottomNavigationView bottomNavigation;
-    private FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

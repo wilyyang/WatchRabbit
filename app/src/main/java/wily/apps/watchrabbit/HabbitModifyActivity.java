@@ -19,12 +19,9 @@ import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.service.HabbitService;
+import wily.apps.watchrabbit.util.Utils;
 
 public class HabbitModifyActivity extends AppCompatActivity {
-
-    private LinearLayout layoutChild_check = null;
-    private LinearLayout layoutChild_timer = null;
-
     private EditText etTitleHabbit = null;
     private Switch switchHabbit = null;
 
@@ -36,20 +33,22 @@ public class HabbitModifyActivity extends AppCompatActivity {
     private NumberPicker numberPickerInit = null;
     private NumberPicker numberPickerGoal = null;
 
+    private LinearLayout layoutChild_check = null;
+    private LinearLayout layoutChild_timer = null;
     private NumberPicker numberPickerPer_check = null;
     private NumberPicker numberPickerPer_timer = null;
 
     private Button btnSave = null;
     private Button btnCancel = null;
 
-    private final int maxPickerValue = 100;
-    private final int minPickerValue = -100;
-
-    private int type = AppConst.TYPE_HABBIT_CHECK;
-
+    private int type = Habbit.TYPE_HABBIT_CHECK;
     private int mode = AppConst.HABBIT_MODIFY_MODE_ADD;
     private int id = -1;
 
+    private final int maxPickerValue = 100;
+    private final int minPickerValue = -100;
+
+    // UI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +65,23 @@ public class HabbitModifyActivity extends AppCompatActivity {
         etTitleHabbit = findViewById(R.id.et_title_habbit);
         switchHabbit = findViewById(R.id.switch_habbit);
 
+        radioBtn_check = findViewById(R.id.radio_habbit_check);
+        radioBtn_timer = findViewById(R.id.radio_habbit_timer);
+        radioGroupHabbit = findViewById(R.id.radio_group_habbit);
+        radioGroupHabbit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch(checkedId){
+                    case R.id.radio_habbit_check:
+                        changeViewAtType(Habbit.TYPE_HABBIT_CHECK);
+                        break;
+                    case R.id.radio_habbit_timer:
+                        changeViewAtType(Habbit.TYPE_HABBIT_TIMER);
+                        break;
+                }
+            }
+        });
+
         numberPickerPrio = findViewById(R.id.number_picker_habbit_prio);
         numberPickerPrio.setMinValue(1);
         numberPickerPrio.setMaxValue(9);
@@ -76,49 +92,64 @@ public class HabbitModifyActivity extends AppCompatActivity {
         numberPickerGoal = findViewById(R.id.number_picker_habbit_goal);
         numberPickerInit(numberPickerGoal);
 
+        layoutChild_check = findViewById(R.id.include_child_habbit_modify_check);
+        layoutChild_timer = findViewById(R.id.include_child_habbit_modify_timer);
+
         numberPickerPer_check = findViewById(R.id.number_picker_check_per);
         numberPickerInit(numberPickerPer_check);
         numberPickerPer_timer = findViewById(R.id.number_picker_timer_per);
         numberPickerInit(numberPickerPer_timer);
-
-        layoutChild_check = findViewById(R.id.include_child_habbit_modify_check);
-        layoutChild_timer = findViewById(R.id.include_child_habbit_modify_timer);
-
-        radioBtn_check = findViewById(R.id.radio_habbit_check);
-        radioBtn_timer = findViewById(R.id.radio_habbit_timer);
-        radioGroupHabbit = findViewById(R.id.radio_group_habbit);
-        radioGroupHabbit.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch(checkedId){
-                    case R.id.radio_habbit_check:
-                        changeViewAtType(AppConst.TYPE_HABBIT_CHECK);
-                        break;
-                    case R.id.radio_habbit_timer:
-                        changeViewAtType(AppConst.TYPE_HABBIT_TIMER);
-                        break;
-                }
-            }
-        });
-        radioBtn_check.setChecked(true);
-        radioBtn_timer.setChecked(false);
-        changeViewAtType(AppConst.TYPE_HABBIT_CHECK);
 
         btnSave = findViewById(R.id.btn_habbit_modify_save);
         btnSave.setOnClickListener(onClickListener);
         btnCancel = findViewById(R.id.btn_habbit_modify_cancel);
         btnCancel.setOnClickListener(onClickListener);
 
+        changeViewAtType(Habbit.TYPE_HABBIT_CHECK);
         if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
             setUIData(id);
+        }
+
+        // Event Start
+        radioBtn_check.setChecked(true);
+        radioBtn_timer.setChecked(false);
+    }
+
+    private void numberPickerInit(NumberPicker numberPicker){
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(maxPickerValue - minPickerValue);
+        numberPicker.setWrapSelectorWheel(false);
+        numberPicker.setFormatter(new NumberPicker.Formatter() {
+            @Override
+            public String format(int index) {
+                return Integer.toString(index + minPickerValue);
+            }
+        });
+        numberPicker.setValue((maxPickerValue - minPickerValue)/2);
+    }
+
+    private void changeViewAtType(int type){
+        switch (type){
+            case Habbit.TYPE_HABBIT_CHECK:
+                this.type = Habbit.TYPE_HABBIT_CHECK;
+                layoutChild_check.setVisibility(View.VISIBLE);
+                layoutChild_timer.setVisibility(View.GONE);
+                numberPickerPer_check.setValue(0 - minPickerValue);
+                break;
+            case Habbit.TYPE_HABBIT_TIMER:
+                this.type = Habbit.TYPE_HABBIT_TIMER;
+                layoutChild_check.setVisibility(View.GONE);
+                layoutChild_timer.setVisibility(View.VISIBLE);
+                numberPickerPer_timer.setValue(0 - minPickerValue);
+                break;
         }
     }
 
     @SuppressLint("ResourceType")
     private void setUIData(int id){
-        btnSave.setText("업데이트");
-        HabbitDatabase db = HabbitDatabase.getAppDatabase(this);
-        db.habbitDao().getHabbit(id).subscribeOn(Schedulers.io())
+        btnSave.setText(getString(R.string.base_btn_update));
+        HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(this);
+        habbitDB.habbitDao().getHabbit(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
                     if(!item.isEmpty()){
@@ -133,12 +164,12 @@ public class HabbitModifyActivity extends AppCompatActivity {
 
                         int type = habbit.getType();
                         switch(type){
-                            case AppConst.TYPE_HABBIT_CHECK:
+                            case Habbit.TYPE_HABBIT_CHECK:
                                 radioBtn_check.setChecked(true);
                                 numberPickerPer_check.setValue(habbit.getPerCost()- minPickerValue);
                                 break;
 
-                            case AppConst.TYPE_HABBIT_TIMER:
+                            case Habbit.TYPE_HABBIT_TIMER:
                                 radioBtn_timer.setChecked(true);
                                 numberPickerPer_timer.setValue(habbit.getPerCost()- minPickerValue);
                                 break;
@@ -149,16 +180,13 @@ public class HabbitModifyActivity extends AppCompatActivity {
                 });
     }
 
+    // Listener
     private Button.OnClickListener onClickListener = new Button.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch(view.getId()){
                 case R.id.btn_habbit_modify_save:
-                    if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
-                        addHabbit();
-                    }else if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
-                        updateHabbit(id);
-                    }
+                    addOrUpdateHabbit();
                     break;
                 case R.id.btn_habbit_modify_cancel:
                     finish();
@@ -167,9 +195,9 @@ public class HabbitModifyActivity extends AppCompatActivity {
         }
     };
 
-    private void updateHabbit(int id){
+    private void addOrUpdateHabbit(){
         int type = this.type;
-        String title = (!etTitleHabbit.equals("") ? etTitleHabbit.getText().toString() : "Unknown");
+        String title = (!etTitleHabbit.getText().toString().equals("") ? etTitleHabbit.getText().toString() : "Unknown");
         boolean active = switchHabbit.isChecked();
 
         int priority  = numberPickerPrio.getValue();
@@ -178,98 +206,52 @@ public class HabbitModifyActivity extends AppCompatActivity {
         int perCost = 0;
 
         switch (type){
-            case AppConst.TYPE_HABBIT_CHECK:
+            case Habbit.TYPE_HABBIT_CHECK:
                 perCost = numberPickerPer_check.getValue()+ minPickerValue;
                 break;
-            case AppConst.TYPE_HABBIT_TIMER:
+            case Habbit.TYPE_HABBIT_TIMER:
                 perCost = numberPickerPer_timer.getValue()+ minPickerValue;
                 break;
         }
 
-        HabbitDatabase db = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
-        db.habbitDao().updateHabbit(id, type, priority, title, active, goalCost, initCost, perCost).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    long habbitId = id;
-                    Intent intent = new Intent(getApplicationContext(), HabbitService.class);
-                    intent.setAction(HabbitService.HABBIT_SERVICE_UPDATE);
-                    intent.putExtra(AppConst.INTENT_SERVICE_HABBIT_ID, (int)habbitId);
-                    intent.putExtra(AppConst.INTENT_SERVICE_TITLE, title);
-                    intent.putExtra(AppConst.INTENT_SERVICE_TYPE, type);
-                    intent.putExtra(AppConst.INTENT_SERVICE_PRIORITY, priority);
-                    intent.putExtra(AppConst.INTENT_SERVICE_ACTIVE, active);
-                    startService(intent);
-                    finish();
-                });
-    }
-
-    private void addHabbit(){
-        int type = this.type;
-        String temp = etTitleHabbit.getText().toString();
-        String title = (!temp.equals("") ? etTitleHabbit.getText().toString() : "Unknown");
-        boolean active = switchHabbit.isChecked();
-
-        int priority  = numberPickerPrio.getValue();
-        int goalCost  = numberPickerGoal.getValue()+ minPickerValue;
-        int initCost  = numberPickerInit.getValue()+ minPickerValue;
-        int perCost = 0;
-
-        switch (type){
-            case AppConst.TYPE_HABBIT_CHECK:
-                perCost = numberPickerPer_check.getValue()+ minPickerValue;
-                break;
-            case AppConst.TYPE_HABBIT_TIMER:
-                perCost = numberPickerPer_timer.getValue()+ minPickerValue;
-                break;
-        }
-        long currentTime = System.currentTimeMillis();
-
-        HabbitDatabase db = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
-        db.habbitDao().insert(new Habbit(type, currentTime, priority, title, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    if(active == true){
+        HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
+        if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
+            long currentTime = System.currentTimeMillis();
+            habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(item -> {
                         long habbitId = item;
-                        Intent intent = new Intent(getApplicationContext(), HabbitService.class);
-                        intent.setAction(HabbitService.HABBIT_SERVICE_ADD);
-                        intent.putExtra(AppConst.INTENT_SERVICE_HABBIT_ID, (int)habbitId);
-                        intent.putExtra(AppConst.INTENT_SERVICE_TITLE, title);
-                        intent.putExtra(AppConst.INTENT_SERVICE_TYPE, type);
-                        intent.putExtra(AppConst.INTENT_SERVICE_PRIORITY, priority);
-                        startService(intent);
-                    }
-
-                    finish();
-                });
-    }
-
-    private void changeViewAtType(int type){
-        switch (type){
-            case AppConst.TYPE_HABBIT_CHECK:
-                this.type = AppConst.TYPE_HABBIT_CHECK;
-                layoutChild_check.setVisibility(View.VISIBLE);
-                layoutChild_timer.setVisibility(View.GONE);
-                numberPickerPer_check.setValue(0 - minPickerValue);
-                break;
-            case AppConst.TYPE_HABBIT_TIMER:
-                this.type = AppConst.TYPE_HABBIT_TIMER;
-                layoutChild_check.setVisibility(View.GONE);
-                layoutChild_timer.setVisibility(View.VISIBLE);
-                numberPickerPer_timer.setValue(0 - minPickerValue);
-                break;
+                        sendServiceHabbit(habbitId, type, title, priority, active);
+                        finish();
+                    });
+        }else if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
+            habbitDB.habbitDao().updateHabbit(id, type, title, priority, active, goalCost, initCost, perCost).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(item -> {
+                        long habbitId = id;
+                        sendServiceHabbit(habbitId, type, title, priority, active);
+                        finish();
+                    });
         }
     }
 
-    private void numberPickerInit(NumberPicker numberPicker){
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(maxPickerValue - minPickerValue);
-        numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setFormatter(new NumberPicker.Formatter() {
-            @Override
-            public String format(int index) {
-                return Integer.toString(index + minPickerValue);
+    private void sendServiceHabbit(long id, int type, String title, int priority, boolean active){
+        if(Utils.isServiceRunning(HabbitModifyActivity.this, HabbitService.class.getName())){
+            Intent intent = new Intent(getApplicationContext(), HabbitService.class);
+            intent.putExtra(AppConst.INTENT_SERVICE_HABBIT_ID, (int)id);
+            intent.putExtra(AppConst.INTENT_SERVICE_TYPE, type);
+            intent.putExtra(AppConst.INTENT_SERVICE_TITLE, title);
+            intent.putExtra(AppConst.INTENT_SERVICE_PRIORITY, priority);
+            intent.putExtra(AppConst.INTENT_SERVICE_ACTIVE, active);
+
+            if(mode == AppConst.HABBIT_MODIFY_MODE_ADD && active == true){
+                intent.setAction(HabbitService.HABBIT_SERVICE_ADD);
+                startService(intent);
+            }else if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
+                intent.setAction(HabbitService.HABBIT_SERVICE_UPDATE);
+                startService(intent);
             }
-        });
-        numberPicker.setValue((maxPickerValue - minPickerValue)/2);
+
+        }
     }
 }

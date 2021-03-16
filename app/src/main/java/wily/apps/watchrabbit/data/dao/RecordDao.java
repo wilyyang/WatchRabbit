@@ -15,7 +15,7 @@ public interface RecordDao {
     @Query("SELECT * FROM Record")
     Single<List<Record>> getAll();
 
-    @Query("SELECT * FROM Record WHERE state != "+Record.RECORD_STATE_TIMER_START)
+    @Query("SELECT * FROM Record WHERE state != "+Record.RECORD_STATE_TIMER_STOP)
     Single<List<Record>> getStartRecords();
 
     @Query("SELECT * FROM Record WHERE state = "+Record.RECORD_STATE_TIMER_STOP)

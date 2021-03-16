@@ -21,7 +21,7 @@
 
     <color name="color_stroke_selector">#FFD6D6D6</color>
 
-    <color name="bg_selector_enable_uncheck">#FF7B7C7E</color>
+    <color name="bg_selector_enable_uncheck">#FF9B9C9E</color>
     <color name="bg_selector_enable_check">#FF339999</color>
     <color name="color_text_selector_enable_uncheck">#FFEBEBEB</color>
     <color name="color_text_selector_enable_check">#FFEBEBEB</color>
