@@ -27,7 +27,7 @@
             android:textSize="@dimen/sp_base_m2" />
 
         <NumberPicker
-            android:id="@+id/timer_picker_per"
+            android:id="@+id/number_picker_timer_per"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"

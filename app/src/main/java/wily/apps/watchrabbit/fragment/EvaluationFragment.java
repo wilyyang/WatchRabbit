@@ -2,7 +2,6 @@ package wily.apps.watchrabbit.fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +20,17 @@ import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import wily.apps.watchrabbit.DataConst;
+import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.MainActivity;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.adapter.RecordAdapter;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
+import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DialogGetter;
-import wily.apps.watchrabbit.RecordDialog;
+import wily.apps.watchrabbit.RecordModifyDialog;
 
-public class TodayFragment extends Fragment {
+public class EvaluationFragment extends Fragment {
     private LinearLayout recordLayoutParent;
 
     private ArrayList<Record> recordList;
@@ -38,34 +38,36 @@ public class TodayFragment extends Fragment {
     private RecyclerView recordRecyclerView;
 
     private Button btnRecordAdd;
-    private Button btnDeleteSelect;
-
-    private Button btnRecordDelete;
-    private Button btnDeleteCancel;
-
+    private Button btnSelectMode;
     private CheckBox checkboxRecordAll;
 
     private LinearLayout layoutDeleteBtn;
+    private Button btnRecordDelete;
+    private Button btnDeleteCancel;
 
+
+    // UI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_today, container, false);
+        View view = inflater.inflate(R.layout.fragment_evaluation, container, false);
         initView(view);
         return view;
     }
 
     private void initView(View view) {
-        recordLayoutParent = view.findViewById(R.id.layout_fragment_record_parent);
+        recordLayoutParent = view.findViewById(R.id.layout_fragment_evaluation_parent);
 
         LinearLayoutManager layoutMgr = new LinearLayoutManager(getContext());
-        recordRecyclerView = view.findViewById(R.id.list_record);
+        recordRecyclerView = view.findViewById(R.id.recycler_view_record);
         recordRecyclerView.setLayoutManager(layoutMgr);
 
         btnRecordAdd = view.findViewById(R.id.btn_record_add);
         btnRecordAdd.setOnClickListener(onClickListener);
 
-        btnDeleteSelect = view.findViewById(R.id.btn_record_delete_select);
-        btnDeleteSelect.setOnClickListener(onClickListener);
+        btnSelectMode = view.findViewById(R.id.btn_record_select_mode);
+        btnSelectMode.setOnClickListener(onClickListener);
+
+        layoutDeleteBtn = view.findViewById(R.id.layout_record_btn_delete);
 
         btnRecordDelete = view.findViewById(R.id.btn_record_delete);
         btnRecordDelete.setOnClickListener(onClickListener);
@@ -73,44 +75,16 @@ public class TodayFragment extends Fragment {
         btnDeleteCancel = view.findViewById(R.id.btn_record_delete_cancel);
         btnDeleteCancel.setOnClickListener(onClickListener);
 
-        checkboxRecordAll = view.findViewById(R.id.checkbox_record_all);
+        checkboxRecordAll = view.findViewById(R.id.check_box_record_all);
         checkboxRecordAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Log.d("WILY", "CHECK CHANGE : "+b);
                 if(compoundButton.isPressed()){
                     recordAdapter.setAllChecked(b);
                 }
             }
         });
-
-        layoutDeleteBtn = view.findViewById(R.id.layout_record_btn_delete);
     }
-
-    private Button.OnClickListener onClickListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.btn_record_add:
-                    RecordDialog recordDialog = new RecordDialog(getContext(), -1, true, DataConst.TYPE_HABBIT_TIMER, -1, -1);
-                    recordDialog.show();
-                    break;
-                case R.id.btn_record_delete_select:
-                    recordAdapter.setSelectableMode(!recordAdapter.isSelectableMode());
-                    setSelectableMode(recordAdapter.isSelectableMode());
-                    break;
-
-                case R.id.btn_record_delete:
-                    deleteSelectRecord();
-                    break;
-
-                case R.id.btn_record_delete_cancel:
-                    recordAdapter.setSelectableMode(false);
-                    setSelectableMode(false);
-                    break;
-            }
-        }
-    };
 
     private void setSelectableMode(boolean mode){
         if(mode){
@@ -141,24 +115,25 @@ public class TodayFragment extends Fragment {
         }
     }
 
+    // Access Data
     private void loadRecords(){
         AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
-        RecordDatabase db = RecordDatabase.getAppDatabase(getContext());
-        db.recordDao().getAllNotStop().subscribeOn(Schedulers.io())
+        RecordDatabase recordDB = RecordDatabase.getAppDatabase(getContext());
+        recordDB.recordDao().getStartRecords().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
                     recordList = (ArrayList) item;
 
-                    db.recordDao().getAllStop().subscribeOn(Schedulers.io())
+                    recordDB.recordDao().getStopRecords().subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(stops -> {
-                                HashMap<Long, Long> stopMap = new HashMap<>();
+                                HashMap<Long, Long> completeHash = new HashMap<>();
                                 for(Record r : stops){
-                                    stopMap.put(r.getPair(), r.getTime());
+                                    completeHash.put(r.getPair(), r.getTime());
                                 }
 
-                                recordAdapter = new RecordAdapter(getContext(), recordList, stopMap);
+                                recordAdapter = new RecordAdapter(getContext(), recordList, completeHash);
                                 recordAdapter.setOnItemClickListener(onItemClickListener);
                                 recordRecyclerView.setAdapter(recordAdapter);
                                 recordAdapter.notifyDataSetChanged();
@@ -168,13 +143,12 @@ public class TodayFragment extends Fragment {
     }
 
     private void deleteSelectRecord() {
-
-        List<Long> list = recordAdapter.getCheckedIds();
-
         AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
-        RecordDatabase db = RecordDatabase.getAppDatabase(getContext());
-        db.recordDao().deleteItemByIds(list).subscribeOn(Schedulers.io())
+
+        List<Long> list = recordAdapter.getCheckedIds();
+        RecordDatabase recordDB = RecordDatabase.getAppDatabase(getContext());
+        recordDB.recordDao().deleteRecordByIds(list).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
                             setSelectableMode(false);
@@ -185,7 +159,33 @@ public class TodayFragment extends Fragment {
                 );
     }
 
-    private RecordAdapter.OnItemClickListener onItemClickListener = new RecordAdapter.OnItemClickListener() {
+    // Listener
+    private Button.OnClickListener onClickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_record_add:
+                    RecordModifyDialog recordModifyDialog = new RecordModifyDialog(getContext(), -1, Habbit.TYPE_HABBIT_TIMER, -1, -1, true);
+                    recordModifyDialog.show();
+                    break;
+                case R.id.btn_record_select_mode:
+                    recordAdapter.setSelectableMode(!recordAdapter.isSelectableMode());
+                    setSelectableMode(recordAdapter.isSelectableMode());
+                    break;
+
+                case R.id.btn_record_delete:
+                    deleteSelectRecord();
+                    break;
+
+                case R.id.btn_record_delete_cancel:
+                    recordAdapter.setSelectableMode(false);
+                    setSelectableMode(false);
+                    break;
+            }
+        }
+    };
+
+    private RecordAdapter.OnRecordItemClickListener onItemClickListener = new RecordAdapter.OnRecordItemClickListener() {
         @Override
         public void onItemCheckChanged(boolean flag) {
             if(flag == false){
@@ -194,18 +194,11 @@ public class TodayFragment extends Fragment {
         }
 
         @Override
-        public void onItemClick(int type, long id, long time, long duration) {
-            if(duration != -1){
-                RecordDialog recordDialog = new RecordDialog(getContext(), id, false, type, time, duration);
-                recordDialog.show();
+        public void onItemClick(long id, int type, long time, long term){
+            if(term != -1){
+                RecordModifyDialog recordModifyDialog = new RecordModifyDialog(getContext(), id, type, time, term, false);
+                recordModifyDialog.show();
             }
-
-//            Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
-//
-//            intent.putExtra("id", id);
-//            intent.putExtra("update", true);
-//
-//            startActivity(intent);
         }
 
         @Override

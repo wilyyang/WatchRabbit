@@ -6,13 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
-
-    public static final int DATE_YEAR = 1;
-    public static final int DATE_MONTH = 2;
-    public static final int DATE_DAY = 3;
-    public static final int DATE_HOUR = 4;
-    public static final int DATE_MINUTE = 5;
-    public static final int DATE_SECOND = 6;
+    public static final long MILLISECOND_TO_MINUTE = 60 * 1000;
 
     public static String getDateString(long time){
         DateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
@@ -26,9 +20,9 @@ public class DateUtil {
         return cal.get(type);
     }
 
-    public static long getDateLong(int year, int month, int day, int hour, int minute, int secord){
+    public static long getDateLong(int year, int month, int day, int hour, int minute, int second){
         Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day, hour, minute, secord);
+        cal.set(year, month, day, hour, minute, second);
         return cal.getTimeInMillis();
     }
 }

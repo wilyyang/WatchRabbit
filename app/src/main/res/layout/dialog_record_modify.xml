@@ -16,13 +16,13 @@
         android:gravity="bottom">
 
         <ImageView
-            android:id="@+id/record_dialog_type"
+            android:id="@+id/image_view_record_dialog_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_type_timer"/>
 
         <TextView
-            android:id="@+id/record_dialog_title"
+            android:id="@+id/text_view_record_dialog_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -57,7 +57,7 @@
             android:weightSum="2">
 
             <DatePicker
-                android:id="@+id/datePicker_record"
+                android:id="@+id/date_picker_record_dialog"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -65,7 +65,7 @@
                 android:descendantFocusability="blocksDescendants"
                 style="@android:style/Widget.DatePicker"/>
             <TimePicker
-                android:id="@+id/timePicker_record"
+                android:id="@+id/time_picker_record_dialog"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -75,7 +75,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layout_due_time"
+            android:id="@+id/layout_record_dialog_term"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3"
@@ -83,7 +83,7 @@
             android:weightSum="7">
 
             <TextView
-                android:id="@+id/record_due_time_label"
+                android:id="@+id/text_view_record_dialog_term_label"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -93,7 +93,7 @@
                 android:textSize="@dimen/sp_base_m2" />
 
             <NumberPicker
-                android:id="@+id/record_due_time"
+                android:id="@+id/number_picker_record_dialog_term"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"

@@ -10,17 +10,17 @@
     android:background="@drawable/bg_layout_round_enabled"
     android:gravity="center"
     android:weightSum="16.2"
-    android:layout_marginRight="5dp">
+    android:layout_marginRight="@dimen/margin_item_scroll_space">
 
     <CheckBox
-        android:id="@+id/habbit_delete_check"
+        android:id="@+id/check_box_item_habbit_select"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:layout_weight="1.2"/>
 
     <ImageView
-        android:id="@+id/habbit_type"
+        android:id="@+id/image_view_habbit_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -28,7 +28,7 @@
         android:layout_margin="5dp"/>
 
     <TextView
-        android:id="@+id/habbit_id"
+        android:id="@+id/text_view_habbit_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -37,7 +37,7 @@
         android:text="0" />
 
     <TextView
-        android:id="@+id/habbit_title"
+        android:id="@+id/text_view_habbit_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
@@ -55,7 +55,7 @@
 
 
         <TextView
-            android:id="@+id/habbit_priority"
+            android:id="@+id/text_view_habbit_priority"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
@@ -72,7 +72,7 @@
             android:textSize="@dimen/sp_base_s2"/>
 
         <TextView
-            android:id="@+id/habbit_goal_cost"
+            android:id="@+id/text_view_habbit_goal_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
@@ -87,7 +87,7 @@
             android:text="init"
             android:textSize="@dimen/sp_base_s2"/>
         <TextView
-            android:id="@+id/habbit_init_cost"
+            android:id="@+id/text_view_habbit_init_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
@@ -103,7 +103,7 @@
             android:textSize="@dimen/sp_base_s2"/>
 
         <TextView
-            android:id="@+id/habbit_per_cost"
+            android:id="@+id/text_view_habbit_per_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"

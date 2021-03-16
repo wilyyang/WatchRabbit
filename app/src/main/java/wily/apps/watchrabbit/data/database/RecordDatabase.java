@@ -18,7 +18,7 @@ public abstract class RecordDatabase extends RoomDatabase {
 
     public static RecordDatabase getAppDatabase(Context context){
         if(INSTANCE == null){
-            INSTANCE = Room.databaseBuilder(context, RecordDatabase.class , "record-db").build();
+            INSTANCE = Room.databaseBuilder(context, RecordDatabase.class , DB_NAME).build();
         }
         return  INSTANCE;
     }

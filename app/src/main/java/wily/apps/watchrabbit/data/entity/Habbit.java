@@ -12,27 +12,29 @@ import java.util.Date;
 public class Habbit {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private long time;
-
     private int type;
+    private long time;
     private String title;
+    private int priority;
     private boolean active;
 
     private int goalCost;
     private int initCost;
     private int perCost;
 
-    private int priority;
-
-
     @Ignore
     private boolean check;
 
-    public Habbit(int type, long time, int priority, String title, boolean active, int goalCost, int initCost, int perCost) {
+    @Ignore
+    public static final int TYPE_HABBIT_CHECK = 1;
+    @Ignore
+    public static final int TYPE_HABBIT_TIMER = 2;
+
+    public Habbit(int type, long time, String title, int priority, boolean active, int goalCost, int initCost, int perCost) {
         this.type = type;
         this.time = time;
-        this.priority = priority;
         this.title = title;
+        this.priority = priority;
         this.active = active;
         this.goalCost = goalCost;
         this.initCost = initCost;
@@ -47,14 +49,6 @@ public class Habbit {
         this.id = id;
     }
 
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
-
     public int getType() {
         return type;
     }
@@ -63,9 +57,13 @@ public class Habbit {
         this.type = type;
     }
 
-    public int getPriority() { return priority; }
+    public long getTime() {
+        return time;
+    }
 
-    public void setPriority(int priority) { this.priority = priority; }
+    public void setTime(long time) {
+        this.time = time;
+    }
 
     public String getTitle() {
         return title;
@@ -73,6 +71,14 @@ public class Habbit {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public boolean isActive() {
@@ -110,14 +116,24 @@ public class Habbit {
     public boolean isCheck() {
         return check;
     }
+
     public void setCheck(boolean check) {
         this.check = check;
     }
 
     @Override
     public String toString() {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return "id= " + this.id + ", time= "+format.format(new Date(time))+" , type= " + this.type + " , priority= " + this.priority + " , title= " + this.title+ " , active= " + this.active+
-                " , goalCost= " + this.goalCost+ " , initCost= " + this.initCost+ " , perCost= " + this.perCost;
+        return "Habbit{" +
+                "id=" + id +
+                ", type=" + type +
+                ", time=" + time +
+                ", title='" + title + '\'' +
+                ", priority=" + priority +
+                ", active=" + active +
+                ", goalCost=" + goalCost +
+                ", initCost=" + initCost +
+                ", perCost=" + perCost +
+                ", check=" + check +
+                '}';
     }
 }

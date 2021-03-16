@@ -22,6 +22,12 @@ public class Record {
 
     @Ignore
     private boolean check;
+    @Ignore
+    public static final int RECORD_STATE_CHECK = 1001;
+    @Ignore
+    public static final int RECORD_STATE_TIMER_START = 2001;
+    @Ignore
+    public static final int RECORD_STATE_TIMER_STOP = 2002;
 
     public Record(int hid, int type, long time, int state, long pair) {
         this.hid = hid;
@@ -89,8 +95,14 @@ public class Record {
 
     @Override
     public String toString() {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return "id= " + this.id +" , hid= " + this.hid +" , type= " + this.type +
-                ", time= "+format.format(new Date(time))+ "state= " + this.state + "pair id= " + this.pair;
+        return "Record{" +
+                "id=" + id +
+                ", hid=" + hid +
+                ", type=" + type +
+                ", time=" + time +
+                ", state=" + state +
+                ", pair=" + pair +
+                ", check=" + check +
+                '}';
     }
 }

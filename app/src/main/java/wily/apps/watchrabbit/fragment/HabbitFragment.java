@@ -3,7 +3,6 @@ package wily.apps.watchrabbit.fragment;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.HabbitModifyActivity;
 import wily.apps.watchrabbit.MainActivity;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.adapter.HabbitAdapter;
-import wily.apps.watchrabbit.DataConst;
+import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
@@ -41,15 +39,14 @@ public class HabbitFragment extends Fragment {
     private RecyclerView habbitRecyclerView;
 
     private Button btnHabbitAdd;
-    private Button btnDeleteSelect;
-
-    private Button btnHabbitDelete;
-    private Button btnDeleteCancel;
-
+    private Button btnSelectMode;
     private CheckBox checkboxHabbitAll;
 
     private LinearLayout layoutDeleteBtn;
+    private Button btnHabbitDelete;
+    private Button btnDeleteCancel;
 
+    // UI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_habbit, container, false);
@@ -61,14 +58,16 @@ public class HabbitFragment extends Fragment {
         habbitLayoutParent = view.findViewById(R.id.layout_fragment_habbit_parent);
 
         LinearLayoutManager layoutMgr = new LinearLayoutManager(getContext());
-        habbitRecyclerView = view.findViewById(R.id.list_habbit);
+        habbitRecyclerView = view.findViewById(R.id.recycler_view_habbit);
         habbitRecyclerView.setLayoutManager(layoutMgr);
 
         btnHabbitAdd = view.findViewById(R.id.btn_habbit_add);
         btnHabbitAdd.setOnClickListener(onClickListener);
 
-        btnDeleteSelect = view.findViewById(R.id.btn_delete_select);
-        btnDeleteSelect.setOnClickListener(onClickListener);
+        btnSelectMode = view.findViewById(R.id.btn_habbit_select_mode);
+        btnSelectMode.setOnClickListener(onClickListener);
+
+        layoutDeleteBtn = view.findViewById(R.id.layout_habbit_btn_delete);
 
         btnHabbitDelete = view.findViewById(R.id.btn_habbit_delete);
         btnHabbitDelete.setOnClickListener(onClickListener);
@@ -76,48 +75,16 @@ public class HabbitFragment extends Fragment {
         btnDeleteCancel = view.findViewById(R.id.btn_habbit_delete_cancel);
         btnDeleteCancel.setOnClickListener(onClickListener);
 
-        checkboxHabbitAll = view.findViewById(R.id.checkbox_habbit_all);
+        checkboxHabbitAll = view.findViewById(R.id.check_box_habbit_all);
         checkboxHabbitAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Log.d("WILY", "CHECK CHANGE : "+b);
                 if(compoundButton.isPressed()){
                     habbitAdapter.setAllChecked(b);
                 }
             }
         });
-
-        layoutDeleteBtn = view.findViewById(R.id.layout_btn_delete);
     }
-
-    private Button.OnClickListener onClickListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.btn_habbit_add:
-                    Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
-
-                    intent.putExtra("id", -1);
-                    intent.putExtra("update", false);
-
-                    startActivity(intent);
-                    break;
-                case R.id.btn_delete_select:
-                    habbitAdapter.setSelectableMode(!habbitAdapter.isSelectableMode());
-                    setSelectableMode(habbitAdapter.isSelectableMode());
-                    break;
-
-                case R.id.btn_habbit_delete:
-                    deleteSelectHabbit();
-                    break;
-
-                case R.id.btn_habbit_delete_cancel:
-                    habbitAdapter.setSelectableMode(false);
-                    setSelectableMode(false);
-                    break;
-            }
-        }
-    };
 
     private void setSelectableMode(boolean mode){
         if(mode){
@@ -148,20 +115,17 @@ public class HabbitFragment extends Fragment {
         }
     }
 
+    // Access Data
     private void loadHabbits(){
         AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
-        HabbitDatabase db = HabbitDatabase.getAppDatabase(getContext());
-        db.habbitDao().getAll().subscribeOn(Schedulers.io())
+        HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(getContext());
+        habbitDB.habbitDao().getAll().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
                     habbitList = (ArrayList)item;
                     habbitAdapter = new HabbitAdapter(getContext(), habbitList);
                     habbitAdapter.setOnItemClickListener(onItemClickListener);
-
-                    for(Habbit h : habbitList){
-                        Log.d("WILY", ""+h);
-                    }
 
                     habbitRecyclerView.setAdapter(habbitAdapter);
                     habbitAdapter.notifyDataSetChanged();
@@ -170,33 +134,61 @@ public class HabbitFragment extends Fragment {
     }
 
     private void deleteSelectHabbit() {
-
-        List<Integer> list = habbitAdapter.getCheckedIds();
-
         AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
-        HabbitDatabase h_db = HabbitDatabase.getAppDatabase(getContext());
-        h_db.habbitDao().deleteItemByIds(list).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
 
-        RecordDatabase r_db = RecordDatabase.getAppDatabase(getContext());
-        r_db.recordDao().deleteItemByHids(list).subscribeOn(Schedulers.io())
+        List<Integer> list = habbitAdapter.getCheckedIds();
+        HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(getContext());
+        habbitDB.habbitDao().deleteHabbitByIds(list).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> {
-                    Intent intent = new Intent(getActivity(), HabbitService.class);
-                    intent.setAction(HabbitService.HABBIT_SERVICE_REMOVE);
-                    intent.putIntegerArrayListExtra(DataConst.HABBIT_DELETE_LIST, (ArrayList<Integer>) list);
-                    getActivity().startService(intent);
-                    setSelectableMode(false);
-                    habbitAdapter.setSelectableMode(false);
-                    dialog.dismiss();
-                    onResume();
-        });
-
+                    RecordDatabase recordDB = RecordDatabase.getAppDatabase(getContext());
+                    recordDB.recordDao().deleteRecordByHids(list).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(sub_item -> {
+                                Intent intent = new Intent(getActivity(), HabbitService.class);
+                                intent.setAction(HabbitService.HABBIT_SERVICE_DELETE);
+                                intent.putIntegerArrayListExtra(AppConst.INTENT_SERVICE_DELETE_LIST, (ArrayList<Integer>) list);
+                                getActivity().startService(intent);
+                                setSelectableMode(false);
+                                habbitAdapter.setSelectableMode(false);
+                                dialog.dismiss();
+                                onResume();
+                            });
+                });
     }
 
-    private HabbitAdapter.OnItemClickListener onItemClickListener = new HabbitAdapter.OnItemClickListener() {
+    // Listener
+    private Button.OnClickListener onClickListener = new Button.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_habbit_add:
+                    Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
+
+                    intent.putExtra(AppConst.INTENT_HABBIT_FRAG_ID, -1);
+                    intent.putExtra(AppConst.INTENT_HABBIT_FRAG_UPDATE, false);
+
+                    startActivity(intent);
+                    break;
+                case R.id.btn_habbit_select_mode:
+                    habbitAdapter.setSelectableMode(!habbitAdapter.isSelectableMode());
+                    setSelectableMode(habbitAdapter.isSelectableMode());
+                    break;
+
+                case R.id.btn_habbit_delete:
+                    deleteSelectHabbit();
+                    break;
+
+                case R.id.btn_habbit_delete_cancel:
+                    habbitAdapter.setSelectableMode(false);
+                    setSelectableMode(false);
+                    break;
+            }
+        }
+    };
+
+    private HabbitAdapter.OnHabbitItemClickListener onItemClickListener = new HabbitAdapter.OnHabbitItemClickListener() {
         @Override
         public void onItemCheckChanged(boolean flag) {
             if(flag == false){
@@ -208,8 +200,8 @@ public class HabbitFragment extends Fragment {
         public void onItemClick(int id) {
             Intent intent = new Intent(getContext(), HabbitModifyActivity.class);
 
-            intent.putExtra("id", id);
-            intent.putExtra("update", true);
+            intent.putExtra(AppConst.INTENT_HABBIT_FRAG_ID, id);
+            intent.putExtra(AppConst.INTENT_HABBIT_FRAG_UPDATE, true);
 
             startActivity(intent);
         }

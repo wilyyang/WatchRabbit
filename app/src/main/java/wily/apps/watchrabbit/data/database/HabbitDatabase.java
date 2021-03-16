@@ -18,7 +18,7 @@ public abstract class HabbitDatabase extends RoomDatabase {
 
     public static HabbitDatabase getAppDatabase(Context context){
         if(INSTANCE == null){
-            INSTANCE = Room.databaseBuilder(context, HabbitDatabase.class , "habbit-db").build();
+            INSTANCE = Room.databaseBuilder(context, HabbitDatabase.class , DB_NAME).build();
         }
         return  INSTANCE;
     }

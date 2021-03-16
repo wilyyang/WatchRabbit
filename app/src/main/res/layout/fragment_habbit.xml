@@ -39,7 +39,7 @@
             android:orientation="horizontal"
             android:weightSum="9">
             <CheckBox
-                android:id="@+id/checkbox_habbit_all"
+                android:id="@+id/check_box_habbit_all"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -63,7 +63,7 @@
                 android:typeface="monospace" />
 
             <Button
-                android:id="@+id/btn_delete_select"
+                android:id="@+id/btn_habbit_select_mode"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -77,7 +77,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_recycler"
+        android:id="@+id/layout_habbit_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="21"
@@ -91,7 +91,7 @@
             android:background="@color/color_stroke_base"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_habbit"
+            android:id="@+id/recycler_view_habbit"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
@@ -107,7 +107,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_btn_delete"
+        android:id="@+id/layout_habbit_btn_delete"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"

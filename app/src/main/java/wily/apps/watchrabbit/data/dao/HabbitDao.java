@@ -25,21 +25,12 @@ public interface HabbitDao {
     @Query("SELECT * FROM Habbit WHERE id=:p_id")
     Single<List<Habbit>> getHabbit(int p_id);
 
-    @Query("UPDATE Habbit SET type=:p_type, priority=:p_prio, title=:p_title, active=:p_act, goalCost=:p_goalCost, initCost=:p_initCost, perCost=:p_perCost WHERE id = :p_id")
-    Single<Integer> updateHabbit(int p_id, int p_type, int p_prio, String p_title, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
+    @Query("UPDATE Habbit SET type=:p_type, title=:p_title, priority=:p_prio, active=:p_act, goalCost=:p_goalCost, initCost=:p_initCost, perCost=:p_perCost WHERE id = :p_id")
+    Single<Integer> updateHabbit(int p_id, int p_type, String p_title, int p_prio, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
 
-    @Query("DELETE FROM Habbit WHERE id IN (:ids)")
-    Single<Integer> deleteItemByIds(List<Integer> ids);
+    @Query("DELETE FROM Habbit WHERE id IN (:p_ids)")
+    Single<Integer> deleteHabbitByIds(List<Integer> p_ids);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<Long> insert(Habbit work);
-
-    @Update
-    Completable update(Habbit work);
-
-    @Delete
-    Completable delete(Habbit work);
-
-    @Query("DELETE FROM Habbit")
-    Completable deleteAll();
 }

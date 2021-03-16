@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_fragment_record_parent"
+    android:id="@+id/layout_fragment_evaluation_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -39,7 +39,7 @@
             android:orientation="horizontal"
             android:weightSum="9">
             <CheckBox
-                android:id="@+id/checkbox_record_all"
+                android:id="@+id/check_box_record_all"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -63,7 +63,7 @@
                 android:typeface="monospace" />
 
             <Button
-                android:id="@+id/btn_record_delete_select"
+                android:id="@+id/btn_record_select_mode"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -91,7 +91,7 @@
             android:background="@color/color_stroke_base"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_record"
+            android:id="@+id/recycler_view_record"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"

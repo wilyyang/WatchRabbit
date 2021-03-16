@@ -118,7 +118,7 @@
                 android:textSize="@dimen/sp_base_m2" />
 
             <NumberPicker
-                android:id="@+id/habbit_picker_prio"
+                android:id="@+id/number_picker_habbit_prio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
@@ -147,7 +147,7 @@
                 android:textSize="@dimen/sp_base_m2" />
 
             <NumberPicker
-                android:id="@+id/habbit_picker_init"
+                android:id="@+id/number_picker_habbit_init"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
@@ -176,7 +176,7 @@
                 android:textSize="@dimen/sp_base_m2" />
 
             <NumberPicker
-                android:id="@+id/habbit_picker_goal"
+                android:id="@+id/number_picker_habbit_goal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
@@ -187,7 +187,7 @@
 
         <include
             layout="@layout/child_habbit_modify_check"
-            android:id="@+id/include_habbit_modify_check"
+            android:id="@+id/include_child_habbit_modify_check"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
@@ -195,7 +195,7 @@
 
         <include
             layout="@layout/child_habbit_modify_timer"
-            android:id="@+id/include_habbit_modify_timer"
+            android:id="@+id/include_child_habbit_modify_timer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"

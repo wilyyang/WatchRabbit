@@ -10,17 +10,17 @@
     android:background="@drawable/bg_layout_round_enabled"
     android:gravity="center"
     android:weightSum="16.2"
-    android:layout_marginRight="5dp">
+    android:layout_marginRight="@dimen/margin_item_scroll_space">
 
     <CheckBox
-        android:id="@+id/record_delete_check"
+        android:id="@+id/check_box_item_record_select"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:layout_weight="1.2"/>
 
     <ImageView
-        android:id="@+id/record_type"
+        android:id="@+id/image_view_record_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -28,13 +28,13 @@
         android:layout_margin="5dp"/>
 
     <TextView
-        android:id="@+id/record_hid"
+        android:id="@+id/text_view_record_hid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0" />
 
     <TextView
-        android:id="@+id/record_id"
+        android:id="@+id/text_view_record_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
@@ -44,7 +44,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/record_time"
+        android:id="@+id/text_view_record_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="8"
@@ -62,7 +62,7 @@
         android:layout_gravity="center_vertical">
 
         <TextView
-            android:id="@+id/label_time_min"
+            android:id="@+id/text_view_record_term_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -70,7 +70,7 @@
             android:textSize="@dimen/sp_base_s2" />
 
         <TextView
-            android:id="@+id/record_time_duration"
+            android:id="@+id/text_view_record_term"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

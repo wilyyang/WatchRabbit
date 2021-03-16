@@ -10,6 +10,8 @@
     <dimen name="margin_layout_mid">20dp</dimen>
     <dimen name="margin_layout_narr">10dp</dimen>
 
+    <dimen name="margin_item_scroll_space">5dp</dimen>
+
     <dimen name="sp_base_s3">8sp</dimen>
     <dimen name="sp_base_s2">10sp</dimen>
     <dimen name="sp_base_s1">12sp</dimen>

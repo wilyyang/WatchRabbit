@@ -5,22 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import wily.apps.watchrabbit.data.database.HabbitDatabase;
-import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.fragment.HabbitFragment;
-import wily.apps.watchrabbit.fragment.TodayFragment;
+import wily.apps.watchrabbit.fragment.EvaluationFragment;
 import wily.apps.watchrabbit.service.HabbitService;
 
 public class MainActivity extends AppCompatActivity {
-    private TodayFragment todayFragment;
+    private EvaluationFragment evaluationFragment;
     private HabbitFragment habbitFragment;
     private BottomNavigationView bottomNavigation;
     private FrameLayout frameLayout;
@@ -29,27 +24,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         fragmentInit();
         createHabbitService();
     }
 
     private void fragmentInit(){
-        frameLayout = findViewById(R.id.container);
-        todayFragment = new TodayFragment();
+        frameLayout = findViewById(R.id.container_main);
+        evaluationFragment = new EvaluationFragment();
         habbitFragment = new HabbitFragment();
 
-        bottomNavigation = findViewById(R.id.bottom_menu);
+        bottomNavigation = findViewById(R.id.bottom_menu_main);
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.today_tab:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, todayFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_main, evaluationFragment).commit();
                         return true;
 
                     case R.id.habbit_tab:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, habbitFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_main, habbitFragment).commit();
                         return true;
                 }
                 return false;
