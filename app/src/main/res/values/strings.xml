@@ -25,4 +25,12 @@
     <string name="record_state_check">체크</string>
     <string name="record_state_timer_complete">타임</string>
     <string name="record_state_timer_inprogress">진행중</string>
+
+    <string name="evaluation_total_group">전체</string>
+    <string name="evaluation_10day_group">10일</string>
+    <string name="evaluation_today_group">금일</string>
+
+    <string name="evaluation_goal_cost">목표 : </string>
+    <string name="evaluation_result_cost">최종 : </string>
+    <string name="evaluation_achive_rate">달성율 : </string>
 </resources>

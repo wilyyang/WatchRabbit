@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_fragment_evaluation_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_layout_back"
+    android:weightSum="24">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="9">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/margin_layout_mid"
+                android:layout_weight="7"
+                android:gravity="center_vertical"
+                android:text="@string/menu_bottom_evaluation_tab"
+                android:textSize="@dimen/sp_bar_h2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:weightSum="9">
+            <CheckBox
+                android:id="@+id/check_box_record_all"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:visibility="invisible" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="6" />
+
+            <Button
+                android:id="@+id/btn_record_add"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn_round"
+                android:text="+"
+                android:textColor="@color/color_text_btn"
+                android:textSize="@dimen/sp_btn_big"
+                android:typeface="monospace" />
+
+            <Button
+                android:id="@+id/btn_record_select_mode"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn_round"
+                android:text=":"
+                android:textColor="@color/color_text_btn"
+                android:textSize="@dimen/sp_btn_big"
+                android:typeface="monospace" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_record_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="21"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_stroke_base"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_record"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:scrollbarFadeDuration="0"
+            android:scrollbarSize="5dp"
+            android:scrollbarThumbVertical="@android:color/darker_gray"
+            android:scrollbars="vertical"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_stroke_base"/>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/layout_record_btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btn_record_delete_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/margin_layout_narr"
+            android:background="@drawable/bg_btn_round"
+            android:text="@string/base_btn_cancel"
+            android:textColor="@color/color_text_btn"
+            android:textSize="@dimen/sp_btn_mid" />
+
+        <Button
+            android:id="@+id/btn_record_delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="@dimen/margin_layout_narr"
+            android:background="@drawable/bg_btn_round"
+            android:text="@string/base_btn_delete"
+            android:textColor="@color/color_text_btn"
+            android:textSize="@dimen/sp_btn_mid" />
+
+    </LinearLayout>
+
+</LinearLayout>
