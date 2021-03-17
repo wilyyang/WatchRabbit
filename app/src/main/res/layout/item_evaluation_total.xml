@@ -12,41 +12,12 @@
     android:weightSum="16.2"
     android:layout_marginRight="@dimen/margin_item_scroll_space">
 
-    <CheckBox
-        android:id="@+id/check_box_item_evaluation_total_select"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="1.2"/>
-
-    <ImageView
-        android:id="@+id/image_view_evaluation_total_type"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textAlignment="center"
-        android:layout_margin="5dp"/>
-
-    <TextView
-        android:id="@+id/text_view_evaluation_total_id"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:textAlignment="center"
-        android:textSize="@dimen/sp_base_s1"
-        android:text="0" />
-
-    <TextView
-        android:id="@+id/text_view_record_hid"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0" />
 
     <TextView
         android:id="@+id/text_view_evaluation_total_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_weight="6"
         android:text="금일 90%"
         android:textSize="18sp"
         android:textStyle="bold"

@@ -10,9 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="6"
         android:orientation="vertical"
-        android:weightSum="5">
+        android:weightSum="8">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,14 +23,23 @@
             android:weightSum="9">
 
             <TextView
+                android:id="@+id/text_view_record_title"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/margin_layout_mid"
                 android:layout_weight="7"
                 android:gravity="center_vertical"
-                android:text="@string/menu_bottom_evaluation_tab"
+                android:text="일일 기록"
                 android:textSize="@dimen/sp_bar_h2" />
         </LinearLayout>
+
+        <include
+            layout="@layout/item_evaluation_date"
+            android:id="@+id/include_top_eval_activity_record"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:layout_margin="@dimen/margin_layout_narr" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,7 +89,7 @@
         android:id="@+id/layout_record_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="21"
+        android:layout_weight="18"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:weightSum="10">
@@ -105,8 +114,6 @@
             android:layout_height="1dp"
             android:background="@color/color_stroke_base"/>
     </LinearLayout>
-
-
 
     <LinearLayout
         android:id="@+id/layout_record_btn_delete"
@@ -140,5 +147,4 @@
             android:textSize="@dimen/sp_btn_mid" />
 
     </LinearLayout>
-
 </LinearLayout>

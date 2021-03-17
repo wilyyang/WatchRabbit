@@ -46,7 +46,6 @@ public class EvaluationFragment extends Fragment {
     private Button btnRecordDelete;
     private Button btnDeleteCancel;
 
-
     // UI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
