@@ -100,7 +100,7 @@
             android:textSize="@dimen/sp_base_s2"/>
 
         <TextView
-            android:id="@+id/text_view_evaluation_date_per_cost"
+            android:id="@+id/text_view_evaluation_date_achive"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"

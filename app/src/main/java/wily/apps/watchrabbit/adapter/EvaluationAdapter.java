@@ -18,6 +18,7 @@ import java.util.List;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.util.DateUtil;
 
 public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.EvaluationViewHolder>{
     private ArrayList<Evaluation> mList;
@@ -33,9 +34,9 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
     }
 
     // Base
-    public EvaluationAdapter(Context context, ArrayList<Evaluation> EvaluationList) {
+    public EvaluationAdapter(Context context, ArrayList<Evaluation> evaluationList) {
         this.mContext = context;
-        this.mList = EvaluationList;
+        this.mList = evaluationList;
     }
 
     public void setOnItemClickListener(OnEvaluationItemClickListener listener){
@@ -57,21 +58,15 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
     }
 
     protected void setContent(EvaluationViewHolder holder, Evaluation pEvaluation){
-        holder.Evaluation = pEvaluation;
-
+        holder.evaluation = pEvaluation;
         holder.txId.setText(""+pEvaluation.getId());
         setIcon(holder.imageType, pEvaluation.getType());
-        holder.txTitle.setText(pEvaluation.getTitle());
-        holder.txPriority.setText(""+pEvaluation.getPriority());
+
+        holder.txHid.setText(pEvaluation.getHid());
+        holder.txDate.setText(""+ DateUtil.getDateString(pEvaluation.getTime()));
         holder.txGoalCost.setText(""+pEvaluation.getGoalCost());
         holder.txInitCost.setText(""+pEvaluation.getInitCost());
-        holder.txPerCost.setText(""+pEvaluation.getPerCost());
-
-        if(pEvaluation.isActive()){
-            holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_enabled));
-        }else{
-            holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
-        }
+        holder.txAchive.setText(""+pEvaluation.getAchive());
 
         if (!selectableMode) {
             holder.checkBoxSelect.setVisibility(View.GONE);
@@ -122,11 +117,11 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
         notifyDataSetChanged();
     }
 
-    public List<Integer> getCheckedIds() {
-        ArrayList<Integer> list = new ArrayList<>();
-        for (Evaluation h : mList) {
-            if (h.isCheck()) {
-                list.add(h.getId());
+    public List<Long> getCheckedIds() {
+        ArrayList<Long> list = new ArrayList<>();
+        for (Evaluation e : mList) {
+            if (e.isCheck()) {
+                list.add(e.getId());
             }
         }
         return list;
@@ -134,38 +129,37 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
 
     // ViewHolder
     public class EvaluationViewHolder extends RecyclerView.ViewHolder  {
-        private Evaluation Evaluation;
+        private Evaluation evaluation;
 
         protected View itemView;
         protected CheckBox checkBoxSelect;
         protected TextView txId;
         protected ImageView imageType;
-        protected TextView txTitle;
-        protected TextView txPriority;
+        protected TextView txHid;
+        protected TextView txDate;
 
         protected TextView txGoalCost;
         protected TextView txInitCost;
-        protected TextView txPerCost;
-
+        protected TextView txAchive;
 
         public EvaluationViewHolder(View view) {
             super(view);
             this.itemView = view;
-            this.checkBoxSelect = view.findViewById(R.id.check_box_item_Evaluation_select);
-            this.txId = view.findViewById(R.id.text_view_Evaluation_id);
-            this.imageType = view.findViewById(R.id.image_view_Evaluation_type);
-            this.txTitle = view.findViewById(R.id.text_view_Evaluation_title);
-            this.txPriority = view.findViewById(R.id.text_view_Evaluation_priority);
+            this.checkBoxSelect = view.findViewById(R.id.check_box_evaluation_date_select);
+            this.txId = view.findViewById(R.id.text_view_evaluation_date_id);
+            this.imageType = view.findViewById(R.id.image_view_evaluation_date_type);
+            this.txHid = view.findViewById(R.id.text_view_evaluation_date_hid);
+            this.txDate = view.findViewById(R.id.text_view_evaluation_date_date);
 
-            this.txGoalCost = view.findViewById(R.id.text_view_Evaluation_goal_cost);
-            this.txInitCost = view.findViewById(R.id.text_view_Evaluation_init_cost);
-            this.txPerCost = view.findViewById(R.id.text_view_Evaluation_per_cost);
+            this.txGoalCost = view.findViewById(R.id.text_view_evaluation_date_goal_cost);
+            this.txInitCost = view.findViewById(R.id.text_view_evaluation_date_init_cost);
+            this.txAchive = view.findViewById(R.id.text_view_evaluation_date_achive);
 
             checkBoxSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(Evaluation != null){
-                        Evaluation.setCheck(b);
+                    if(evaluation != null){
+                        evaluation.setCheck(b);
                     }
 
                     if(compoundButton.isPressed()){
