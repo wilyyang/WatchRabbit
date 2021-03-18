@@ -13,7 +13,7 @@
     android:layout_marginRight="@dimen/margin_item_scroll_space">
 
     <CheckBox
-        android:id="@+id/check_box_item_evaluation_date_select"
+        android:id="@+id/check_box_evaluation_date_select"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -38,7 +38,7 @@
         android:text="0" />
 
     <TextView
-        android:id="@+id/text_view_record_hid"
+        android:id="@+id/text_view_evaluation_date_hid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0" />
@@ -47,7 +47,7 @@
         android:id="@+id/text_view_evaluation_date_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_weight="6"
         android:text="2021/01/08"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -57,7 +57,7 @@
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="9"
+        android:layout_weight="8"
         android:weightSum="3">
 
         <TextView

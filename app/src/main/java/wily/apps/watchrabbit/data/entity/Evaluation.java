@@ -4,49 +4,50 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @Entity
-public class Habbit {
+public class Evaluation {
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
+
+    private int hid;
     private int type;
     private long time;
-    private String title;
-    private int priority;
-    private boolean active;
 
     private int goalCost;
     private int initCost;
-    private int perCost;
+
+    private int sumCost;
+    private int resultCost;
+    private int achive;
 
     @Ignore
     private boolean check;
 
-    @Ignore
-    public static final int TYPE_HABBIT_CHECK = 1;
-    @Ignore
-    public static final int TYPE_HABBIT_TIMER = 2;
-
-    public Habbit(int type, long time, String title, int priority, boolean active, int goalCost, int initCost, int perCost) {
+    public Evaluation(int hid, int type, long time, int goalCost, int initCost, int sumCost, int resultCost, int achive) {
+        this.hid = hid;
         this.type = type;
         this.time = time;
-        this.title = title;
-        this.priority = priority;
-        this.active = active;
         this.goalCost = goalCost;
         this.initCost = initCost;
-        this.perCost = perCost;
+        this.sumCost = sumCost;
+        this.resultCost = resultCost;
+        this.achive = achive;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public int getHid() {
+        return hid;
+    }
+
+    public void setHid(int hid) {
+        this.hid = hid;
     }
 
     public int getType() {
@@ -65,30 +66,6 @@ public class Habbit {
         this.time = time;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public int getGoalCost() {
         return goalCost;
     }
@@ -105,12 +82,28 @@ public class Habbit {
         this.initCost = initCost;
     }
 
-    public int getPerCost() {
-        return perCost;
+    public int getSumCost() {
+        return sumCost;
     }
 
-    public void setPerCost(int perCost) {
-        this.perCost = perCost;
+    public void setSumCost(int sumCost) {
+        this.sumCost = sumCost;
+    }
+
+    public int getResultCost() {
+        return resultCost;
+    }
+
+    public void setResultCost(int resultCost) {
+        this.resultCost = resultCost;
+    }
+
+    public int getAchive() {
+        return achive;
+    }
+
+    public void setAchive(int achive) {
+        this.achive = achive;
     }
 
     public boolean isCheck() {
@@ -123,16 +116,16 @@ public class Habbit {
 
     @Override
     public String toString() {
-        return "Habbit{" +
+        return "Evaluation{" +
                 "id=" + id +
+                ", hid=" + hid +
                 ", type=" + type +
                 ", time=" + time +
-                ", title=" + title +
-                ", priority=" + priority +
-                ", active=" + active +
                 ", goalCost=" + goalCost +
                 ", initCost=" + initCost +
-                ", perCost=" + perCost +
+                ", sumCost=" + sumCost +
+                ", resultCost=" + resultCost +
+                ", achive=" + achive +
                 ", check=" + check +
                 '}';
     }

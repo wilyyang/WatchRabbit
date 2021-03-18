@@ -60,7 +60,7 @@ public class RecordModifyDialog extends Dialog {
         this.setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                Intent intent = new Intent(mContext, MainActivity.class);
+                Intent intent = new Intent(mContext, EvaluationRecordActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 mContext.startActivity(intent);
             }

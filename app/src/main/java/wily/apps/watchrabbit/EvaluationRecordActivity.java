@@ -26,7 +26,7 @@ import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DialogGetter;
 
 public class EvaluationRecordActivity extends AppCompatActivity {
-    private LinearLayout recordLayoutParent;
+    private LinearLayout recordLayoutRecycler;
 
     private ArrayList<Record> recordList;
     private RecordAdapter recordAdapter;
@@ -44,30 +44,31 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation_record);
+        initView();
     }
 
-    private void initView(View view) {
-        recordLayoutParent = view.findViewById(R.id.layout_fragment_evaluation_parent);
+    private void initView() {
+        recordLayoutRecycler = findViewById(R.id.layout_eval_record_recycler);
 
         LinearLayoutManager layoutMgr = new LinearLayoutManager(EvaluationRecordActivity.this);
-        recordRecyclerView = view.findViewById(R.id.recycler_view_record);
+        recordRecyclerView = findViewById(R.id.recycler_view_eval_record);
         recordRecyclerView.setLayoutManager(layoutMgr);
 
-        btnRecordAdd = view.findViewById(R.id.btn_record_add);
+        btnRecordAdd = findViewById(R.id.btn_eval_record_add);
         btnRecordAdd.setOnClickListener(onClickListener);
 
-        btnSelectMode = view.findViewById(R.id.btn_record_select_mode);
+        btnSelectMode = findViewById(R.id.btn_eval_record_select_mode);
         btnSelectMode.setOnClickListener(onClickListener);
 
-        layoutDeleteBtn = view.findViewById(R.id.layout_record_btn_delete);
+        layoutDeleteBtn = findViewById(R.id.layout_eval_record_btn_delete);
 
-        btnRecordDelete = view.findViewById(R.id.btn_record_delete);
+        btnRecordDelete = findViewById(R.id.btn_eval_record_delete);
         btnRecordDelete.setOnClickListener(onClickListener);
 
-        btnDeleteCancel = view.findViewById(R.id.btn_record_delete_cancel);
+        btnDeleteCancel = findViewById(R.id.btn_eval_record_delete_cancel);
         btnDeleteCancel.setOnClickListener(onClickListener);
 
-        checkboxRecordAll = view.findViewById(R.id.check_box_record_all);
+        checkboxRecordAll = findViewById(R.id.check_box_eval_record_all);
         checkboxRecordAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -79,15 +80,18 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     }
 
     private void setSelectableMode(boolean mode){
+
         if(mode){
-            recordLayoutParent.setWeightSum(26);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 16f);
+            recordLayoutRecycler.setLayoutParams(params);
 
             checkboxRecordAll.setVisibility(View.VISIBLE);
             btnRecordAdd.setVisibility(View.INVISIBLE);
 
             layoutDeleteBtn.setVisibility(View.VISIBLE);
         }else{
-            recordLayoutParent.setWeightSum(24);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 18f);
+            recordLayoutRecycler.setLayoutParams(params);
 
             checkboxRecordAll.setChecked(false);
             checkboxRecordAll.setVisibility(View.INVISIBLE);
@@ -118,7 +122,6 @@ public class EvaluationRecordActivity extends AppCompatActivity {
                     recordDB.recordDao().getStopRecords().subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(stops -> {
-                                Log.d(AppConst.TAG, "LAST");
                                 HashMap<Long, Long> completeHash = new HashMap<>();
                                 for(Record r : stops){
                                     completeHash.put(r.getPair(), r.getTime());
@@ -156,20 +159,20 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.btn_record_add:
+                case R.id.btn_eval_record_add:
                     RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, -1, Habbit.TYPE_HABBIT_TIMER, -1, -1, true);
                     recordModifyDialog.show();
                     break;
-                case R.id.btn_record_select_mode:
+                case R.id.btn_eval_record_select_mode:
                     recordAdapter.setSelectableMode(!recordAdapter.isSelectableMode());
                     setSelectableMode(recordAdapter.isSelectableMode());
                     break;
 
-                case R.id.btn_record_delete:
+                case R.id.btn_eval_record_delete:
                     deleteSelectRecord();
                     break;
 
-                case R.id.btn_record_delete_cancel:
+                case R.id.btn_eval_record_delete_cancel:
                     recordAdapter.setSelectableMode(false);
                     setSelectableMode(false);
                     break;
