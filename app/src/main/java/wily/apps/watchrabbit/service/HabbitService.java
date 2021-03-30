@@ -17,6 +17,7 @@ import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
+import wily.apps.watchrabbit.util.Utils;
 
 public class HabbitService extends Service {
     public static final String HABBIT_SERVICE_CREATE    = "HABBIT_SERVICE_CREATE";
@@ -90,24 +91,24 @@ public class HabbitService extends Service {
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitService.this);
         habbitDB.habbitDao().getHabbitActive(true).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    List<Habbit> habbitList = item;
-                    if(notiList != null){
-                        for(HabbitNotification noti : notiList){
-                            noti.cancel();
-                        }
-                    }
-                    notiList = new ArrayList<HabbitNotification>();
+                .subscribe(item -> afterGetHabbitActive(item));
+    }
 
-                    for(Habbit habbit : habbitList){
-                        notiList.add(new HabbitNotification(HabbitService.this, habbit.getId(), habbit.getType(), habbit.getTitle(), habbit.getPriority()));
-                    }
+    private void afterGetHabbitActive(List<Habbit> habbitList){
+        if(notiList != null){
+            for(HabbitNotification noti : notiList){
+                noti.cancel();
+            }
+        }
+        notiList = new ArrayList<HabbitNotification>();
+        for(Habbit habbit : habbitList){
+            notiList.add(new HabbitNotification(HabbitService.this, habbit.getId(), habbit.getType(), habbit.getTitle(), habbit.getPriority()));
+        }
 
-                    for(HabbitNotification noti : notiList){
-                        noti.sendNotification("Notification init");
-                    }
-                    mainNoti.sendNotification("HabbitService init complete : "+notiList.size());
-                });
+        for(HabbitNotification noti : notiList){
+            noti.sendNotification("Notification init");
+        }
+        mainNoti.sendNotification("HabbitService init complete : "+notiList.size());
     }
 
     // 3. HABBIT_SERVICE_EXIT

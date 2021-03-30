@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.HabbitModifyActivity;
@@ -47,6 +48,7 @@ public class HabbitFragment extends Fragment {
     private Button btnHabbitDelete;
     private Button btnDeleteCancel;
 
+    private AlertDialog dialog;
     // UI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class HabbitFragment extends Fragment {
     }
 
     private void initView(View view) {
+        dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
+
         habbitLayoutParent = view.findViewById(R.id.layout_fragment_habbit_parent);
 
         LinearLayoutManager layoutMgr = new LinearLayoutManager(getContext());
@@ -118,47 +122,49 @@ public class HabbitFragment extends Fragment {
 
     // Access Data
     private void loadHabbits(){
-        AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(getContext());
-        habbitDB.habbitDao().getAll().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    habbitList = (ArrayList)item;
-                    habbitAdapter = new HabbitAdapter(getContext(), habbitList);
-                    habbitAdapter.setOnItemClickListener(onItemClickListener);
+        habbitDB.habbitDao().getAll()
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> afterGetHabbit((ArrayList<Habbit>) item));
+    }
 
-                    habbitRecyclerView.setAdapter(habbitAdapter);
-                    habbitAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                });
+    private void afterGetHabbit(ArrayList<Habbit> list){
+        habbitList = list;
+        habbitAdapter = new HabbitAdapter(getContext(), habbitList);
+        habbitAdapter.setOnItemClickListener(onItemClickListener);
+
+        habbitRecyclerView.setAdapter(habbitAdapter);
+        habbitAdapter.notifyDataSetChanged();
+        dialog.dismiss();
     }
 
     private void deleteSelectHabbit() {
-        AlertDialog dialog = DialogGetter.getProgressDialog(getContext(), getString(R.string.base_dialog_database_inprogress));
         dialog.show();
 
         List<Integer> list = habbitAdapter.getCheckedIds();
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(getContext());
-        habbitDB.habbitDao().deleteHabbitByIds(list).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    RecordDatabase recordDB = RecordDatabase.getAppDatabase(getContext());
-                    recordDB.recordDao().deleteRecordByHids(list).subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(sub_item -> {
-                                if(Utils.isServiceRunning(getContext(), HabbitService.class.getName())){
-                                    Intent intent = new Intent(getActivity(), HabbitService.class);
-                                    intent.setAction(HabbitService.HABBIT_SERVICE_DELETE);
-                                    intent.putIntegerArrayListExtra(AppConst.INTENT_SERVICE_DELETE_LIST, (ArrayList<Integer>) list);
-                                    getActivity().startService(intent);
-                                }
-                                setSelectableMode(false);
-                                habbitAdapter.setSelectableMode(false);
-                                dialog.dismiss();
-                                onResume();
-                            });
-                });
+        RecordDatabase recordDB = RecordDatabase.getAppDatabase(getContext());
+
+        Single singleHabbit = habbitDB.habbitDao().deleteHabbitByIds(list);
+        Single singleRecord = recordDB.recordDao().deleteRecordByHids(list);
+        Single.concat(singleHabbit, singleRecord)
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(item -> afterDeleteHabbit(list));
+
+    }
+
+    private void afterDeleteHabbit(List<Integer> list){
+        if(Utils.isServiceRunning(getContext(), HabbitService.class.getName())){
+            Intent intent = new Intent(getActivity(), HabbitService.class);
+            intent.setAction(HabbitService.HABBIT_SERVICE_DELETE);
+            intent.putIntegerArrayListExtra(AppConst.INTENT_SERVICE_DELETE_LIST, (ArrayList<Integer>) list);
+            getActivity().startService(intent);
+        }
+        setSelectableMode(false);
+        habbitAdapter.setSelectableMode(false);
+        dialog.dismiss();
+        onResume();
     }
 
     // Listener

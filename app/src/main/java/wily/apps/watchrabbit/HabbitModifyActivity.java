@@ -14,6 +14,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
@@ -151,33 +153,35 @@ public class HabbitModifyActivity extends AppCompatActivity {
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(this);
         habbitDB.habbitDao().getHabbit(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    if(!item.isEmpty()){
-                        Habbit habbit = item.get(0);
+                .subscribe(item -> afterGetHabbit(item));
+    }
 
-                        etTitleHabbit.setText(habbit.getTitle());
-                        switchHabbit.setChecked(habbit.isActive());
+    private void afterGetHabbit(List<Habbit> item){
+        if(!item.isEmpty()){
+            Habbit habbit = item.get(0);
 
-                        numberPickerPrio.setValue(habbit.getPriority());
-                        numberPickerInit.setValue(habbit.getInitCost()- minPickerValue);
-                        numberPickerGoal.setValue(habbit.getGoalCost()- minPickerValue);
+            etTitleHabbit.setText(habbit.getTitle());
+            switchHabbit.setChecked(habbit.isActive());
 
-                        int type = habbit.getType();
-                        switch(type){
-                            case Habbit.TYPE_HABBIT_CHECK:
-                                radioBtn_check.setChecked(true);
-                                numberPickerPer_check.setValue(habbit.getPerCost()- minPickerValue);
-                                break;
+            numberPickerPrio.setValue(habbit.getPriority());
+            numberPickerInit.setValue(habbit.getInitCost()- minPickerValue);
+            numberPickerGoal.setValue(habbit.getGoalCost()- minPickerValue);
 
-                            case Habbit.TYPE_HABBIT_TIMER:
-                                radioBtn_timer.setChecked(true);
-                                numberPickerPer_timer.setValue(habbit.getPerCost()- minPickerValue);
-                                break;
-                        }
-                        radioBtn_check.setEnabled(false);
-                        radioBtn_timer.setEnabled(false);
-                    }
-                });
+            int type = habbit.getType();
+            switch(type){
+                case Habbit.TYPE_HABBIT_CHECK:
+                    radioBtn_check.setChecked(true);
+                    numberPickerPer_check.setValue(habbit.getPerCost()- minPickerValue);
+                    break;
+
+                case Habbit.TYPE_HABBIT_TIMER:
+                    radioBtn_timer.setChecked(true);
+                    numberPickerPer_timer.setValue(habbit.getPerCost()- minPickerValue);
+                    break;
+            }
+            radioBtn_check.setEnabled(false);
+            radioBtn_timer.setEnabled(false);
+        }
     }
 
     // Listener
@@ -219,20 +223,17 @@ public class HabbitModifyActivity extends AppCompatActivity {
             long currentTime = System.currentTimeMillis();
             habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(item -> {
-                        long habbitId = item;
-                        sendServiceHabbit(habbitId, type, title, priority, active);
-                        finish();
-                    });
+                    .subscribe(item -> afterUpdateHabbit(item, type, title, priority, active));
         }else if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
             habbitDB.habbitDao().updateHabbit(id, type, title, priority, active, goalCost, initCost, perCost).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(item -> {
-                        long habbitId = id;
-                        sendServiceHabbit(habbitId, type, title, priority, active);
-                        finish();
-                    });
+                    .subscribe(item -> afterUpdateHabbit(id, type, title, priority, active));
         }
+    }
+
+    private void afterUpdateHabbit(long id, int type, String title, int priority, boolean active){
+        sendServiceHabbit(id, type, title, priority, active);
+        finish();
     }
 
     private void sendServiceHabbit(long id, int type, String title, int priority, boolean active){
