@@ -1,6 +1,5 @@
 package wily.apps.watchrabbit;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,7 +25,6 @@ import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
-import wily.apps.watchrabbit.fragment.EvaluationFragment;
 import wily.apps.watchrabbit.util.DateUtil;
 
 public class RecordModifyDialog extends Dialog {
@@ -78,16 +76,16 @@ public class RecordModifyDialog extends Dialog {
                             timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
                     if(mType == Habbit.TYPE_HABBIT_CHECK){
 
-                        recordDB.recordDao().insert(new Record(-1, mType, time, Record.RECORD_STATE_CHECK, -1)).subscribeOn(Schedulers.io())
+                        recordDB.recordDao().insert(new Record(-1, mType, time, Habbit.STATE_CHECK, -1)).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(item ->{
                                     mDialog.dismiss();});
                     }else if(mType == Habbit.TYPE_HABBIT_TIMER){
                         long stopTime = time+(numberPickerRecord.getValue()*DateUtil.MILLISECOND_TO_MINUTE);
-                        recordDB.recordDao().insert(new Record(-1, mType, time, Record.RECORD_STATE_TIMER_START, -1)).subscribeOn(Schedulers.io())
+                        recordDB.recordDao().insert(new Record(-1, mType, time, Habbit.STATE_TIMER_WAIT, -1)).subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(item -> {
-                                    recordDB.recordDao().insert(new Record(-1, mType, stopTime, Record.RECORD_STATE_TIMER_STOP, item)).subscribeOn(Schedulers.io())
+                                    recordDB.recordDao().insert(new Record(-1, mType, stopTime, Habbit.STATE_TIMER_INPROGRESS, item)).subscribeOn(Schedulers.io())
                                             .observeOn(AndroidSchedulers.mainThread())
                                             .subscribe(subItem ->{
                                                 mDialog.dismiss();});

@@ -46,6 +46,7 @@ public class HabbitModifyActivity extends AppCompatActivity {
     private int type = Habbit.TYPE_HABBIT_CHECK;
     private int mode = AppConst.HABBIT_MODIFY_MODE_ADD;
     private int id = -1;
+    private int state = -1;
 
     private final int maxPickerValue = 100;
     private final int minPickerValue = -100;
@@ -181,6 +182,8 @@ public class HabbitModifyActivity extends AppCompatActivity {
             }
             radioBtn_check.setEnabled(false);
             radioBtn_timer.setEnabled(false);
+
+            state = habbit.getState();
         }
     }
 
@@ -218,10 +221,14 @@ public class HabbitModifyActivity extends AppCompatActivity {
                 break;
         }
 
+        if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
+            state = (type == Habbit.TYPE_HABBIT_CHECK) ? Habbit.STATE_CHECK : Habbit.STATE_TIMER_WAIT;
+        }
+
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
         if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
             long currentTime = System.currentTimeMillis();
-            habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost)).subscribeOn(Schedulers.io())
+            habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost, state)).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(item -> afterUpdateHabbit(item, type, title, priority, active));
         }else if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
@@ -244,6 +251,7 @@ public class HabbitModifyActivity extends AppCompatActivity {
             intent.putExtra(AppConst.INTENT_SERVICE_TITLE, title);
             intent.putExtra(AppConst.INTENT_SERVICE_PRIORITY, priority);
             intent.putExtra(AppConst.INTENT_SERVICE_ACTIVE, active);
+            intent.putExtra(AppConst.INTENT_SERVICE_STATE, state);
 
             if(mode == AppConst.HABBIT_MODIFY_MODE_ADD && active == true){
                 intent.setAction(HabbitService.HABBIT_SERVICE_ADD);
@@ -252,7 +260,6 @@ public class HabbitModifyActivity extends AppCompatActivity {
                 intent.setAction(HabbitService.HABBIT_SERVICE_UPDATE);
                 startService(intent);
             }
-
         }
     }
 }

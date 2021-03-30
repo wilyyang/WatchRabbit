@@ -22,12 +22,6 @@ public class Record {
 
     @Ignore
     private boolean check;
-    @Ignore
-    public static final int RECORD_STATE_CHECK = 1001;
-    @Ignore
-    public static final int RECORD_STATE_TIMER_START = 2001;
-    @Ignore
-    public static final int RECORD_STATE_TIMER_STOP = 2002;
 
     public Record(int hid, int type, long time, int state, long pair) {
         this.hid = hid;

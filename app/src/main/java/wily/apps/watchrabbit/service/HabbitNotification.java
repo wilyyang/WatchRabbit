@@ -12,7 +12,6 @@ import androidx.core.app.NotificationCompat;
 
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Habbit;
-import wily.apps.watchrabbit.data.entity.Record;
 
 import static wily.apps.watchrabbit.AppConst.INTENT_SERVICE_HABBIT_ID;
 import static wily.apps.watchrabbit.AppConst.INTENT_SERVICE_TYPE;
@@ -33,10 +32,12 @@ public class HabbitNotification {
     public static final int TYPE_MAIN_NOTI = -1;
     public static final String GROUP_HABBIT_NOTI_KEY = "wily.apps.watchrabbit.WatchRabbit";
 
+    public static final int MAIN_NOTI_STATE = 9999;
+
     // Create
     private HabbitNotification() {}
 
-    public HabbitNotification(Context context, int id, int type, String title, int priority) {
+    public HabbitNotification(Context context, int id, int type, String title, int priority, int state) {
         // Member init
         this.mContext = context;
         this.mId = id;
@@ -45,12 +46,7 @@ public class HabbitNotification {
         this.mPriority = priority;
         this.mPair = -1;
 
-        if(type == Habbit.TYPE_HABBIT_CHECK){
-            mStatus = Record.RECORD_STATE_CHECK;
-        }else if(type == Habbit.TYPE_HABBIT_TIMER){
-            mStatus = Record.RECORD_STATE_TIMER_START;
-        }
-
+        mStatus = state;
         mChannel = new NotificationChannel(""+id, mTitle, NotificationManager.IMPORTANCE_HIGH);
         mBuilder = new NotificationCompat.Builder(mContext, ""+id)
                 .setContentTitle(mTitle)
@@ -75,14 +71,18 @@ public class HabbitNotification {
             recordIntent.putExtra(INTENT_SERVICE_HABBIT_ID, mId);
             recordIntent.putExtra(INTENT_SERVICE_TYPE, mType);
             PendingIntent recordPending = PendingIntent.getService(mContext, mId, recordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            switch(mType){
-                case Habbit.TYPE_HABBIT_CHECK:
+            switch(mStatus){
+                case Habbit.STATE_CHECK:
                     mBuilder.setSmallIcon(R.drawable.ic_type_check)
                             .addAction(android.R.drawable.btn_default, "CHECK", recordPending);
                     break;
-                case Habbit.TYPE_HABBIT_TIMER:
+                case Habbit.STATE_TIMER_WAIT:
                     mBuilder.setSmallIcon(R.drawable.ic_type_timer)
                             .addAction(android.R.drawable.btn_default, "START", recordPending);
+                    break;
+                case Habbit.STATE_TIMER_INPROGRESS:
+                    mBuilder.setSmallIcon(R.drawable.ic_type_timer)
+                            .addAction(android.R.drawable.btn_default, "STOP", recordPending);
                     break;
             }
         }

@@ -22,6 +22,8 @@ public class Habbit {
     private int initCost;
     private int perCost;
 
+    private int state;
+
     @Ignore
     private boolean check;
 
@@ -30,7 +32,14 @@ public class Habbit {
     @Ignore
     public static final int TYPE_HABBIT_TIMER = 2;
 
-    public Habbit(int type, long time, String title, int priority, boolean active, int goalCost, int initCost, int perCost) {
+    @Ignore
+    public static final int STATE_CHECK = 1001;
+    @Ignore
+    public static final int STATE_TIMER_WAIT = 2001;
+    @Ignore
+    public static final int STATE_TIMER_INPROGRESS = 2002;
+
+    public Habbit(int type, long time, String title, int priority, boolean active, int goalCost, int initCost, int perCost, int state) {
         this.type = type;
         this.time = time;
         this.title = title;
@@ -39,6 +48,7 @@ public class Habbit {
         this.goalCost = goalCost;
         this.initCost = initCost;
         this.perCost = perCost;
+        this.state = state;
     }
 
     public int getId() {
@@ -113,6 +123,14 @@ public class Habbit {
         this.perCost = perCost;
     }
 
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
     public boolean isCheck() {
         return check;
     }
@@ -127,12 +145,13 @@ public class Habbit {
                 "id=" + id +
                 ", type=" + type +
                 ", time=" + time +
-                ", title=" + title +
+                ", title='" + title + '\'' +
                 ", priority=" + priority +
                 ", active=" + active +
                 ", goalCost=" + goalCost +
                 ", initCost=" + initCost +
                 ", perCost=" + perCost +
+                ", state=" + state +
                 ", check=" + check +
                 '}';
     }

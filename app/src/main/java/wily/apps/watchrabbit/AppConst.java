@@ -14,6 +14,7 @@ public final class AppConst {
     public static final String INTENT_SERVICE_PRIORITY = "priority";
     public static final String INTENT_SERVICE_ACTIVE = "active";
     public static final String INTENT_SERVICE_DELETE_LIST = "delete_list";
+    public static final String INTENT_SERVICE_STATE = "state";
 
     public static final String INTENT_HABBIT_FRAG_ID = "id";
     public static final String INTENT_HABBIT_FRAG_UPDATE = "update";

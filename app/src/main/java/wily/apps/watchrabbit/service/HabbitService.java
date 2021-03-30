@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.AppConst;
@@ -17,7 +18,6 @@ import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
-import wily.apps.watchrabbit.util.Utils;
 
 public class HabbitService extends Service {
     public static final String HABBIT_SERVICE_CREATE    = "HABBIT_SERVICE_CREATE";
@@ -52,7 +52,8 @@ public class HabbitService extends Service {
                     int add_type = intent.getIntExtra(AppConst.INTENT_SERVICE_TYPE, -1);
                     String add_title = intent.getStringExtra(AppConst.INTENT_SERVICE_TITLE);
                     int add_priority = intent.getIntExtra(AppConst.INTENT_SERVICE_PRIORITY, -1);
-                    addNotification(add_id, add_type, add_title, add_priority);
+                    int add_state = intent.getIntExtra(AppConst.INTENT_SERVICE_STATE, -1);
+                    addNotification(add_id, add_type, add_title, add_priority, add_state);
                     break;
                 case HABBIT_SERVICE_UPDATE:
                     int up_id = intent.getIntExtra(AppConst.INTENT_SERVICE_HABBIT_ID, -1);
@@ -60,7 +61,8 @@ public class HabbitService extends Service {
                     String up_title = intent.getStringExtra(AppConst.INTENT_SERVICE_TITLE);
                     int up_priority = intent.getIntExtra(AppConst.INTENT_SERVICE_PRIORITY, -1);
                     boolean up_active = intent.getBooleanExtra(AppConst.INTENT_SERVICE_ACTIVE, false);
-                    updateNotification(up_id, up_type, up_title, up_priority, up_active);
+                    int up_state = intent.getIntExtra(AppConst.INTENT_SERVICE_STATE, -1);
+                    updateNotification(up_id, up_type, up_title, up_priority, up_active, up_state);
                     break;
                 case HABBIT_SERVICE_DELETE:
                     ArrayList<Integer> delete_list = intent.getIntegerArrayListExtra(AppConst.INTENT_SERVICE_DELETE_LIST);
@@ -80,7 +82,7 @@ public class HabbitService extends Service {
     private void createService(){
         if(isCreate == false){
             isCreate = true;
-            mainNoti = new HabbitNotification(HabbitService.this, -1, HabbitNotification.TYPE_MAIN_NOTI,"Main Notifiation",  11);
+            mainNoti = new HabbitNotification(HabbitService.this, HabbitNotification.TYPE_MAIN_NOTI, HabbitNotification.TYPE_MAIN_NOTI,"Main Notifiation",  11, HabbitNotification.MAIN_NOTI_STATE);
             initService();
             startForeground(mainNoti.getId(), mainNoti.build());
         }
@@ -102,7 +104,7 @@ public class HabbitService extends Service {
         }
         notiList = new ArrayList<HabbitNotification>();
         for(Habbit habbit : habbitList){
-            notiList.add(new HabbitNotification(HabbitService.this, habbit.getId(), habbit.getType(), habbit.getTitle(), habbit.getPriority()));
+            notiList.add(new HabbitNotification(HabbitService.this, habbit.getId(), habbit.getType(), habbit.getTitle(), habbit.getPriority(), habbit.getState()));
         }
 
         for(HabbitNotification noti : notiList){
@@ -126,9 +128,9 @@ public class HabbitService extends Service {
     }
 
     // 4. HABBIT_SERVICE_ADD
-    private void addNotification(int id, int type, String title, int priority){
+    private void addNotification(int id, int type, String title, int priority, int state){
         if(id != -1){
-            HabbitNotification noti = new HabbitNotification(HabbitService.this, id, type, title, priority);
+            HabbitNotification noti = new HabbitNotification(HabbitService.this, id, type, title, priority, state);
             notiList.add(noti);
             noti.sendNotification("Notification init");
             mainNoti.sendNotification("#"+id+" "+title+" noti added");
@@ -136,7 +138,7 @@ public class HabbitService extends Service {
     }
 
     // 5. HABBIT_SERVICE_UPDATE
-    private void updateNotification(int id, int type, String title, int priority, boolean active){
+    private void updateNotification(int id, int type, String title, int priority, boolean active, int state){
         if(id != -1){
             int idx = notiList.indexOf(HabbitNotification.getDummy(id));
             Log.d(AppConst.TAG, "idx : "+idx+" , "+id+" "+active);
@@ -151,7 +153,7 @@ public class HabbitService extends Service {
                 }
             }else{
                 if(active){
-                    HabbitNotification newNoti = new HabbitNotification(HabbitService.this, id, type, title, priority);
+                    HabbitNotification newNoti = new HabbitNotification(HabbitService.this, id, type, title, priority, state);
                     notiList.add(newNoti);
                     noti.sendNotification("Notification init");
                     mainNoti.sendNotification("#"+id+" "+title+" noti actived");
@@ -181,30 +183,45 @@ public class HabbitService extends Service {
     @SuppressLint("RestrictedApi")
     private void recordAction(int id, int type){
         long now = System.currentTimeMillis();
+
         HabbitNotification noti = notiList.get(notiList.indexOf(HabbitNotification.getDummy(id)));
         long pair = noti.getPair();
-        int state = noti.getStatus();
-        RecordDatabase db = RecordDatabase.getAppDatabase(this);
-        db.recordDao().insert(new Record(id, type, now, state, pair)).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    String message = "#"+id+" "+ DateUtil.getDateString(now)+" ";
-                    if(state == Record.RECORD_STATE_TIMER_START){
-                        noti.setPair(item);
-                        noti.setStatus(Record.RECORD_STATE_TIMER_STOP);
-                        noti.getBuilder().mActions.get(0).title = "STOP";
-                        message+="start";
-                    }else if(state == Record.RECORD_STATE_TIMER_STOP){
-                        noti.setPair(-1);
-                        noti.setStatus(Record.RECORD_STATE_TIMER_START);
-                        noti.getBuilder().mActions.get(0).title = "START";
-                        message+="stop";
-                    }else{
-                        noti.setPair(-1);
-                        message+="checked";
+
+        HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(this);
+        RecordDatabase recordDB = RecordDatabase.getAppDatabase(this);
+        habbitDB.habbitDao().getHabbitState(id).subscribeOn(Schedulers.io())
+                .subscribe(state -> {
+                    Log.d("WILYWILY", "1"+state);
+                    if(state == Habbit.STATE_TIMER_WAIT){
+                        habbitDB.habbitDao().updateHabbitState(id, Habbit.STATE_TIMER_INPROGRESS).subscribe();
+                    }else if(state == Habbit.STATE_TIMER_INPROGRESS){
+                        habbitDB.habbitDao().updateHabbitState(id, Habbit.STATE_TIMER_WAIT).subscribe();
                     }
-                    noti.sendNotification(message);
-                });
+                    Log.d("WILYWILY", "2"+state);
+                    recordDB.recordDao().insert(new Record(id, type, now, state, pair)).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(item -> {                    Log.d("WILYWILY", "3"+state);
+                                String message = "#"+id+" "+ DateUtil.getDateString(now)+" ";
+                                if(state == Habbit.STATE_TIMER_WAIT){
+                                    noti.setPair(item);
+                                    noti.setStatus(Habbit.STATE_TIMER_INPROGRESS);
+                                    noti.getBuilder().mActions.get(0).title = "STOP";
+                                    message+="start";
+                                }else if(state == Habbit.STATE_TIMER_INPROGRESS){
+                                    noti.setPair(-1);
+                                    noti.setStatus(Habbit.STATE_TIMER_WAIT);
+                                    noti.getBuilder().mActions.get(0).title = "START";
+                                    message+="stop";
+                                }else{
+                                    noti.setPair(-1);
+                                    message+="checked";
+                                }
+                                noti.sendNotification(message);
+                            });
+
+                    //
+
+                    });
     }
 
     @Override

@@ -8,6 +8,7 @@ import androidx.room.Query;
 import java.util.List;
 
 import io.reactivex.Single;
+import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 
 @Dao
@@ -15,13 +16,13 @@ public interface RecordDao {
     @Query("SELECT * FROM Record")
     Single<List<Record>> getAll();
 
-    @Query("SELECT * FROM Record  WHERE hid = :p_hid AND time >= :p_start AND time < :p_stop AND state !="+Record.RECORD_STATE_TIMER_STOP)
+    @Query("SELECT * FROM Record  WHERE hid = :p_hid AND time >= :p_start AND time < :p_stop AND state !="+ Habbit.STATE_TIMER_INPROGRESS)
     Single<List<Record>> getRecordByHidDateNotStop(int p_hid, long p_start, long p_stop);
 
-    @Query("SELECT * FROM Record WHERE state != "+Record.RECORD_STATE_TIMER_STOP)
+    @Query("SELECT * FROM Record WHERE state != "+Habbit.STATE_TIMER_INPROGRESS)
     Single<List<Record>> getStartRecords();
 
-    @Query("SELECT * FROM Record WHERE state = "+Record.RECORD_STATE_TIMER_STOP)
+    @Query("SELECT * FROM Record WHERE state = "+Habbit.STATE_TIMER_INPROGRESS)
     Single<List<Record>> getStopRecords();
 
     @Query("UPDATE Record SET time=:p_time WHERE id = :p_id")
