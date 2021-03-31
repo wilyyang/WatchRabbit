@@ -28,8 +28,6 @@ public interface RecordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<Long> insert(Record record);
 
-
-
     @Query("UPDATE Record SET time=:p_time WHERE id = :p_id")
     Single<Integer> updateTime(long p_id, long p_time);
 
@@ -38,4 +36,8 @@ public interface RecordDao {
 
     @Query("UPDATE Record SET term=:p_term WHERE id = :p_id")
     Single<Integer> updateTerm(long p_id, long p_term);
+
+    // <tempo>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Single<List<Long>> insertAll(List<Record> records);
 }

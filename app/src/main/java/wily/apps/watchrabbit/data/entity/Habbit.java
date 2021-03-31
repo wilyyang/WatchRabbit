@@ -23,7 +23,7 @@ public class Habbit {
     private int perCost;
 
     private int state;
-    private int curRecordId;
+    private long curRecordId;
 
     @Ignore
     private boolean check;
@@ -40,7 +40,7 @@ public class Habbit {
     @Ignore
     public static final int STATE_TIMER_INPROGRESS = 2002;
 
-    public Habbit(int type, long time, String title, int priority, boolean active, int goalCost, int initCost, int perCost, int state) {
+    public Habbit(int type, long time, String title, int priority, boolean active, int goalCost, int initCost, int perCost, int state, long curRecordId) {
         this.type = type;
         this.time = time;
         this.title = title;
@@ -51,6 +51,7 @@ public class Habbit {
         this.perCost = perCost;
         this.state = state;
         this.curRecordId = -1;
+        this.curRecordId = curRecordId;
     }
 
     public int getId() {
@@ -133,20 +134,20 @@ public class Habbit {
         this.state = state;
     }
 
+    public long getCurRecordId() {
+        return curRecordId;
+    }
+
+    public void setCurRecordId(long curRecordId) {
+        this.curRecordId = curRecordId;
+    }
+
     public boolean isCheck() {
         return check;
     }
 
     public void setCheck(boolean check) {
         this.check = check;
-    }
-
-    public int getCurRecordId() {
-        return curRecordId;
-    }
-
-    public void setCurRecordId(int curRecordId) {
-        this.curRecordId = curRecordId;
     }
 
     @Override

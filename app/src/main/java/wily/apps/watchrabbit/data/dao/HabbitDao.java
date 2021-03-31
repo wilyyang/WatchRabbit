@@ -16,7 +16,7 @@ public interface HabbitDao {
     Single<List<Habbit>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<Long> insert(Habbit work);
+    Single<Long> insert(Habbit habbit);
 
     @Query("SELECT * FROM Habbit WHERE id=:p_id")
     Single<List<Habbit>> getHabbit(int p_id);

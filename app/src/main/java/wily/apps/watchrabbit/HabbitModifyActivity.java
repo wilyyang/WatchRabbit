@@ -228,7 +228,7 @@ public class HabbitModifyActivity extends AppCompatActivity {
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
         if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
             long currentTime = System.currentTimeMillis();
-            habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost, state)).subscribeOn(Schedulers.io())
+            habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost, state, -1)).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(item -> afterUpdateHabbit(item, type, title, priority, active));
         }else if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
