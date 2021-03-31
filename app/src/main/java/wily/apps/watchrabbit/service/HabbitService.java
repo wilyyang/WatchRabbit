@@ -84,7 +84,7 @@ public class HabbitService extends Service {
             isCreate = true;
             mainNoti = new HabbitNotification(HabbitService.this, HabbitNotification.TYPE_MAIN_NOTI, HabbitNotification.TYPE_MAIN_NOTI,"Main Notifiation",  11, HabbitNotification.MAIN_NOTI_STATE);
             initService();
-            startForeground(mainNoti.getId(), mainNoti.build());
+            startForeground(mainNoti.getHid(), mainNoti.build());
         }
     }
 
@@ -141,7 +141,6 @@ public class HabbitService extends Service {
     private void updateNotification(int id, int type, String title, int priority, boolean active, int state){
         if(id != -1){
             int idx = notiList.indexOf(HabbitNotification.getDummy(id));
-            Log.d(AppConst.TAG, "idx : "+idx+" , "+id+" "+active);
             HabbitNotification noti = notiList.get(idx);
             if(noti != null){
                 if(active){
@@ -181,47 +180,56 @@ public class HabbitService extends Service {
 
     // 7. HABBIT_SERVICE_RECORDING
     @SuppressLint("RestrictedApi")
-    private void recordAction(int id, int type){
+    private void recordAction(int hid, int type){
         long now = System.currentTimeMillis();
 
-        HabbitNotification noti = notiList.get(notiList.indexOf(HabbitNotification.getDummy(id)));
-        long pair = noti.getPair();
+        HabbitNotification noti = notiList.get(notiList.indexOf(HabbitNotification.getDummy(hid)));
 
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(this);
         RecordDatabase recordDB = RecordDatabase.getAppDatabase(this);
-        habbitDB.habbitDao().getHabbitState(id).subscribeOn(Schedulers.io())
+        habbitDB.habbitDao().getHabbitState(hid).subscribeOn(Schedulers.io())
                 .subscribe(state -> {
-                    Log.d("WILYWILY", "1"+state);
-                    if(state == Habbit.STATE_TIMER_WAIT){
-                        habbitDB.habbitDao().updateHabbitState(id, Habbit.STATE_TIMER_INPROGRESS).subscribe();
-                    }else if(state == Habbit.STATE_TIMER_INPROGRESS){
-                        habbitDB.habbitDao().updateHabbitState(id, Habbit.STATE_TIMER_WAIT).subscribe();
-                    }
-                    Log.d("WILYWILY", "2"+state);
-                    recordDB.recordDao().insert(new Record(id, type, now, state, pair)).subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(item -> {                    Log.d("WILYWILY", "3"+state);
-                                String message = "#"+id+" "+ DateUtil.getDateString(now)+" ";
-                                if(state == Habbit.STATE_TIMER_WAIT){
-                                    noti.setPair(item);
-                                    noti.setStatus(Habbit.STATE_TIMER_INPROGRESS);
-                                    noti.getBuilder().mActions.get(0).title = "STOP";
-                                    message+="start";
-                                }else if(state == Habbit.STATE_TIMER_INPROGRESS){
-                                    noti.setPair(-1);
-                                    noti.setStatus(Habbit.STATE_TIMER_WAIT);
-                                    noti.getBuilder().mActions.get(0).title = "START";
-                                    message+="stop";
-                                }else{
-                                    noti.setPair(-1);
-                                    message+="checked";
-                                }
+                    switch(state){
+                        case Habbit.STATE_CHECK:
+                            recordDB.recordDao().insert(new Record(hid, type, now, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(res ->
+                            {
+                                String message = "#"+hid+" "+ DateUtil.getDateString(now)+" checked";
                                 noti.sendNotification(message);
                             });
+                            break;
+                        case Habbit.STATE_TIMER_WAIT:
+                            recordDB.recordDao().insert(new Record(hid, type, now, -1)).subscribe(id->{
+                                habbitDB.habbitDao().updateHabbitState(hid, Habbit.STATE_TIMER_INPROGRESS).subscribe();
+                                habbitDB.habbitDao().updateCurRecordId(hid, id).observeOn(AndroidSchedulers.mainThread()).subscribe(res ->
+                                {
+                                    noti.setStatus(Habbit.STATE_TIMER_INPROGRESS);
+                                    noti.getBuilder().mActions.get(0).title = "STOP";
+                                    String message = "#"+hid+" "+ DateUtil.getDateString(now)+" inprogress";
+                                    noti.sendNotification(message);
+                                });
+                            });
+                            break;
+                        case Habbit.STATE_TIMER_INPROGRESS:
+                            habbitDB.habbitDao().getCurRecordId(hid).subscribe(id-> recordDB.recordDao().getRecord(id).subscribe(
+                                    list -> {
+                                        if(list.size()>0){
+                                            Record record = list.get(0);
+                                            long term = now - record.getTime();
+                                            recordDB.recordDao().updateTerm(record.getId(), term).subscribe();
+                                        }
 
-                    //
-
-                    });
+                                        habbitDB.habbitDao().updateHabbitState(hid, Habbit.STATE_TIMER_WAIT).subscribe();
+                                        habbitDB.habbitDao().updateCurRecordId(hid, -1).observeOn(AndroidSchedulers.mainThread()).subscribe(res ->
+                                        {
+                                            noti.setStatus(Habbit.STATE_TIMER_WAIT);
+                                            noti.getBuilder().mActions.get(0).title = "START";
+                                            String message = "#"+hid+" "+ DateUtil.getDateString(now)+" complete";
+                                            noti.sendNotification(message);
+                                        });
+                                    }
+                            ));
+                            break;
+                    }});
     }
 
     @Override

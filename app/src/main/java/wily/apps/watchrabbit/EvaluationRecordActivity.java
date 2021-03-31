@@ -28,7 +28,6 @@ import wily.apps.watchrabbit.util.DialogGetter;
 public class EvaluationRecordActivity extends AppCompatActivity {
     private LinearLayout recordLayoutRecycler;
 
-    private ArrayList<Record> recordList;
     private RecordAdapter recordAdapter;
     private RecyclerView recordRecyclerView;
 
@@ -40,6 +39,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     private Button btnRecordDelete;
     private Button btnDeleteCancel;
 
+    private AlertDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +48,8 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        dialog = DialogGetter.getProgressDialog(EvaluationRecordActivity.this, getString(R.string.base_dialog_database_inprogress));
+
         recordLayoutRecycler = findViewById(R.id.layout_eval_record_recycler);
 
         LinearLayoutManager layoutMgr = new LinearLayoutManager(EvaluationRecordActivity.this);
@@ -111,34 +113,20 @@ public class EvaluationRecordActivity extends AppCompatActivity {
 
     // Access Data
     private void loadRecords(){
-        AlertDialog dialog = DialogGetter.getProgressDialog(EvaluationRecordActivity.this, getString(R.string.base_dialog_database_inprogress));
         dialog.show();
         RecordDatabase recordDB = RecordDatabase.getAppDatabase(EvaluationRecordActivity.this);
-        recordDB.recordDao().getStartRecords().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                    recordList = (ArrayList) item;
+        recordDB.recordDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterRecordGetAll(item));
+    }
 
-                    recordDB.recordDao().getStopRecords().subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(stops -> {
-                                HashMap<Long, Long> completeHash = new HashMap<>();
-                                for(Record r : stops){
-                                    completeHash.put(r.getPair(), r.getTime());
-                                    Log.d(AppConst.TAG, " "+r.getPair()+" "+r.getTime());
-                                }
-
-                                recordAdapter = new RecordAdapter(EvaluationRecordActivity.this, recordList, completeHash);
-                                recordAdapter.setOnItemClickListener(onItemClickListener);
-                                recordRecyclerView.setAdapter(recordAdapter);
-                                recordAdapter.notifyDataSetChanged();
-                                dialog.dismiss();
-                            });
-                });
+    private void afterRecordGetAll(List<Record> recordList){
+        recordAdapter = new RecordAdapter(EvaluationRecordActivity.this, (ArrayList<Record>)recordList);
+        recordAdapter.setOnItemClickListener(onItemClickListener);
+        recordRecyclerView.setAdapter(recordAdapter);
+        recordAdapter.notifyDataSetChanged();
+        dialog.dismiss();
     }
 
     private void deleteSelectRecord() {
-        AlertDialog dialog = DialogGetter.getProgressDialog(EvaluationRecordActivity.this, getString(R.string.base_dialog_database_inprogress));
         dialog.show();
 
         List<Long> list = recordAdapter.getCheckedIds();
@@ -160,6 +148,8 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_eval_record_add:
+
+                    // <tempo>
                     RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, -1, Habbit.TYPE_HABBIT_TIMER, -1, -1, true);
                     recordModifyDialog.show();
                     break;

@@ -47,13 +47,18 @@ public class RecordModifyDialog extends Dialog {
     private final int maxPickerMinuteValue = 1440;
     private final int minPickerMinuteValue = 1;
 
+    private long recordId;
+    private boolean isAdd;
+
     public RecordModifyDialog(@NonNull Context context, long id, int type, long time, long term, boolean isAdd) {
         super(context);
         setContentView(R.layout.dialog_record_modify);
 
         this.mDialog = this;
         this.mContext = context;
+        this.recordId = id;
         this.mType = type;
+        this.isAdd = isAdd;
 
         this.setOnDismissListener(new OnDismissListener() {
             @Override
@@ -68,31 +73,6 @@ public class RecordModifyDialog extends Dialog {
 
         if(isAdd){
             btnAdd.setText(R.string.base_btn_add);
-            btnAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    RecordDatabase recordDB = RecordDatabase.getAppDatabase(mContext);
-                    long time = DateUtil.getDateLong(datePickerRecord.getYear(), datePickerRecord.getMonth(), datePickerRecord.getDayOfMonth(),
-                            timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
-                    if(mType == Habbit.TYPE_HABBIT_CHECK){
-
-                        recordDB.recordDao().insert(new Record(-1, mType, time, Habbit.STATE_CHECK, -1)).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(item ->{
-                                    mDialog.dismiss();});
-                    }else if(mType == Habbit.TYPE_HABBIT_TIMER){
-                        long stopTime = time+(numberPickerRecord.getValue()*DateUtil.MILLISECOND_TO_MINUTE);
-                        recordDB.recordDao().insert(new Record(-1, mType, time, Habbit.STATE_TIMER_WAIT, -1)).subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(item -> {
-                                    recordDB.recordDao().insert(new Record(-1, mType, stopTime, Habbit.STATE_TIMER_INPROGRESS, item)).subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(subItem ->{
-                                                mDialog.dismiss();});
-                                });
-                    }
-                }
-            });
             setRecord(type, System.currentTimeMillis(), 1);
         }
         else {
@@ -100,36 +80,38 @@ public class RecordModifyDialog extends Dialog {
                 return;
             }else{
                 btnAdd.setText(R.string.base_btn_update);
-                btnAdd.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        RecordDatabase recordDB = RecordDatabase.getAppDatabase(mContext);
-                        long time = DateUtil.getDateLong(datePickerRecord.getYear(), datePickerRecord.getMonth(), datePickerRecord.getDayOfMonth(),
-                                timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
-
-                        if(mType == Habbit.TYPE_HABBIT_CHECK){
-                            recordDB.recordDao().updateTime(id, time).subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(item ->{
-                                        mDialog.dismiss();});
-                        }else if(mType == Habbit.TYPE_HABBIT_TIMER){
-                            long stopTime = time+(numberPickerRecord.getValue()*DateUtil.MILLISECOND_TO_MINUTE);
-                            recordDB.recordDao().updateTime(id, time).subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(item ->{
-                                        recordDB.recordDao().updateTimePair(id, stopTime).subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(subItem ->{
-                                                    mDialog.dismiss();
-                                                });
-                                    });
-                        }
-                    }
-                });
                 setRecord(type, time, term);
             }
         }
+        btnAdd.setOnClickListener(addUpdateClickListener);
     }
+
+    private View.OnClickListener addUpdateClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            RecordDatabase recordDB = RecordDatabase.getAppDatabase(mContext);
+            long time = DateUtil.getDateLong(datePickerRecord.getYear(), datePickerRecord.getMonth(), datePickerRecord.getDayOfMonth(),
+                    timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
+            if(isAdd){
+                // <tempo>
+                if(mType == Habbit.TYPE_HABBIT_CHECK){
+                    recordDB.recordDao().insert(new Record(-1004, mType, time, -1))
+                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item ->{ mDialog.dismiss(); });
+                }else if(mType == Habbit.TYPE_HABBIT_TIMER){
+                    recordDB.recordDao().insert(new Record(-1004, mType, time, (numberPickerRecord.getValue()*DateUtil.MILLISECOND_TO_MINUTE)))
+                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> {mDialog.dismiss(); });
+                }
+            }else{
+                if(mType == Habbit.TYPE_HABBIT_CHECK){
+                    recordDB.recordDao().updateTime(recordId, time)
+                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> {mDialog.dismiss(); });
+                }else if(mType == Habbit.TYPE_HABBIT_TIMER){
+                    recordDB.recordDao().updateTimeAndTerm(recordId, time, (numberPickerRecord.getValue()*DateUtil.MILLISECOND_TO_MINUTE))
+                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> {mDialog.dismiss(); });
+                }
+            }
+        }
+    };
 
     private void setRecord(int type, long time, long term){
         int hour = DateUtil.getDateNum(time, Calendar.HOUR);

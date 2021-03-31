@@ -19,11 +19,10 @@ import static wily.apps.watchrabbit.AppConst.INTENT_SERVICE_TYPE;
 public class HabbitNotification {
     private Context mContext;
 
-    private int mId;
+    private int mHid;
     private int mType;
     private String mTitle;
     private int mPriority;
-    private long mPair;
     private int mStatus;
 
     private NotificationChannel mChannel;
@@ -37,18 +36,17 @@ public class HabbitNotification {
     // Create
     private HabbitNotification() {}
 
-    public HabbitNotification(Context context, int id, int type, String title, int priority, int state) {
+    public HabbitNotification(Context context, int hId, int type, String title, int priority, int state) {
         // Member init
         this.mContext = context;
-        this.mId = id;
+        this.mHid = hId;
         this.mType = type;
         this.mTitle = title;
         this.mPriority = priority;
-        this.mPair = -1;
 
         mStatus = state;
-        mChannel = new NotificationChannel(""+id, mTitle, NotificationManager.IMPORTANCE_HIGH);
-        mBuilder = new NotificationCompat.Builder(mContext, ""+id)
+        mChannel = new NotificationChannel(""+mHid, mTitle, NotificationManager.IMPORTANCE_HIGH);
+        mBuilder = new NotificationCompat.Builder(mContext, ""+mHid)
                 .setContentTitle(mTitle)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(false)
@@ -68,9 +66,9 @@ public class HabbitNotification {
         }else{
             Intent recordIntent = new Intent(mContext, HabbitService.class);
             recordIntent.setAction(HabbitService.HABBIT_SERVICE_RECORDING);
-            recordIntent.putExtra(INTENT_SERVICE_HABBIT_ID, mId);
+            recordIntent.putExtra(INTENT_SERVICE_HABBIT_ID, mHid);
             recordIntent.putExtra(INTENT_SERVICE_TYPE, mType);
-            PendingIntent recordPending = PendingIntent.getService(mContext, mId, recordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent recordPending = PendingIntent.getService(mContext, mHid, recordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             switch(mStatus){
                 case Habbit.STATE_CHECK:
                     mBuilder.setSmallIcon(R.drawable.ic_type_check)
@@ -99,36 +97,36 @@ public class HabbitNotification {
         this.mBuilder.setSortKey(""+priority);
 
         NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifiMgr.notify(mId, mBuilder.build());
+        notifiMgr.notify(mHid, mBuilder.build());
     }
 
     public void sendNotification(String msg) {
         mBuilder.setContentText(msg);
         NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifiMgr.notify(mId, mBuilder.build());
+        notifiMgr.notify(mHid, mBuilder.build());
     }
 
     public void cancel(){
         NotificationManager notifiMgr = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifiMgr.cancel(mId);
+        notifiMgr.cancel(mHid);
     }
 
     // Object
-    public static HabbitNotification getDummy(int id){
+    public static HabbitNotification getDummy(int hid){
         HabbitNotification noti = new HabbitNotification();
-        noti.mId = id;
+        noti.mHid = hid;
         return noti;
     }
 
     @Override
     public int hashCode() {
-        return mId % 11;
+        return mHid % 11;
     }
 
     @Override
     public boolean equals(@Nullable Object obj) {
         HabbitNotification noti = (HabbitNotification) obj;
-        return noti.getId() == mId;
+        return noti.getHid() == mHid;
     }
 
     // Property
@@ -139,20 +137,12 @@ public class HabbitNotification {
         return mBuilder.build();
     }
 
-    public int getId(){
-        return mId;
+    public int getHid(){
+        return mHid;
     }
     public int getType(){
         return mType;
     }
-
-    public long getPair() {
-        return mPair;
-    }
-    public void setPair(long mPair) {
-        this.mPair = mPair;
-    }
-
     public int getStatus(){
         return mStatus;
     }

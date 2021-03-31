@@ -68,6 +68,9 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
 
         if(pHabbit.isActive()){
             holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_enabled));
+            if(pHabbit.getState() == Habbit.STATE_TIMER_INPROGRESS){
+                holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_inprogress));
+            }
         }else{
             holder.itemView.setBackground(mContext.getDrawable(R.drawable.bg_layout_round_disabled));
         }

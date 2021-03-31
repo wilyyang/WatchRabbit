@@ -26,7 +26,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     private Context mContext;
     private OnRecordItemClickListener mListener = null;
     private boolean selectableMode = false;
-    private HashMap<Long, Long> completeHash = null;
 
     // Listener
     public interface OnRecordItemClickListener{
@@ -36,10 +35,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     }
 
     // Base
-    public RecordAdapter(Context context, ArrayList<Record> recordList, HashMap<Long, Long> completeHash) {
+    public RecordAdapter(Context context, ArrayList<Record> recordList) {
         this.mContext = context;
         this.mList = recordList;
-        this.completeHash = completeHash;
     }
 
     public void setOnItemClickListener(OnRecordItemClickListener listener){
@@ -71,13 +69,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         if(pRecord.getType()==Habbit.TYPE_HABBIT_TIMER){
             holder.txTermLabel.setVisibility(View.VISIBLE);
             holder.txTerm.setVisibility(View.VISIBLE);
-            Long completeTime = completeHash.get(pRecord.getId());
-            if(completeTime != null){
-                Long term = (completeTime - pRecord.getTime())/DateUtil.MILLISECOND_TO_MINUTE;
-                holder.term = term;
-                holder.txTerm.setText(""+ term);
+
+            if(pRecord.getTerm() != -1){
+                holder.txTerm.setText(""+ (pRecord.getTerm()/DateUtil.MILLISECOND_TO_MINUTE));
             }else{
-                holder.term = -1;
                 holder.txTerm.setText("진행중");
             }
 
@@ -158,7 +153,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         protected TextView txTime;
         protected TextView txTermLabel;
         protected TextView txTerm;
-        protected long term;
 
         public RecordViewHolder(View view) {
             super(view);
@@ -195,7 +189,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
                         checkBoxSelect.setChecked(!checkBoxSelect.isChecked());
                     } else {
                         if (mListener != null) {
-                            mListener.onItemClick(record.getId(), record.getType(), record.getTime(), term);
+                            mListener.onItemClick(record.getId(), record.getType(), record.getTime(), record.getTerm());
                         }
                     }
                 }

@@ -14,6 +14,9 @@
     <color name="bg_layout_disable_front">#33CCCCCC</color>
     <color name="bg_layout_disable_press">#11CCCCCC</color>
 
+    <color name="bg_layout_inprogress_front">#33ff1133</color>
+    <color name="bg_layout_inprogress_press">#11ff1133</color>
+
     <color name="color_stroke_base">#FFD1D1D1</color>
     <color name="color_stroke_item">#33D1D1D1</color>
 

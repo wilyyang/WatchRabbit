@@ -23,6 +23,7 @@ public class Habbit {
     private int perCost;
 
     private int state;
+    private int curRecordId;
 
     @Ignore
     private boolean check;
@@ -49,6 +50,7 @@ public class Habbit {
         this.initCost = initCost;
         this.perCost = perCost;
         this.state = state;
+        this.curRecordId = -1;
     }
 
     public int getId() {
@@ -139,6 +141,14 @@ public class Habbit {
         this.check = check;
     }
 
+    public int getCurRecordId() {
+        return curRecordId;
+    }
+
+    public void setCurRecordId(int curRecordId) {
+        this.curRecordId = curRecordId;
+    }
+
     @Override
     public String toString() {
         return "Habbit{" +
@@ -152,6 +162,7 @@ public class Habbit {
                 ", initCost=" + initCost +
                 ", perCost=" + perCost +
                 ", state=" + state +
+                ", curRecordId=" + curRecordId +
                 ", check=" + check +
                 '}';
     }

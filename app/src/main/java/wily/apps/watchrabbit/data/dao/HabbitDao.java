@@ -30,6 +30,12 @@ public interface HabbitDao {
     @Query("UPDATE Habbit SET state=:p_state WHERE id = :p_id")
     Single<Integer> updateHabbitState(int p_id, int p_state);
 
+    @Query("UPDATE Habbit SET curRecordId=:p_recordId WHERE id = :p_id")
+    Single<Integer> updateCurRecordId(int p_id, long p_recordId);
+
+    @Query("SELECT curRecordId FROM Habbit WHERE id=:p_id")
+    Single<Integer> getCurRecordId(int p_id);
+
     @Query("DELETE FROM Habbit WHERE id IN (:p_ids)")
     Single<Integer> deleteHabbitByIds(List<Integer> p_ids);
 

@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class DateUtil {
     public static final long MILLISECOND_TO_MINUTE = 60 * 1000;
+    public static final long MILLISECOND_TO_SECOND = 1000;
 
     public static String getDateString(long time){
         DateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm:ss");

@@ -16,19 +16,16 @@ public class Record {
     private int hid;
     private int type;
     private long time;
-    private int state;
-
-    private long pair;
+    private long term;
 
     @Ignore
     private boolean check;
 
-    public Record(int hid, int type, long time, int state, long pair) {
+    public Record(int hid, int type, long time, long term) {
         this.hid = hid;
         this.type = type;
         this.time = time;
-        this.state = state;
-        this.pair = pair;
+        this.term = term;
     }
 
     public long getId() {
@@ -63,20 +60,12 @@ public class Record {
         this.time = time;
     }
 
-    public int getState() {
-        return state;
+    public long getTerm() {
+        return term;
     }
 
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public long getPair() {
-        return pair;
-    }
-
-    public void setPair(long pair) {
-        this.pair = pair;
+    public void setTerm(long term) {
+        this.term = term;
     }
 
     public boolean isCheck() {
@@ -94,8 +83,7 @@ public class Record {
                 ", hid=" + hid +
                 ", type=" + type +
                 ", time=" + time +
-                ", state=" + state +
-                ", pair=" + pair +
+                ", term=" + term +
                 ", check=" + check +
                 '}';
     }
