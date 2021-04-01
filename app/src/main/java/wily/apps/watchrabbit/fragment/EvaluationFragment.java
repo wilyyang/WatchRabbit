@@ -29,6 +29,9 @@ import wily.apps.watchrabbit.MainActivity;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.adapter.HabbitAdapter;
 import wily.apps.watchrabbit.adapter.RecordAdapter;
+import wily.apps.watchrabbit.data.dao.EvaluationDao;
+import wily.apps.watchrabbit.data.dao.HabbitDao;
+import wily.apps.watchrabbit.data.dao.RecordDao;
 import wily.apps.watchrabbit.data.database.EvaluationDatabase;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
@@ -46,11 +49,11 @@ public class EvaluationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        if(init == false){
-            init = true;
-            testAdd();
-        }
-        evalAdd();
+//        if(init == false){
+//            init = true;
+//            testAdd();
+//        }
+//        updateTotal();
 
 
         View view = inflater.inflate(R.layout.fragment_evaluation, container, false);
@@ -99,8 +102,70 @@ public class EvaluationFragment extends Fragment {
         }
     }
 
-    private void evalAdd(){
+    private HabbitDao habbitDao = null;
+    private EvaluationDao evalDao = null;
+    private RecordDao recordDao = null;
+    private void updateTotal(){
+        habbitDao = HabbitDatabase.getAppDatabase(getContext()).habbitDao();
+        evalDao = EvaluationDatabase.getAppDatabase(getContext()).evaluationDao();
+        recordDao = RecordDatabase.getAppDatabase(getContext()).recordDao();
 
+        habbitDao.getAll().subscribeOn(Schedulers.io()).subscribe(list->{
+
+            for(Habbit habbit : list){
+                updateHabbit(habbit);
+            }
+
+        });
+    }
+
+    private void updateHabbit(final Habbit habbit){
+        long habbitDate = DateUtil.convertDate(habbit.getTime());
+        long endDate = DateUtil.convertDate(System.currentTimeMillis());
+        long before30Date = DateUtil.getDateLongBefore(endDate, 30);
+        long startDate = (habbitDate > before30Date) ? before30Date : habbitDate;
+
+
+        evalDao.getEvaluationByHidAndTime(habbit.getId(), startDate, endDate).subscribe(evalList ->{
+
+            int idx = 0;
+            int size = evalList.size();
+            Evaluation temp = null;
+            for(long cur = startDate; cur <= endDate; cur += DateUtil.ONEDAY_TO_MILLISECOND){
+                if(temp == null && idx < size){
+                    temp = evalList.get(idx);
+                }
+
+                if(temp != null && temp.getTime() == cur){
+                    // 있다.
+                    temp = null;
+                    ++idx;
+                }else{
+                    // 없다.
+                    updateEvaluation(habbit, cur);
+                }
+            }
+        });
+    }
+
+    private void updateEvaluation(final Habbit habbit, final long day){
+
+        recordDao.getRecordByHidAndTime(habbit.getId(), day, day+DateUtil.ONEDAY_TO_MILLISECOND-1).subscribe(list ->{
+            int sum = 0;
+            if(habbit.getType() == Habbit.TYPE_HABBIT_CHECK){
+                sum = list.size();
+
+            }else if(habbit.getType() == Habbit.TYPE_HABBIT_TIMER){
+                for(Record record : list){
+                    sum += record.getTerm();
+                }
+            }
+
+            int result = habbit.getInitCost() + (sum * habbit.getPerCost());
+            int rate = (int) (( result / (double)habbit.getGoalCost() ) * 100 );
+
+            evalDao.insert(new Evaluation(habbit.getId(), day, result, rate)).subscribe();
+        });
 
     }
 }

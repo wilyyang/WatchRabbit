@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.today_tab:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_main, evaluationFragment).commit();
-                        Intent intent = new Intent(MainActivity.this, EvaluationRecordActivity.class);
+                        Intent intent = new Intent(MainActivity.this, EvaluationHabbitActivity.class);
                         startActivity(intent);
                         return true;
 

@@ -10,28 +10,19 @@ public class Evaluation {
     private long id;
 
     private int hid;
-    private int type;
     private long time;
 
-    private int goalCost;
-    private int initCost;
-
-    private int sumCost;
     private int resultCost;
-    private int achive;
+    private int achiveRate;
 
     @Ignore
     private boolean check;
 
-    public Evaluation(int hid, int type, long time, int goalCost, int initCost, int sumCost, int resultCost, int achive) {
+    public Evaluation(int hid, long time, int resultCost, int achiveRate) {
         this.hid = hid;
-        this.type = type;
         this.time = time;
-        this.goalCost = goalCost;
-        this.initCost = initCost;
-        this.sumCost = sumCost;
         this.resultCost = resultCost;
-        this.achive = achive;
+        this.achiveRate = achiveRate;
     }
 
     public long getId() {
@@ -50,44 +41,12 @@ public class Evaluation {
         this.hid = hid;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public long getTime() {
         return time;
     }
 
     public void setTime(long time) {
         this.time = time;
-    }
-
-    public int getGoalCost() {
-        return goalCost;
-    }
-
-    public void setGoalCost(int goalCost) {
-        this.goalCost = goalCost;
-    }
-
-    public int getInitCost() {
-        return initCost;
-    }
-
-    public void setInitCost(int initCost) {
-        this.initCost = initCost;
-    }
-
-    public int getSumCost() {
-        return sumCost;
-    }
-
-    public void setSumCost(int sumCost) {
-        this.sumCost = sumCost;
     }
 
     public int getResultCost() {
@@ -98,12 +57,12 @@ public class Evaluation {
         this.resultCost = resultCost;
     }
 
-    public int getAchive() {
-        return achive;
+    public int getAchiveRate() {
+        return achiveRate;
     }
 
-    public void setAchive(int achive) {
-        this.achive = achive;
+    public void setAchiveRate(int achiveRate) {
+        this.achiveRate = achiveRate;
     }
 
     public boolean isCheck() {
@@ -119,13 +78,9 @@ public class Evaluation {
         return "Evaluation{" +
                 "id=" + id +
                 ", hid=" + hid +
-                ", type=" + type +
                 ", time=" + time +
-                ", goalCost=" + goalCost +
-                ", initCost=" + initCost +
-                ", sumCost=" + sumCost +
                 ", resultCost=" + resultCost +
-                ", achive=" + achive +
+                ", achiveRate=" + achiveRate +
                 ", check=" + check +
                 '}';
     }

@@ -60,13 +60,13 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
     protected void setContent(EvaluationViewHolder holder, Evaluation pEvaluation){
         holder.evaluation = pEvaluation;
         holder.txId.setText(""+pEvaluation.getId());
-        setIcon(holder.imageType, pEvaluation.getType());
+//        setIcon(holder.imageType, pEvaluation.getType());
 
-        holder.txHid.setText(pEvaluation.getHid());
+        holder.txHid.setText(""+pEvaluation.getHid());
         holder.txDate.setText(""+ DateUtil.getDateString(pEvaluation.getTime()));
-        holder.txGoalCost.setText(""+pEvaluation.getGoalCost());
-        holder.txInitCost.setText(""+pEvaluation.getInitCost());
-        holder.txAchive.setText(""+pEvaluation.getAchive());
+//        holder.txGoalCost.setText(""+pEvaluation.getGoalCost());
+        holder.txInitCost.setText(""+pEvaluation.getResultCost());
+        holder.txAchive.setText(""+pEvaluation.getAchiveRate());
 
         if (!selectableMode) {
             holder.checkBoxSelect.setVisibility(View.GONE);

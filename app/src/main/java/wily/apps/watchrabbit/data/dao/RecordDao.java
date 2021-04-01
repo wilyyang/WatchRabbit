@@ -8,6 +8,7 @@ import androidx.room.Query;
 import java.util.List;
 
 import io.reactivex.Single;
+import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 
@@ -36,6 +37,9 @@ public interface RecordDao {
 
     @Query("UPDATE Record SET term=:p_term WHERE id = :p_id")
     Single<Integer> updateTerm(long p_id, long p_term);
+
+    @Query("SELECT * FROM Record WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end ORDER BY time ASC")
+    Single<List<Record>> getRecordByHidAndTime(int p_hid, long p_start, long p_end);
 
     // <tempo>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
