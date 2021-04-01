@@ -9,6 +9,7 @@ import java.util.List;
 
 import io.reactivex.Single;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.data.entity.Record;
 
 @Dao
 public interface HabbitDao {
@@ -41,4 +42,9 @@ public interface HabbitDao {
 
     @Query("SELECT * FROM Habbit WHERE active=:p_active")
     Single<List<Habbit>> getHabbitActive(boolean p_active);
+
+
+    //
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Single<List<Long>> insertAll(List<Habbit> habbits);
 }

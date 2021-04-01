@@ -8,6 +8,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import wily.apps.watchrabbit.util.DateUtil;
+
 @Entity
 public class Habbit {
     @PrimaryKey(autoGenerate = true)
@@ -155,7 +157,7 @@ public class Habbit {
         return "Habbit{" +
                 "id=" + id +
                 ", type=" + type +
-                ", time=" + time +
+                ", time=" + DateUtil.getDateString(time)  +
                 ", title='" + title + '\'' +
                 ", priority=" + priority +
                 ", active=" + active +

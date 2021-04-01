@@ -39,9 +39,12 @@ public interface RecordDao {
     Single<Integer> updateTerm(long p_id, long p_term);
 
     @Query("SELECT * FROM Record WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end ORDER BY time ASC")
-    Single<List<Record>> getRecordByHidAndTime(int p_hid, long p_start, long p_end);
+    List<Record> getRecordByHidAndTime(int p_hid, long p_start, long p_end);
 
     // <tempo>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<List<Long>> insertAll(List<Record> records);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    List<Long> insertAllSync(List<Record> records);
 }

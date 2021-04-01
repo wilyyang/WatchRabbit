@@ -4,6 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import wily.apps.watchrabbit.util.DateUtil;
+
 @Entity
 public class Evaluation {
     @PrimaryKey(autoGenerate = true)
@@ -78,7 +80,7 @@ public class Evaluation {
         return "Evaluation{" +
                 "id=" + id +
                 ", hid=" + hid +
-                ", time=" + time +
+                ", time=" + DateUtil.getDateString(time) +
                 ", resultCost=" + resultCost +
                 ", achiveRate=" + achiveRate +
                 ", check=" + check +

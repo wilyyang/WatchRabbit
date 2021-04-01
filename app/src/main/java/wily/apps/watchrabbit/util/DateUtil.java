@@ -1,9 +1,13 @@
 package wily.apps.watchrabbit.util;
 
+import android.util.Log;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import wily.apps.watchrabbit.AppConst;
 
 public class DateUtil {
     public static final long MILLISECOND_TO_MINUTE = 60 * 1000;

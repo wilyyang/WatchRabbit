@@ -166,7 +166,6 @@ public class HabbitService extends Service {
         int count = 0;
         for(Integer id : list){
             int idx = notiList.indexOf(HabbitNotification.getDummy(id));
-            Log.d(AppConst.TAG, "idx : "+idx+" , "+id+" ");
             if(idx > -1) {
                 HabbitNotification noti = notiList.get(idx);
                 noti.cancel();
