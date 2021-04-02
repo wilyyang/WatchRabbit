@@ -1,6 +1,7 @@
 package wily.apps.watchrabbit.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
@@ -38,6 +40,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     public RecordAdapter(Context context, ArrayList<Record> recordList) {
         this.mContext = context;
         this.mList = recordList;
+
+        Log.d(AppConst.TAG, ">>>>>"+recordList.size());
     }
 
     public void setOnItemClickListener(OnRecordItemClickListener listener){

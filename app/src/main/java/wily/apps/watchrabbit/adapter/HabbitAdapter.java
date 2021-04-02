@@ -1,6 +1,7 @@
 package wily.apps.watchrabbit.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
@@ -35,6 +37,7 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
     public HabbitAdapter(Context context, ArrayList<Habbit> habbitList) {
         this.mContext = context;
         this.mList = habbitList;
+        Log.d(AppConst.TAG, "Habbit>>>>>"+habbitList.size());
     }
 
     public void setOnItemClickListener(OnHabbitItemClickListener listener){

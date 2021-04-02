@@ -1,6 +1,7 @@
 package wily.apps.watchrabbit.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
@@ -37,6 +39,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
     public EvaluationAdapter(Context context, ArrayList<Evaluation> evaluationList) {
         this.mContext = context;
         this.mList = evaluationList;
+        Log.d(AppConst.TAG, "Eval>>>>>"+evaluationList.size());
     }
 
     public void setOnItemClickListener(OnEvaluationItemClickListener listener){

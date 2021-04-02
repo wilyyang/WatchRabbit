@@ -68,11 +68,14 @@ public class WatchRabbitApplication extends Application {
 
 
     public void updateTotal(final int numOfDay, final boolean replace){
-        checkWork(true);
+        //checkWork(true);
         habbitDao.getAll().subscribeOn(Schedulers.io()).doOnSuccess(list->{
+            Log.d(AppConst.TAG, "updateTotal Habbit size >>> "+list.size());
+            int count = 0;
             for(Habbit habbit : list){
                 if(replace){
-//                    replaceAllEvaluation(habbit, numOfDay);
+                    ++count;
+                    Log.d(AppConst.TAG, "updateTotal Habbit "+habbit+" "+count);
                     long endDate = DateUtil.convertDate(System.currentTimeMillis());
                     long beforeDate = DateUtil.getDateLongBefore(endDate, numOfDay);
                     long habbitDate = DateUtil.convertDate(habbit.getTime());
@@ -80,12 +83,13 @@ public class WatchRabbitApplication extends Application {
 //                    evalDao.deleteEvaluationByTime(habbit.getId(), startDate, endDate);
 
                     ArrayList<Evaluation> evalList = new ArrayList<>();
-                    for(long cur = startDate; cur <= endDate; cur += DateUtil.ONEDAY_TO_MILLISECOND){
-                        List<Record> recordList = recordDao.getRecordByHidAndTime(habbit.getId(), cur, cur+DateUtil.ONEDAY_TO_MILLISECOND-1);
-                        Evaluation evaluation = makeEval(habbit, recordList, cur);
-                        Log.d(AppConst.TAG, ""+evaluation);
-                        evalList.add(evaluation);
-                    }
+                    evalList.add(makeEval(habbit, new ArrayList<Record>(), startDate));
+//                    for(long cur = startDate; cur <= endDate; cur += DateUtil.ONEDAY_TO_MILLISECOND){
+//                        List<Record> recordList = recordDao.getRecordByHidAndTime(habbit.getId(), cur, cur+DateUtil.ONEDAY_TO_MILLISECOND-1);
+//                        Evaluation evaluation = makeEval(habbit, recordList, cur);
+//                        Log.d(AppConst.TAG, ""+evaluation);
+//                        evalList.add(evaluation);
+//                    }
                     evalDao.insertAll(evalList);
                 }else{
                     updateAllEvaluation(habbit, numOfDay);
@@ -95,20 +99,7 @@ public class WatchRabbitApplication extends Application {
     }
 
     private void replaceAllEvaluation(Habbit habbit, final int numOfDay){
-        long endDate = DateUtil.convertDate(System.currentTimeMillis());
-        long beforeDate = DateUtil.getDateLongBefore(endDate, numOfDay);
-        long habbitDate = DateUtil.convertDate(habbit.getTime());
-        long startDate = Math.max(habbitDate, beforeDate);
-        evalDao.deleteEvaluationByTime(habbit.getId(), startDate, endDate);
 
-         ArrayList<Evaluation> evalList = new ArrayList<>();
-        for(long cur = startDate; cur <= endDate; cur += DateUtil.ONEDAY_TO_MILLISECOND){
-            List<Record> list = recordDao.getRecordByHidAndTime(habbit.getId(), cur, cur+DateUtil.ONEDAY_TO_MILLISECOND-1);
-            Evaluation evaluation = makeEval(habbit, list, cur);
-            Log.d(AppConst.TAG, ""+evaluation);
-            evalList.add(evaluation);
-        }
-        evalDao.insertAll(evalList);
     }
 
     private void updateAllEvaluation(Habbit habbit, final int numOfDay){
@@ -152,6 +143,7 @@ public class WatchRabbitApplication extends Application {
             for (Record record : list) {
                 sum += record.getTerm();
             }
+            sum = (int)(sum/DateUtil.MILLISECOND_TO_MINUTE);
         }
 
         // process
@@ -185,7 +177,8 @@ public class WatchRabbitApplication extends Application {
                     records.add(new Record((int)hhid, type,start+(divTerm*j), 10 * DateUtil.MILLISECOND_TO_MINUTE));
                 }
                 recordDao.insertAllSync(records);
+                Log.d(AppConst.TAG, ">>>"+hhid+" "+records.size());
             }
-        }).observeOn(AndroidSchedulers.mainThread()).subscribe(res -> checkWork(false));
+        }).subscribe(res -> updateTotal(20, true));
     }
 }

@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentInit();
         createHabbitService();
 
-
-
         listener = new WatchRabbitApplication.OnProcessFinsishedListener(){
             @Override
             public void onStart() {
@@ -61,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
         long sTime = DateUtil.getDateLong(2021, Calendar.APRIL, 2, 0, 0, 0);
         long cTime = System.currentTimeMillis();
-        ((WatchRabbitApplication)getApplication()).addSamples(1, 30, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
-        ((WatchRabbitApplication)getApplication()).addSamples(1, 30, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
-        ((WatchRabbitApplication)getApplication()).updateTotal(50, true);
+//        ((WatchRabbitApplication)getApplication()).addSamples(4, 20, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
+        ((WatchRabbitApplication)getApplication()).addSamples(6, 20, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
+        //((WatchRabbitApplication)getApplication()).updateTotal(50, true);
     }
 
     @Override
