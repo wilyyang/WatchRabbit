@@ -7,6 +7,7 @@ import android.util.Log;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -69,7 +70,7 @@ public class WatchRabbitApplication extends Application {
 
     public void updateTotal(final int numOfDay, final boolean replace){
         //checkWork(true);
-        habbitDao.getAll().subscribeOn(Schedulers.io()).doOnSuccess(list->{
+        habbitDao.getAllSingle().subscribeOn(Schedulers.io()).doOnSuccess(list->{
             Log.d(AppConst.TAG, "updateTotal Habbit size >>> "+list.size());
             int count = 0;
             for(Habbit habbit : list){
@@ -154,7 +155,7 @@ public class WatchRabbitApplication extends Application {
 
 
     // <tempo>
-    public void addSamples(int habbitNum, final int recordNum, final long start, long end, int type){
+    public void addSamples2(int habbitNum, final int recordNum, final long start, long end, int type){
         checkWork(true);
 
         String typeStr = (type==Habbit.TYPE_HABBIT_CHECK)?"체크":"타임";
@@ -169,16 +170,52 @@ public class WatchRabbitApplication extends Application {
             ++count;
         }
 
-        habbitDao.insertAll(habbits).subscribeOn(Schedulers.io()).doOnSuccess(idList->{
+        habbitDao.insertAllSingle(habbits).subscribeOn(Schedulers.io()).doOnSuccess(idList->{
             for(long hhid : idList){
                 ArrayList<Record> records = new ArrayList<Record>();
                 long divTerm = totalTerm/recordNum;
                 for(int j = 0; j< recordNum; ++j){
                     records.add(new Record((int)hhid, type,start+(divTerm*j), 10 * DateUtil.MILLISECOND_TO_MINUTE));
                 }
-                recordDao.insertAllSync(records);
+                recordDao.insertAllSingle(records);
                 Log.d(AppConst.TAG, ">>>"+hhid+" "+records.size());
             }
         }).subscribe(res -> updateTotal(20, true));
+    }
+    /////////////
+
+    public void addSamples(int habbitNum, final int recordNum, final long start, long end, int type){
+        checkWork(true);
+
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                String typeStr = (type==Habbit.TYPE_HABBIT_CHECK)?"체크":"타임";
+                int per = (type==Habbit.TYPE_HABBIT_CHECK)?10:1;
+                int state= (type==Habbit.TYPE_HABBIT_CHECK)?Habbit.STATE_CHECK:Habbit.STATE_TIMER_WAIT;
+                long totalTerm  = end - start;
+                ArrayList<Habbit> habbits = new ArrayList<Habbit>();
+
+                for(int i = 0; i< habbitNum; ++i){
+                    habbits.add(new Habbit(type, start, typeStr+" "+count, 1, true, 100, 0, per, state, -1));
+                    ++count;
+                }
+
+
+                List<Long> list = habbitDao.insertAll(habbits);
+
+                for(long hhid : list){
+                    ArrayList<Record> records = new ArrayList<Record>();
+                    long divTerm = totalTerm/recordNum;
+                    for(int j = 0; j< recordNum; ++j){
+                        records.add(new Record((int)hhid, type,start+(divTerm*j), 10 * DateUtil.MILLISECOND_TO_MINUTE));
+                    }
+                    recordDao.insertAll(records);
+                    Log.d(AppConst.TAG, ">>>"+hhid+" "+records.size());
+                }
+
+            }
+        }.start();
     }
 }

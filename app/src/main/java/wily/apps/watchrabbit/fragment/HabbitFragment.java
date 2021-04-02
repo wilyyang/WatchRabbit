@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.HabbitModifyActivity;
 import wily.apps.watchrabbit.MainActivity;
@@ -125,9 +127,10 @@ public class HabbitFragment extends Fragment {
     private void loadHabbits(){
         dialog.show();
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(getContext());
-        habbitDB.habbitDao().getAll()
+        habbitDB.habbitDao().getAllSingle()
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> afterGetHabbit((ArrayList<Habbit>) item));
+
     }
 
     private void afterGetHabbit(ArrayList<Habbit> list){

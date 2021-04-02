@@ -14,7 +14,10 @@ import wily.apps.watchrabbit.data.entity.Record;
 @Dao
 public interface HabbitDao {
     @Query("SELECT * FROM Habbit")
-    Single<List<Habbit>> getAll();
+    Single<List<Habbit>> getAllSingle();
+
+    @Query("SELECT * FROM Habbit")
+    List<Habbit> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<Long> insert(Habbit habbit);
@@ -46,5 +49,8 @@ public interface HabbitDao {
 
     //
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<List<Long>> insertAll(List<Habbit> habbits);
+    Single<List<Long>> insertAllSingle(List<Habbit> habbits);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    List<Long> insertAll(List<Habbit> habbits);
 }

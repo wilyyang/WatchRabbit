@@ -43,8 +43,8 @@ public interface RecordDao {
 
     // <tempo>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<List<Long>> insertAll(List<Record> records);
+    Single<List<Long>> insertAllSingle(List<Record> records);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insertAllSync(List<Record> records);
+    List<Long> insertAll(List<Record> records);
 }
