@@ -26,8 +26,8 @@
     <string name="record_state_timer_complete">타임</string>
     <string name="record_state_timer_inprogress">진행중</string>
 
-    <string name="evaluation_total_group">전체</string>
-    <string name="evaluation_10day_group">10일</string>
+    <string name="evaluation_30day_group">30일</string>
+    <string name="evaluation_7day_group">7일</string>
     <string name="evaluation_today_group">금일</string>
 
     <string name="evaluation_goal_cost">목표 : </string>

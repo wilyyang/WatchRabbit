@@ -72,7 +72,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/evaluation_total_group"
+                android:text="@string/evaluation_30day_group"
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/sp_base_s2" />
@@ -87,7 +87,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_habbit_total_result_cost"
+                android:id="@+id/text_view_evaluation_habbit_day_30_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
@@ -103,7 +103,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_habbit_total_rate"
+                android:id="@+id/text_view_evaluation_habbit_day_30_achive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
@@ -123,7 +123,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/evaluation_10day_group"
+                android:text="@string/evaluation_7day_group"
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/sp_base_s2" />
@@ -138,7 +138,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_habbit_10day_result_cost"
+                android:id="@+id/text_view_evaluation_habbit_day_7_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
@@ -154,7 +154,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_habbit_10day_rate"
+                android:id="@+id/text_view_evaluation_habbit_day_7_achive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
@@ -189,7 +189,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_habbit_today_result_cost"
+                android:id="@+id/text_view_evaluation_habbit_today_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
@@ -205,7 +205,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_habbit_today_rate"
+                android:id="@+id/text_view_evaluation_habbit_today_achive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"

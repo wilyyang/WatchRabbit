@@ -40,8 +40,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
     public RecordAdapter(Context context, ArrayList<Record> recordList) {
         this.mContext = context;
         this.mList = recordList;
-
-        Log.d(AppConst.TAG, ">>>>>"+recordList.size());
     }
 
     public void setOnItemClickListener(OnRecordItemClickListener listener){

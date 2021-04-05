@@ -28,6 +28,8 @@ public class HabbitService extends Service {
     public static final String HABBIT_SERVICE_DELETE    = "HABBIT_SERVICE_DELETE";
     public static final String HABBIT_SERVICE_RECORDING = "HABBIT_SERVICE_RECORDING";
 
+    public static final String HABBIT_SERVICE_EVALUATE = "HABBIT_SERVICE_EVALUATE";
+
     private boolean isCreate = false;
 
     private HabbitNotification mainNoti = null;
@@ -72,6 +74,10 @@ public class HabbitService extends Service {
                     int record_id = intent.getIntExtra(AppConst.INTENT_SERVICE_HABBIT_ID, -1);
                     int record_type = intent.getIntExtra(AppConst.INTENT_SERVICE_TYPE, -1);
                     recordAction(record_id, record_type);
+                    break;
+
+                case HABBIT_SERVICE_EVALUATE:
+                    evaluateUpdate();
                     break;
             }
         }
@@ -229,6 +235,12 @@ public class HabbitService extends Service {
                             ));
                             break;
                     }});
+    }
+
+    // 8. HABBIT_SERVICE_RECORDING
+    private void evaluateUpdate(){
+        EvaluateThread evaluateThread = new EvaluateThread(HabbitService.this, false);
+        evaluateThread.start();
     }
 
     @Override

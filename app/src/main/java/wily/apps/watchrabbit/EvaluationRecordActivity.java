@@ -106,7 +106,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if(recordAdapter == null || !recordAdapter.isSelectableMode()){
+        if( !(recordAdapter != null && recordAdapter.isSelectableMode()) ){
             loadRecords();
         }
     }

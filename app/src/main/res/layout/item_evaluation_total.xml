@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/evaluation_total_group"
+                android:text="@string/evaluation_30day_group"
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/sp_base_s2" />
@@ -93,7 +93,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/evaluation_10day_group"
+                android:text="@string/evaluation_7day_group"
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:textSize="@dimen/sp_base_s2" />

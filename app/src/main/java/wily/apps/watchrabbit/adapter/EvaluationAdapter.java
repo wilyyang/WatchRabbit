@@ -39,7 +39,6 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
     public EvaluationAdapter(Context context, ArrayList<Evaluation> evaluationList) {
         this.mContext = context;
         this.mList = evaluationList;
-        Log.d(AppConst.TAG, "Eval>>>>>"+evaluationList.size());
     }
 
     public void setOnItemClickListener(OnEvaluationItemClickListener listener){
