@@ -9,19 +9,29 @@
     android:orientation="horizontal"
     android:background="@drawable/bg_layout_round_enabled"
     android:gravity="center"
-    android:weightSum="16.2"
+    android:weightSum="16"
     android:layout_marginRight="@dimen/margin_item_scroll_space">
 
+
+    <TextView
+        android:id="@+id/text_view_evaluation_total_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:text="01월 08일"
+        android:textSize="@dimen/sp_base_s1"
+        android:textAlignment="viewStart"/>
 
     <TextView
         android:id="@+id/text_view_evaluation_total_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
-        android:text="금일 90%"
-        android:textSize="18sp"
+        android:layout_weight="3"
+        android:text="90%"
+        android:textSize="@dimen/sp_btn_big"
+        android:textColor="@color/color_primary"
         android:textStyle="bold"
-        android:textAlignment="viewStart"/>
+        android:textAlignment="center"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -35,7 +45,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="5"
             android:gravity="center_vertical">
 
             <TextView
@@ -51,7 +61,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_result_cost"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -60,14 +70,15 @@
                 android:id="@+id/text_view_evaluation_total_total_result_cost"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_achive_rate"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -76,8 +87,9 @@
                 android:id="@+id/text_view_evaluation_total_total_rate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
         </LinearLayout>
 
@@ -86,7 +98,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="5"
             android:gravity="center_vertical">
 
             <TextView
@@ -102,7 +114,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_result_cost"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -111,14 +123,15 @@
                 android:id="@+id/text_view_evaluation_total_10day_result_cost"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_achive_rate"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -127,8 +140,9 @@
                 android:id="@+id/text_view_evaluation_total_10day_rate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
         </LinearLayout>
 
@@ -137,7 +151,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="5"
             android:gravity="center_vertical">
 
             <TextView
@@ -153,7 +167,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_result_cost"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -162,14 +176,15 @@
                 android:id="@+id/text_view_evaluation_total_today_result_cost"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_achive_rate"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -178,8 +193,9 @@
                 android:id="@+id/text_view_evaluation_total_today_rate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
         </LinearLayout>
     </LinearLayout>

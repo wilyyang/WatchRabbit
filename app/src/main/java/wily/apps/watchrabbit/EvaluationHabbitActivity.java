@@ -104,10 +104,5 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
         public void onItemLongClick(int pos) {
 
         }
-
-        @Override
-        public void onItemCheckChanged(boolean flag) {
-
-        }
     };
 }

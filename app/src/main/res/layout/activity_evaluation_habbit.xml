@@ -9,9 +9,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
+        android:layout_weight="5"
         android:orientation="vertical"
-        android:weightSum="9">
+        android:weightSum="7">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,55 +40,13 @@
             android:layout_weight="4"
             android:layout_margin="@dimen/margin_layout_narr" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal"
-            android:weightSum="9">
-            <CheckBox
-                android:id="@+id/check_box_eval_habbit_all"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginLeft="5dp"
-                android:visibility="invisible" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="6" />
-
-            <Button
-                android:id="@+id/btn_eval_habbit_add"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/bg_btn_round"
-                android:text="+"
-                android:textColor="@color/color_text_btn"
-                android:textSize="@dimen/sp_btn_big"
-                android:typeface="monospace" />
-
-            <Button
-                android:id="@+id/btn_eval_habbit_select_mode"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/bg_btn_round"
-                android:text=":"
-                android:textColor="@color/color_text_btn"
-                android:textSize="@dimen/sp_btn_big"
-                android:typeface="monospace" />
-
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_eval_habbit_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="17"
+        android:layout_weight="19"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:weightSum="10">

@@ -94,10 +94,5 @@ public class EvaluationFragment extends Fragment {
         public void onItemLongClick(int pos) {
 
         }
-
-        @Override
-        public void onItemCheckChanged(boolean flag) {
-
-        }
     };
 }

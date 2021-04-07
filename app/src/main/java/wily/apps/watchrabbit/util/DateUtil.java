@@ -20,6 +20,11 @@ public class DateUtil {
         return format.format(new Date(time));
     }
 
+    public static String getDateStringDayLimit(long time){
+        DateFormat format = new SimpleDateFormat("yy/MM/dd");
+        return format.format(new Date(time));
+    }
+
     // type : Calendar.DAY_OF_YEAR
     public static int getDateNum(long time, int type){
         Calendar cal = Calendar.getInstance();

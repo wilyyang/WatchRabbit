@@ -12,13 +12,6 @@
     android:weightSum="16.2"
     android:layout_marginRight="@dimen/margin_item_scroll_space">
 
-    <CheckBox
-        android:id="@+id/check_box_evaluation_habbit_select"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_weight="1.2"
-        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/image_view_evaluation_habbit_type"
@@ -57,7 +50,7 @@
         android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="9"
+        android:layout_weight="10.2"
         android:weightSum="3">
 
         <LinearLayout
@@ -65,7 +58,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="5"
             android:gravity="center_vertical">
 
             <TextView
@@ -77,11 +70,10 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/sp_base_s2" />
 
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_result_cost"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -90,14 +82,15 @@
                 android:id="@+id/text_view_evaluation_habbit_day_30_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_achive_rate"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -106,8 +99,9 @@
                 android:id="@+id/text_view_evaluation_habbit_day_30_achive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
         </LinearLayout>
 
@@ -116,7 +110,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="5"
             android:gravity="center_vertical">
 
             <TextView
@@ -132,7 +126,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_result_cost"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -141,14 +135,15 @@
                 android:id="@+id/text_view_evaluation_habbit_day_7_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_achive_rate"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -157,8 +152,9 @@
                 android:id="@+id/text_view_evaluation_habbit_day_7_achive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
         </LinearLayout>
 
@@ -167,7 +163,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:weightSum="3"
+            android:weightSum="5"
             android:gravity="center_vertical">
 
             <TextView
@@ -183,7 +179,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_result_cost"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -192,14 +188,15 @@
                 android:id="@+id/text_view_evaluation_habbit_today_result"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="@string/evaluation_achive_rate"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
@@ -208,8 +205,9 @@
                 android:id="@+id/text_view_evaluation_habbit_today_achive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="0"
+                android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
         </LinearLayout>
     </LinearLayout>

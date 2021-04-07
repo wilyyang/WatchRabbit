@@ -31,6 +31,6 @@
     <string name="evaluation_today_group">금일</string>
 
     <string name="evaluation_goal_cost">목표 : </string>
-    <string name="evaluation_result_cost">최종 : </string>
-    <string name="evaluation_achive_rate">달성 : </string>
+    <string name="evaluation_result_cost">평가 : </string>
+    <string name="evaluation_achive_rate">달성율 : </string>
 </resources>

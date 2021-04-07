@@ -31,7 +31,7 @@
         android:id="@+id/text_view_habbit_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="1.5"
         android:textAlignment="center"
         android:textSize="@dimen/sp_base_s1"
         android:text="0" />
@@ -40,7 +40,7 @@
         android:id="@+id/text_view_habbit_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_weight="4.5"
         android:text="init"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -61,6 +61,7 @@
             android:layout_weight="0.5"
             android:text="0"
             android:textStyle="bold"
+            android:textAlignment="center"
             android:textSize="@dimen/sp_base_s2"/>
 
         <TextView
