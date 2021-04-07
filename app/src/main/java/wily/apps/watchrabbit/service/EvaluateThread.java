@@ -1,9 +1,12 @@
 package wily.apps.watchrabbit.service;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.data.dao.EvaluationDao;
 import wily.apps.watchrabbit.data.dao.HabbitDao;
 import wily.apps.watchrabbit.data.dao.RecordDao;
@@ -41,7 +44,7 @@ public class EvaluateThread extends Thread{
             replaceTotal(30);
         }else{
             updateTotal(30);
-            replaceTotal(3);
+//            replaceTotal(3);
         }
     }
 
@@ -63,12 +66,14 @@ public class EvaluateThread extends Thread{
             Evaluation temp = null;
 
             // 2.2) if null, Make evaluation
-            ArrayList<Evaluation> evalList = new ArrayList<>();
-            for(long cur = startDate; cur <= endDate; cur += DateUtil.ONEDAY_TO_MILLISECOND) {
 
+            ArrayList<Evaluation> evalList = new ArrayList<>();
+            for(long cur = startDate; cur < (endDate + DateUtil.ONEDAY_TO_MILLISECOND); cur += DateUtil.ONEDAY_TO_MILLISECOND) {
+//                Log.d(AppConst.TAG, ">"+DateUtil.getDateString(startDate)+" ~ "+DateUtil.getDateString(endDate) +" = "+DateUtil.getDateString(cur));
                 if(temp == null && idx < size){
                     temp = oldList.get(idx);
                 }
+
 
                 if(temp != null && temp.getTime() == cur){
                     temp = null;

@@ -30,7 +30,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
 
     // Listener
     public interface OnEvaluationItemClickListener{
-        void onItemClick(int id);
+        void onItemClick(int hid, long date);
         void onItemLongClick(int pos);
         void onItemCheckChanged(boolean flag);
     }
@@ -180,7 +180,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
                         checkBoxSelect.setChecked(!checkBoxSelect.isChecked());
                     } else {
                         if (mListener != null) {
-                            mListener.onItemClick(Integer.parseInt(txId.getText().toString()));
+                            mListener.onItemClick(evaluation.getHid(), evaluation.getTime());
                         }
                     }
                 }

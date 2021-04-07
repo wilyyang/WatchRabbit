@@ -51,6 +51,7 @@ public class DateUtil {
     public static long convertDate(long time){
         Calendar cal = Calendar.getInstance();
         cal.set(getDateNum(time, Calendar.YEAR),getDateNum(time, Calendar.MONTH),getDateNum(time, Calendar.DAY_OF_MONTH),0,0,0);
+        cal.set(Calendar.MILLISECOND, 0);
         return cal.getTimeInMillis();
     }
 }

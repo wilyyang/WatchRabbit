@@ -26,6 +26,9 @@ public interface EvaluationDao {
     @Query("SELECT * FROM Evaluation WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end ORDER BY time ASC")
     List<Evaluation> getEvaluationByHidAndTime(int p_hid, long p_start, long p_end);
 
+    @Query("SELECT * FROM Evaluation WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end ORDER BY time ASC")
+    Single<List<Evaluation>> getEvaluationByHidAndTimeSingle(int p_hid, long p_start, long p_end);
+
     @Query("DELETE FROM Evaluation WHERE id IN (:p_ids)")
     Single<Integer> deleteEvaluationByIds(List<Integer> p_ids);
 

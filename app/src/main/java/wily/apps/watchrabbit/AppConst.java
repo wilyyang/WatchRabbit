@@ -18,4 +18,12 @@ public final class AppConst {
 
     public static final String INTENT_HABBIT_FRAG_ID = "id";
     public static final String INTENT_HABBIT_FRAG_UPDATE = "update";
+
+    public static final String INTENT_EVAL_FRAG_ID = "hid";
+
+    public static final String INTENT_EVAL_HABBIT_ID = "hid";
+    public static final String INTENT_EVAL_HABBIT_DATE = "date";
+
+    public static final int EVALUATION_30_DAYS = 30;
+    public static final int EVALUATION_7_DAYS = 7;
 }

@@ -42,10 +42,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         fragmentInit();
         createHabbitService();
-        evaluateHabbitService();
 
         dialog = DialogGetter.getProgressDialog(MainActivity.this, getString(R.string.base_dialog_database_inprogress));
-        long sTime = DateUtil.getDateLong(2021, Calendar.APRIL, 2, 0, 0, 0);
+        long sTime = DateUtil.getDateLong(2021, Calendar.APRIL, 4, 0, 0, 0);
         long cTime = System.currentTimeMillis();
 
 
@@ -55,10 +54,16 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        addSamples(6, 20, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
-        addSamples(6, 20, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
+        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
+        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
     }
     boolean init = false;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        evaluateHabbitService();
+    }
 
     private void fragmentInit(){
         frameLayout = findViewById(R.id.container_main);

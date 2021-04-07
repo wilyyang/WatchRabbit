@@ -28,6 +28,8 @@ import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.util.DialogGetter;
 
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_FRAG_ID;
+
 public class EvaluationFragment extends Fragment {
     private EvaluationHabbitAdapter evaluationHabbitAdapter;
     private RecyclerView evaluationHabbitRecyclerView;
@@ -84,6 +86,7 @@ public class EvaluationFragment extends Fragment {
         @Override
         public void onItemClick(int id) {
             Intent intent = new Intent(getActivity(), EvaluationHabbitActivity.class);
+            intent.putExtra(INTENT_EVAL_FRAG_ID, id);
             startActivity(intent);
         }
 

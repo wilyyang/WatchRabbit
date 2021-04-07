@@ -33,6 +33,10 @@ import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
 import wily.apps.watchrabbit.util.DialogGetter;
 
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_FRAG_ID;
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_DATE;
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_ID;
+
 public class EvaluationHabbitActivity extends AppCompatActivity {
 
     private EvaluationAdapter evaluationAdapter;
@@ -40,10 +44,16 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
 
     private AlertDialog dialog;
 
+    private int hid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation_habbit);
+
+        Intent intent = getIntent();
+        hid = intent.getExtras().getInt(AppConst.INTENT_EVAL_FRAG_ID);
+
         initView();
     }
 
@@ -63,8 +73,12 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
 
     private void loadEvaluations(){
         dialog.show();
+
+        long endDate = DateUtil.convertDate(System.currentTimeMillis());
+        long startDate = DateUtil.getDateLongBefore(endDate, AppConst.EVALUATION_30_DAYS);
+
         EvaluationDatabase evalDB = EvaluationDatabase.getAppDatabase(EvaluationHabbitActivity.this);
-        evalDB.evaluationDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterEvaluationGet(item));
+        evalDB.evaluationDao().getEvaluationByHidAndTimeSingle(hid, startDate, endDate).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterEvaluationGet(item));
     }
 
     private void afterEvaluationGet(List<Evaluation> evalList){
@@ -79,8 +93,10 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
     private EvaluationAdapter.OnEvaluationItemClickListener onItemClickListener = new EvaluationAdapter.OnEvaluationItemClickListener() {
 
         @Override
-        public void onItemClick(int id) {
+        public void onItemClick(int hid, long date) {
             Intent intent = new Intent(EvaluationHabbitActivity.this, EvaluationRecordActivity.class);
+            intent.putExtra(INTENT_EVAL_HABBIT_ID, hid);
+            intent.putExtra(INTENT_EVAL_HABBIT_DATE, date);
             startActivity(intent);
         }
 

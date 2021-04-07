@@ -41,6 +41,9 @@ public interface RecordDao {
     @Query("SELECT * FROM Record WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end ORDER BY time ASC")
     List<Record> getRecordByHidAndTime(int p_hid, long p_start, long p_end);
 
+    @Query("SELECT * FROM Record WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end ORDER BY time ASC")
+    Single<List<Record>> getRecordByHidAndTimeSingle(int p_hid, long p_start, long p_end);
+
     // <tempo>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<List<Long>> insertAllSingle(List<Record> records);

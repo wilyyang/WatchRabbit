@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +24,7 @@ import wily.apps.watchrabbit.adapter.RecordAdapter;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
+import wily.apps.watchrabbit.util.DateUtil;
 import wily.apps.watchrabbit.util.DialogGetter;
 
 public class EvaluationRecordActivity extends AppCompatActivity {
@@ -40,10 +42,19 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     private Button btnDeleteCancel;
 
     private AlertDialog dialog;
+
+    private int hid;
+    private long date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation_record);
+
+        Intent intent = getIntent();
+        hid = intent.getExtras().getInt(AppConst.INTENT_EVAL_HABBIT_ID);
+        date = intent.getExtras().getLong(AppConst.INTENT_EVAL_HABBIT_DATE);
+
         initView();
     }
 
@@ -115,7 +126,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     private void loadRecords(){
         dialog.show();
         RecordDatabase recordDB = RecordDatabase.getAppDatabase(EvaluationRecordActivity.this);
-        recordDB.recordDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterRecordGetAll(item));
+        recordDB.recordDao().getRecordByHidAndTimeSingle(hid, date, (date+ DateUtil.ONEDAY_TO_MILLISECOND-1) ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterRecordGetAll(item));
     }
 
     private void afterRecordGetAll(List<Record> recordList){
