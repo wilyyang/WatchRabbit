@@ -26,6 +26,9 @@
     <string name="record_state_timer_complete">타임</string>
     <string name="record_state_timer_inprogress">진행중</string>
 
+    <string name="record_dialog_start_time_text">시작 시간 : </string>
+    <string name="record_dialog_term_text">시간 경과(분) : </string>
+
     <string name="evaluation_30day_group">30일</string>
     <string name="evaluation_7day_group">7일</string>
     <string name="evaluation_today_group">금일</string>

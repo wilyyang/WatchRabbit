@@ -36,6 +36,8 @@ import wily.apps.watchrabbit.util.DialogGetter;
 import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_FRAG_ID;
 import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_DATE;
 import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_ID;
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_TITLE;
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_TYPE;
 
 public class EvaluationHabbitActivity extends AppCompatActivity {
 
@@ -45,6 +47,8 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
     private AlertDialog dialog;
 
     private int hid;
+    private int hType;
+    private String hTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,8 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         hid = intent.getExtras().getInt(AppConst.INTENT_EVAL_FRAG_ID);
+        hType = intent.getExtras().getInt(AppConst.INTENT_EVAL_FRAG_TYPE);
+        hTitle = intent.getExtras().getString(AppConst.INTENT_EVAL_FRAG_TITLE);
 
         initView();
     }
@@ -96,6 +102,8 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
         public void onItemClick(int hid, long date) {
             Intent intent = new Intent(EvaluationHabbitActivity.this, EvaluationRecordActivity.class);
             intent.putExtra(INTENT_EVAL_HABBIT_ID, hid);
+            intent.putExtra(INTENT_EVAL_HABBIT_TYPE, hType);
+            intent.putExtra(INTENT_EVAL_HABBIT_TITLE, hTitle);
             intent.putExtra(INTENT_EVAL_HABBIT_DATE, date);
             startActivity(intent);
         }

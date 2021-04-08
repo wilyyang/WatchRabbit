@@ -25,31 +25,32 @@ public class DateUtil {
         return format.format(new Date(time));
     }
 
-    // type : Calendar.DAY_OF_YEAR
+    // type : Calendar.DATE
     public static int getDateNum(long time, int type){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date(time));
-
         return cal.get(type);
     }
 
     public static long getDateLong(int year, int month, int day, int hour, int minute, int second){
         Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MILLISECOND, 0);
         cal.set(year, month, day, hour, minute, second);
+
         return cal.getTimeInMillis();
     }
 
     public static long getDateLongAfter(long time, int day){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date(time));
-        cal.add(Calendar.DAY_OF_YEAR, day);
+        cal.add(Calendar.DATE, day);
         return cal.getTimeInMillis();
     }
 
     public static long getDateLongBefore(long time, int day){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date(time));
-        cal.add(Calendar.DAY_OF_YEAR, -day);
+        cal.add(Calendar.DATE, -day);
         return cal.getTimeInMillis();
     }
 

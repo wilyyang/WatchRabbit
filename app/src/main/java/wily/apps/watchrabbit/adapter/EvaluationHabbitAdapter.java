@@ -26,7 +26,7 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
 
     // Listener
     public interface OnEvaluationHabbitItemClickListener{
-        void onItemClick(int id);
+        void onItemClick(int id, int type, String title);
         void onItemLongClick(int pos);
     }
 
@@ -122,7 +122,7 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
                 @Override
                 public void onClick(View view) {
                     if (mListener != null) {
-                        mListener.onItemClick(Integer.parseInt(txId.getText().toString()));
+                        mListener.onItemClick(evaluationHabbit.getHabbit().getId(), evaluationHabbit.getHabbit().getType(), evaluationHabbit.getHabbit().getTitle());
                     }
                 }
             });
@@ -131,7 +131,7 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
                 @Override
                 public boolean onLongClick(View view) {
                     if (mListener != null) {
-                        mListener.onItemLongClick(Integer.parseInt(txId.getText().toString()));
+                        mListener.onItemLongClick(evaluationHabbit.getHabbit().getId());
                     }
                     return true;
                 }

@@ -29,6 +29,8 @@ import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.util.DialogGetter;
 
 import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_FRAG_ID;
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_FRAG_TITLE;
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_FRAG_TYPE;
 
 public class EvaluationFragment extends Fragment {
     private EvaluationHabbitAdapter evaluationHabbitAdapter;
@@ -84,9 +86,11 @@ public class EvaluationFragment extends Fragment {
     private EvaluationHabbitAdapter.OnEvaluationHabbitItemClickListener onItemClickListener = new EvaluationHabbitAdapter.OnEvaluationHabbitItemClickListener() {
 
         @Override
-        public void onItemClick(int id) {
+        public void onItemClick(int id, int type, String title) {
             Intent intent = new Intent(getActivity(), EvaluationHabbitActivity.class);
             intent.putExtra(INTENT_EVAL_FRAG_ID, id);
+            intent.putExtra(INTENT_EVAL_FRAG_TYPE, type);
+            intent.putExtra(INTENT_EVAL_FRAG_TITLE, title);
             startActivity(intent);
         }
 

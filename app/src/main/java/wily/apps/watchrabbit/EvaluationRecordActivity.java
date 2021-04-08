@@ -44,6 +44,8 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     private AlertDialog dialog;
 
     private int hid;
+    private int hType;
+    private String hTitle;
     private long date;
 
     @Override
@@ -53,12 +55,16 @@ public class EvaluationRecordActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         hid = intent.getExtras().getInt(AppConst.INTENT_EVAL_HABBIT_ID);
+        hType = intent.getExtras().getInt(AppConst.INTENT_EVAL_HABBIT_TYPE);
+        hTitle = intent.getExtras().getString(AppConst.INTENT_EVAL_HABBIT_TITLE);
         date = intent.getExtras().getLong(AppConst.INTENT_EVAL_HABBIT_DATE);
 
         initView();
     }
 
     private void initView() {
+        initTopEvaluation();
+
         dialog = DialogGetter.getProgressDialog(EvaluationRecordActivity.this, getString(R.string.base_dialog_database_inprogress));
 
         recordLayoutRecycler = findViewById(R.id.layout_eval_record_recycler);
@@ -90,6 +96,13 @@ public class EvaluationRecordActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void initTopEvaluation(){
+        View view = findViewById(R.id.include_eval_record_top);
+
+//        view.findViewById(R.id.)
+
     }
 
     private void setSelectableMode(boolean mode){
@@ -159,9 +172,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_eval_record_add:
-
-                    // <tempo>
-                    RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, -1, Habbit.TYPE_HABBIT_TIMER, -1, -1, true);
+                    RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, hid, hType, hTitle+" ("+DateUtil.getDateStringDayLimit(date)+")", -1, date, -1, true);
                     recordModifyDialog.show();
                     break;
                 case R.id.btn_eval_record_select_mode:
@@ -191,10 +202,11 @@ public class EvaluationRecordActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(long id, int type, long time, long term){
-            if(term != -1){
-                RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, id, type, time, term, false);
-                recordModifyDialog.show();
+            if(type == Habbit.TYPE_HABBIT_TIMER && term == -1){
+                return;
             }
+            RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, hid, hType, hTitle+" ("+DateUtil.getDateStringDayLimit(date)+")", id, time, term, false);
+            recordModifyDialog.show();
         }
 
         @Override

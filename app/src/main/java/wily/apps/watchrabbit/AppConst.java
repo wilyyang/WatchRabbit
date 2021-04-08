@@ -20,8 +20,12 @@ public final class AppConst {
     public static final String INTENT_HABBIT_FRAG_UPDATE = "update";
 
     public static final String INTENT_EVAL_FRAG_ID = "hid";
+    public static final String INTENT_EVAL_FRAG_TYPE = "type";
+    public static final String INTENT_EVAL_FRAG_TITLE = "title";
 
     public static final String INTENT_EVAL_HABBIT_ID = "hid";
+    public static final String INTENT_EVAL_HABBIT_TYPE = "type";
+    public static final String INTENT_EVAL_HABBIT_TITLE = "title";
     public static final String INTENT_EVAL_HABBIT_DATE = "date";
 
     public static final int EVALUATION_30_DAYS = 30;
