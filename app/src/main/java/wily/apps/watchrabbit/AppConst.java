@@ -19,10 +19,13 @@ public final class AppConst {
     public static final String INTENT_HABBIT_FRAG_ID = "id";
     public static final String INTENT_HABBIT_FRAG_UPDATE = "update";
 
+    public static final String INTENT_EVAL_FRAG_EVALUATION_HABBIT = "evaluationHabbit";
     public static final String INTENT_EVAL_FRAG_ID = "hid";
     public static final String INTENT_EVAL_FRAG_TYPE = "type";
     public static final String INTENT_EVAL_FRAG_TITLE = "title";
 
+    public static final String INTENT_EVAL_EVALUATION= "evaluation";
+    public static final String INTENT_EVAL_HABBIT = "habbit";
     public static final String INTENT_EVAL_HABBIT_ID = "hid";
     public static final String INTENT_EVAL_HABBIT_TYPE = "type";
     public static final String INTENT_EVAL_HABBIT_TITLE = "title";

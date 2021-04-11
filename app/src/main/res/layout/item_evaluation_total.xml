@@ -23,7 +23,7 @@
         android:textAlignment="viewStart"/>
 
     <TextView
-        android:id="@+id/text_view_evaluation_total_title"
+        android:id="@+id/text_view_evaluation_total_rate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
@@ -67,7 +67,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_total_total_result_cost"
+                android:id="@+id/text_view_evaluation_total_day_30_result_cost"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -84,7 +84,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_total_total_rate"
+                android:id="@+id/text_view_evaluation_total_day_30_achive_rate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -120,7 +120,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_total_10day_result_cost"
+                android:id="@+id/text_view_evaluation_total_day_7_result_cost"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -137,7 +137,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_total_10day_rate"
+                android:id="@+id/text_view_evaluation_total_day_7_achive_rate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -190,7 +190,7 @@
                 android:textSize="@dimen/sp_base_s2" />
 
             <TextView
-                android:id="@+id/text_view_evaluation_total_today_rate"
+                android:id="@+id/text_view_evaluation_total_today_achive_rate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

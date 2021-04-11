@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,25 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import wily.apps.watchrabbit.R;
-import wily.apps.watchrabbit.data.EvaluationHabbit;
 import wily.apps.watchrabbit.data.entity.Habbit;
 
 public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabbitAdapter.EvaluationHabbitViewHolder>{
-    private ArrayList<EvaluationHabbit> mList;
+    private ArrayList<Habbit> mList;
     private Context mContext;
     private OnEvaluationHabbitItemClickListener mListener = null;
 
     // Listener
     public interface OnEvaluationHabbitItemClickListener{
-        void onItemClick(int id, int type, String title);
+        void onItemClick(Habbit evaluationHabbit);
         void onItemLongClick(int pos);
     }
 
     // Base
-    public EvaluationHabbitAdapter(Context context, ArrayList<EvaluationHabbit> evaluationHabbitList) {
+    public EvaluationHabbitAdapter(Context context, ArrayList<Habbit> evaluationHabbitList) {
         this.mContext = context;
         this.mList = evaluationHabbitList;
     }
@@ -54,19 +50,18 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
         setContent(holder, mList.get(position));
     }
 
-    protected void setContent(EvaluationHabbitViewHolder holder, EvaluationHabbit pEvalHabbit){
+    protected void setContent(EvaluationHabbitViewHolder holder, Habbit pEvalHabbit){
         holder.evaluationHabbit = pEvalHabbit;
-        holder.txId.setText(""+pEvalHabbit.getHabbit().getId());
-        setIcon(holder.imageType, pEvalHabbit.getHabbit().getType());
-        holder.txTitle.setText(pEvalHabbit.getHabbit().getTitle());
+        holder.txId.setText(""+pEvalHabbit.getId());
+        setIcon(holder.imageType, pEvalHabbit.getType());
+        holder.txTitle.setText(pEvalHabbit.getTitle());
 
-
-        holder.txDay30Result.setText(""+pEvalHabbit.getDay30Result());
-        holder.txDay30Achive.setText(""+pEvalHabbit.getDay30Achive());
-        holder.txDay7Result.setText(""+pEvalHabbit.getDay7Result());
-        holder.txDay7Achive.setText(""+pEvalHabbit.getDay7Achive());
-        holder.txTodayResult.setText(""+pEvalHabbit.getTodayResult());
-        holder.txTodayAchive.setText(""+pEvalHabbit.getTodayResult());
+        holder.txDay30Result.setText(""+pEvalHabbit.getDay30ResultCost());
+        holder.txDay30Achive.setText(""+pEvalHabbit.getDay30AchiveRate());
+        holder.txDay7Result.setText(""+pEvalHabbit.getDay7ResultCost());
+        holder.txDay7Achive.setText(""+pEvalHabbit.getDay7AchiveRate());
+        holder.txTodayResult.setText(""+pEvalHabbit.getCurrentResultCost());
+        holder.txTodayAchive.setText(""+pEvalHabbit.getCurrentAchiveRate());
     }
 
     private void setIcon(ImageView image, int type){
@@ -87,7 +82,7 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
 
     // ViewHolder
     public class EvaluationHabbitViewHolder extends RecyclerView.ViewHolder  {
-        private EvaluationHabbit evaluationHabbit;
+        private Habbit evaluationHabbit;
 
         protected View itemView;
         protected TextView txId;
@@ -122,7 +117,7 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
                 @Override
                 public void onClick(View view) {
                     if (mListener != null) {
-                        mListener.onItemClick(evaluationHabbit.getHabbit().getId(), evaluationHabbit.getHabbit().getType(), evaluationHabbit.getHabbit().getTitle());
+                        mListener.onItemClick(evaluationHabbit);
                     }
                 }
             });
@@ -131,7 +126,7 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
                 @Override
                 public boolean onLongClick(View view) {
                     if (mListener != null) {
-                        mListener.onItemLongClick(evaluationHabbit.getHabbit().getId());
+                        mListener.onItemLongClick(evaluationHabbit.getId());
                     }
                     return true;
                 }

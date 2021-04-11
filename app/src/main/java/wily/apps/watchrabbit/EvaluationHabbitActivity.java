@@ -7,12 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,24 +16,13 @@ import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.adapter.EvaluationAdapter;
-import wily.apps.watchrabbit.adapter.RecordAdapter;
-import wily.apps.watchrabbit.data.dao.EvaluationDao;
-import wily.apps.watchrabbit.data.dao.HabbitDao;
-import wily.apps.watchrabbit.data.dao.RecordDao;
 import wily.apps.watchrabbit.data.database.EvaluationDatabase;
-import wily.apps.watchrabbit.data.database.HabbitDatabase;
-import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
-import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
 import wily.apps.watchrabbit.util.DialogGetter;
 
-import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_FRAG_ID;
-import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_DATE;
-import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_ID;
-import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_TITLE;
-import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT_TYPE;
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_HABBIT;
 
 public class EvaluationHabbitActivity extends AppCompatActivity {
 
@@ -46,9 +31,7 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
 
     private AlertDialog dialog;
 
-    private int hid;
-    private int hType;
-    private String hTitle;
+    private Habbit evaluationHabbit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +39,29 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_evaluation_habbit);
 
         Intent intent = getIntent();
-        hid = intent.getExtras().getInt(AppConst.INTENT_EVAL_FRAG_ID);
-        hType = intent.getExtras().getInt(AppConst.INTENT_EVAL_FRAG_TYPE);
-        hTitle = intent.getExtras().getString(AppConst.INTENT_EVAL_FRAG_TITLE);
-
+        evaluationHabbit = (Habbit) intent.getSerializableExtra(AppConst.INTENT_EVAL_FRAG_EVALUATION_HABBIT);
         initView();
     }
 
     private void initView() {
+        initTopEvaluationHabbit();
         dialog = DialogGetter.getProgressDialog(EvaluationHabbitActivity.this, getString(R.string.base_dialog_database_inprogress));
 
         LinearLayoutManager layoutMgr = new LinearLayoutManager(EvaluationHabbitActivity.this);
         evaluationRecyclerView = findViewById(R.id.recycler_view_eval_habbit);
         evaluationRecyclerView.setLayoutManager(layoutMgr);
+    }
+
+    private void initTopEvaluationHabbit(){
+        View view = findViewById(R.id.include_eval_habbit_top);
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_title)).setText(""+evaluationHabbit.getTitle());
+
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_30_result)).setText(""+evaluationHabbit.getDay30ResultCost());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_30_achive)).setText(""+evaluationHabbit.getDay30AchiveRate());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_7_result)).setText(""+evaluationHabbit.getDay7ResultCost());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_7_achive)).setText(""+evaluationHabbit.getDay7AchiveRate());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_today_result)).setText(""+evaluationHabbit.getCurrentResultCost());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_today_achive)).setText(""+evaluationHabbit.getCurrentAchiveRate());
     }
 
     @Override
@@ -84,7 +77,7 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
         long startDate = DateUtil.getDateLongBefore(endDate, AppConst.EVALUATION_30_DAYS);
 
         EvaluationDatabase evalDB = EvaluationDatabase.getAppDatabase(EvaluationHabbitActivity.this);
-        evalDB.evaluationDao().getEvaluationByHidAndTimeSingle(hid, startDate, endDate).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterEvaluationGet(item));
+        evalDB.evaluationDao().getEvaluationByHidAndTimeSingle(evaluationHabbit.getId(), startDate, endDate).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterEvaluationGet(item));
     }
 
     private void afterEvaluationGet(List<Evaluation> evalList){
@@ -99,12 +92,10 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
     private EvaluationAdapter.OnEvaluationItemClickListener onItemClickListener = new EvaluationAdapter.OnEvaluationItemClickListener() {
 
         @Override
-        public void onItemClick(int hid, long date) {
+        public void onItemClick(Evaluation eval) {
             Intent intent = new Intent(EvaluationHabbitActivity.this, EvaluationRecordActivity.class);
-            intent.putExtra(INTENT_EVAL_HABBIT_ID, hid);
-            intent.putExtra(INTENT_EVAL_HABBIT_TYPE, hType);
-            intent.putExtra(INTENT_EVAL_HABBIT_TITLE, hTitle);
-            intent.putExtra(INTENT_EVAL_HABBIT_DATE, date);
+            intent.putExtra(AppConst.INTENT_EVAL_EVALUATION, eval);
+            intent.putExtra(INTENT_EVAL_HABBIT, evaluationHabbit);
             startActivity(intent);
         }
 

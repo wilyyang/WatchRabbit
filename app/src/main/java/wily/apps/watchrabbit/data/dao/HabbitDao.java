@@ -37,6 +37,12 @@ public interface HabbitDao {
     @Query("UPDATE Habbit SET curRecordId=:p_recordId WHERE id = :p_id")
     Single<Integer> updateCurRecordId(int p_id, long p_recordId);
 
+    @Query("UPDATE Habbit SET currentResultCost=:p_currentResultCost, currentAchiveRate=:p_currentAchiveRate, day7ResultCost=:p_day7ResultCost, day7AchiveRate=:p_day7AchiveRate, day30ResultCost=:p_day30ResultCost, day30AchiveRate=:p_day30AchiveRate WHERE id = :p_id")
+    int updateHabbitEvaluation(int p_id, long p_currentResultCost, long p_currentAchiveRate, long p_day7ResultCost, long p_day7AchiveRate, long p_day30ResultCost, long p_day30AchiveRate);
+
+    @Query("UPDATE Habbit SET currentResultCost=:p_currentResultCost, currentAchiveRate=:p_currentAchiveRate WHERE id = :p_id")
+    int updateHabbitEvaluationToday(int p_id, long p_currentResultCost, long p_currentAchiveRate);
+
     @Query("SELECT curRecordId FROM Habbit WHERE id=:p_id")
     Single<Integer> getCurRecordId(int p_id);
 
@@ -45,7 +51,6 @@ public interface HabbitDao {
 
     @Query("SELECT * FROM Habbit WHERE active=:p_active")
     Single<List<Habbit>> getHabbitActive(boolean p_active);
-
 
     //
     @Insert(onConflict = OnConflictStrategy.REPLACE)

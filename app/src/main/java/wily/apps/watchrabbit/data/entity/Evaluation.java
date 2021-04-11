@@ -4,10 +4,12 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 import wily.apps.watchrabbit.util.DateUtil;
 
 @Entity
-public class Evaluation {
+public class Evaluation implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private long id;
 

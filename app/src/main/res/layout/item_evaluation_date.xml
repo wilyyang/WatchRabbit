@@ -15,11 +15,11 @@
 
     <ImageView
         android:id="@+id/image_view_evaluation_date_type"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:layout_weight="0"
-        android:textAlignment="center"
-        android:layout_margin="5dp"/>
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/text_view_evaluation_date_id"
@@ -40,7 +40,7 @@
         android:id="@+id/text_view_evaluation_date_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="7"
+        android:layout_weight="6"
         android:text="2021/01/08"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -50,8 +50,8 @@
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="7"
-        android:weightSum="3">
+        android:layout_weight="8"
+        android:weightSum="4">
 
 
         <TextView
@@ -62,10 +62,10 @@
             android:text="@string/evaluation_result_cost"
             android:textSize="@dimen/sp_base_s2"/>
         <TextView
-            android:id="@+id/text_view_evaluation_date_init_cost"
+            android:id="@+id/text_view_evaluation_date_result"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="0"
             android:textSize="@dimen/sp_base_s2"/>
 
@@ -81,7 +81,7 @@
             android:id="@+id/text_view_evaluation_date_achive"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:text="0"
             android:textSize="@dimen/sp_base_s2"/>
     </LinearLayout>

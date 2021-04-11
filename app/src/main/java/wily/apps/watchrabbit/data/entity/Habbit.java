@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.Date;
 import wily.apps.watchrabbit.util.DateUtil;
 
 @Entity
-public class Habbit {
+public class Habbit implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int type;
@@ -26,6 +27,13 @@ public class Habbit {
 
     private int state;
     private long curRecordId;
+
+    private int currentResultCost;
+    private int currentAchiveRate;
+    private int day7ResultCost;
+    private int day7AchiveRate;
+    private int day30ResultCost;
+    private int day30AchiveRate;
 
     @Ignore
     private boolean check;
@@ -54,6 +62,13 @@ public class Habbit {
         this.state = state;
         this.curRecordId = -1;
         this.curRecordId = curRecordId;
+
+        this.currentResultCost = 1;
+        this.currentAchiveRate = 2;
+        this.day7ResultCost = 3;
+        this.day7AchiveRate = 4;
+        this.day30ResultCost = 5;
+        this.day30AchiveRate = 6;
     }
 
     public int getId() {
@@ -152,12 +167,60 @@ public class Habbit {
         this.check = check;
     }
 
+    public int getCurrentResultCost() {
+        return currentResultCost;
+    }
+
+    public void setCurrentResultCost(int currentResultCost) {
+        this.currentResultCost = currentResultCost;
+    }
+
+    public int getCurrentAchiveRate() {
+        return currentAchiveRate;
+    }
+
+    public void setCurrentAchiveRate(int currentAchiveRate) {
+        this.currentAchiveRate = currentAchiveRate;
+    }
+
+    public int getDay7ResultCost() {
+        return day7ResultCost;
+    }
+
+    public void setDay7ResultCost(int day7ResultCost) {
+        this.day7ResultCost = day7ResultCost;
+    }
+
+    public int getDay7AchiveRate() {
+        return day7AchiveRate;
+    }
+
+    public void setDay7AchiveRate(int day7AchiveRate) {
+        this.day7AchiveRate = day7AchiveRate;
+    }
+
+    public int getDay30ResultCost() {
+        return day30ResultCost;
+    }
+
+    public void setDay30ResultCost(int day30ResultCost) {
+        this.day30ResultCost = day30ResultCost;
+    }
+
+    public int getDay30AchiveRate() {
+        return day30AchiveRate;
+    }
+
+    public void setDay30AchiveRate(int day30AchiveRate) {
+        this.day30AchiveRate = day30AchiveRate;
+    }
+
     @Override
     public String toString() {
         return "Habbit{" +
                 "id=" + id +
                 ", type=" + type +
-                ", time=" + DateUtil.getDateString(time)  +
+                ", time=" + time +
                 ", title='" + title + '\'' +
                 ", priority=" + priority +
                 ", active=" + active +
@@ -166,6 +229,12 @@ public class Habbit {
                 ", perCost=" + perCost +
                 ", state=" + state +
                 ", curRecordId=" + curRecordId +
+                ", currentResultCost=" + currentResultCost +
+                ", currentAchiveRate=" + currentAchiveRate +
+                ", day7ResultCost=" + day7ResultCost +
+                ", day7AchiveRate=" + day7AchiveRate +
+                ", day30ResultCost=" + day30ResultCost +
+                ", day30AchiveRate=" + day30AchiveRate +
                 ", check=" + check +
                 '}';
     }

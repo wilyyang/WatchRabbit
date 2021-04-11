@@ -36,4 +36,6 @@
     <string name="evaluation_goal_cost">목표 : </string>
     <string name="evaluation_result_cost">평가 : </string>
     <string name="evaluation_achive_rate">달성율 : </string>
+
+    <string name="frag_evaluation_title">전체 평가</string>
 </resources>

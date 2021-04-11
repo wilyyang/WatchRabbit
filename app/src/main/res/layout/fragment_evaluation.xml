@@ -29,7 +29,7 @@
                 android:layout_marginLeft="@dimen/margin_layout_mid"
                 android:layout_weight="7"
                 android:gravity="center_vertical"
-                android:text="@string/menu_bottom_evaluation_tab"
+                android:text="@string/frag_evaluation_title"
                 android:textSize="@dimen/sp_bar_h2" />
         </LinearLayout>
 

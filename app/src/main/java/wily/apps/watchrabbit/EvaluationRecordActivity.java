@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.adapter.RecordAdapter;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
+import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
@@ -43,9 +45,8 @@ public class EvaluationRecordActivity extends AppCompatActivity {
 
     private AlertDialog dialog;
 
-    private int hid;
-    private int hType;
-    private String hTitle;
+    private Evaluation evaluation;
+    private Habbit habbit;
     private long date;
 
     @Override
@@ -54,10 +55,9 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_evaluation_record);
 
         Intent intent = getIntent();
-        hid = intent.getExtras().getInt(AppConst.INTENT_EVAL_HABBIT_ID);
-        hType = intent.getExtras().getInt(AppConst.INTENT_EVAL_HABBIT_TYPE);
-        hTitle = intent.getExtras().getString(AppConst.INTENT_EVAL_HABBIT_TITLE);
-        date = intent.getExtras().getLong(AppConst.INTENT_EVAL_HABBIT_DATE);
+        evaluation = (Evaluation) intent.getSerializableExtra(AppConst.INTENT_EVAL_EVALUATION);
+        habbit = (Habbit) intent.getSerializableExtra(AppConst.INTENT_EVAL_HABBIT);
+        date = evaluation.getTime();
 
         initView();
     }
@@ -66,6 +66,8 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         initTopEvaluation();
 
         dialog = DialogGetter.getProgressDialog(EvaluationRecordActivity.this, getString(R.string.base_dialog_database_inprogress));
+
+        ((TextView)findViewById(R.id.text_view_eval_record_title)).setText("일일 기록 : "+habbit.getTitle());
 
         recordLayoutRecycler = findViewById(R.id.layout_eval_record_recycler);
 
@@ -100,9 +102,10 @@ public class EvaluationRecordActivity extends AppCompatActivity {
 
     private void initTopEvaluation(){
         View view = findViewById(R.id.include_eval_record_top);
-
-//        view.findViewById(R.id.)
-
+        ((TextView)view.findViewById(R.id.text_view_evaluation_date_id)).setText(""+evaluation.getId());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_date_date)).setText(DateUtil.getDateStringDayLimit(evaluation.getTime()));
+        ((TextView)view.findViewById(R.id.text_view_evaluation_date_result)).setText(""+evaluation.getResultCost());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_date_achive)).setText(""+evaluation.getAchiveRate()+"%");
     }
 
     private void setSelectableMode(boolean mode){
@@ -139,7 +142,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     private void loadRecords(){
         dialog.show();
         RecordDatabase recordDB = RecordDatabase.getAppDatabase(EvaluationRecordActivity.this);
-        recordDB.recordDao().getRecordByHidAndTimeSingle(hid, date, (date+ DateUtil.ONEDAY_TO_MILLISECOND-1) ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterRecordGetAll(item));
+        recordDB.recordDao().getRecordByHidAndTimeSingle(habbit.getId(), date, (date+ DateUtil.ONEDAY_TO_MILLISECOND-1) ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterRecordGetAll(item));
     }
 
     private void afterRecordGetAll(List<Record> recordList){
@@ -172,7 +175,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_eval_record_add:
-                    RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, hid, hType, hTitle+" ("+DateUtil.getDateStringDayLimit(date)+")", -1, date, -1, true);
+                    RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, habbit.getId(), habbit.getType(), habbit.getTitle()+" ("+DateUtil.getDateStringDayLimit(date)+")", -1, date, -1, true);
                     recordModifyDialog.show();
                     break;
                 case R.id.btn_eval_record_select_mode:
@@ -205,7 +208,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
             if(type == Habbit.TYPE_HABBIT_TIMER && term == -1){
                 return;
             }
-            RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, hid, hType, hTitle+" ("+DateUtil.getDateStringDayLimit(date)+")", id, time, term, false);
+            RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, habbit.getId(), habbit.getType(),  habbit.getTitle()+" ("+DateUtil.getDateStringDayLimit(date)+")", id, time, term, false);
             recordModifyDialog.show();
         }
 

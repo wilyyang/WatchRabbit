@@ -1,12 +1,11 @@
 package wily.apps.watchrabbit.service;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
-import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.data.dao.EvaluationDao;
 import wily.apps.watchrabbit.data.dao.HabbitDao;
 import wily.apps.watchrabbit.data.dao.RecordDao;
@@ -25,6 +24,8 @@ public class EvaluateThread extends Thread{
     private EvaluationDao evalDao = null;
     private RecordDao recordDao = null;
 
+    private int hid = -1;
+    private long date = -1;
     private boolean replace = false;
 
     public EvaluateThread(Context context, boolean replace){
@@ -44,17 +45,60 @@ public class EvaluateThread extends Thread{
             replaceTotal(30);
         }else{
             updateTotal(30);
-//            replaceTotal(3);
+            replaceTotal(3);
+            updateHabbitEvaluation();
+        }
+    }
+
+    public void updateHabbitEvaluation(){
+        int numOfDay = 30;
+        // 1) Get habbit all
+        List<Habbit> habbits = habbitDao.getAll();
+
+        // 2) Per Habbit
+        long endDate = DateUtil.convertDate(System.currentTimeMillis());
+        long beforeDate = DateUtil.getDateLongBefore(endDate, numOfDay);
+        for(Habbit habbit : habbits) {
+            long habbitDate = DateUtil.convertDate(habbit.getTime());
+            long startDate = Math.max(habbitDate, beforeDate);
+
+            // 2.1) Get evaluation by 30 day
+            List<Evaluation> evalList = evalDao.getEvaluationByHidAndTimeDESC(habbit.getId(), startDate, endDate);
+
+            long p_currentResultCost = 0;
+            long p_currentAchiveRate = 0;
+            long p_day7ResultCost = 0;
+            long p_day7AchiveRate = 0;
+            long p_day30ResultCost = 0;
+            long p_day30AchiveRate = 0;
+
+            // 2.1.1) today
+            int currentSize = (int) IntStream.range(0, evalList.size()).filter(i -> i < 1).count();
+            p_currentResultCost = IntStream.range(0, evalList.size()).filter(i -> i < 1).mapToObj(i -> evalList.get(i)).mapToInt(o -> o.getResultCost()).sum() / currentSize;
+            p_currentAchiveRate = IntStream.range(0, evalList.size()).filter(i -> i < 1).mapToObj(i -> evalList.get(i)).mapToInt(o -> o.getAchiveRate()).sum() / currentSize;
+
+            // 2.1.2) 7 day
+            int day7size = (int) IntStream.range(0, evalList.size()).filter(i -> i < 7).count();
+            p_day7ResultCost = IntStream.range(0, evalList.size()).filter(i -> i < 7).mapToObj(i -> evalList.get(i)).mapToInt(o -> o.getResultCost()).sum() / day7size;
+            p_day7AchiveRate = IntStream.range(0, evalList.size()).filter(i -> i < 7).mapToObj(i -> evalList.get(i)).mapToInt(o -> o.getAchiveRate()).sum() / day7size;
+
+            // 2.1.3) 30 day
+            int day30size = (int) IntStream.range(0, evalList.size()).filter(i -> i < 30).count();
+            p_day30ResultCost = IntStream.range(0, evalList.size()).filter(i -> i < 30).mapToObj(i -> evalList.get(i)).mapToInt(o -> o.getResultCost()).sum() / day30size;
+            p_day30AchiveRate = IntStream.range(0, evalList.size()).filter(i -> i < 30).mapToObj(i -> evalList.get(i)).mapToInt(o -> o.getAchiveRate()).sum() / day30size;
+
+            // 2.2) Update Habbit
+            habbitDao.updateHabbitEvaluation(habbit.getId(), p_currentResultCost, p_currentAchiveRate, p_day7ResultCost, p_day7AchiveRate, p_day30ResultCost, p_day30AchiveRate);
         }
     }
 
     public void updateTotal(int numOfDay){
         // 1) Get habbit all
         List<Habbit> habbits = habbitDao.getAll();
+
+        // 2) Per Habbit
         long endDate = DateUtil.convertDate(System.currentTimeMillis());
         long beforeDate = DateUtil.getDateLongBefore(endDate, numOfDay);
-
-        // 2) Habbit Replace
         for(Habbit habbit : habbits){
             long habbitDate = DateUtil.convertDate(habbit.getTime());
             long startDate = Math.max(habbitDate, beforeDate);
@@ -62,29 +106,27 @@ public class EvaluateThread extends Thread{
             // 2.1) Get evaluation by term all
             int idx = 0;
             List<Evaluation> oldList = evalDao.getEvaluationByHidAndTime(habbit.getId(), startDate, endDate);
+
             int size = oldList.size();
             Evaluation temp = null;
-
-            // 2.2) if null, Make evaluation
-
             ArrayList<Evaluation> evalList = new ArrayList<>();
+            // 2.2) Per Evaluation at date
             for(long cur = startDate; cur < (endDate + DateUtil.ONEDAY_TO_MILLISECOND); cur += DateUtil.ONEDAY_TO_MILLISECOND) {
-//                Log.d(AppConst.TAG, ">"+DateUtil.getDateString(startDate)+" ~ "+DateUtil.getDateString(endDate) +" = "+DateUtil.getDateString(cur));
                 if(temp == null && idx < size){
                     temp = oldList.get(idx);
                 }
 
-
+                // 2.2.1) Evaluation exist
                 if(temp != null && temp.getTime() == cur){
                     temp = null;
                     ++idx;
                     continue;
-                }else{
+                }else{  // 2.2.2) Evaluation not exist, make Evaluation
                     Evaluation evaluation = makeEvaluation(habbit, cur);
                     evalList.add(evaluation);
                 }
             }
-            // 2.3) Insert evaluation
+            // 2.3) Insert evaluations (not exist)
             evalDao.insertAll(evalList);
         }
     }

@@ -23,6 +23,9 @@ public interface EvaluationDao {
     @Query("SELECT * FROM Evaluation WHERE hid=:p_hid")
     Single<List<Evaluation>> getEvaluationByHid(int p_hid);
 
+    @Query("SELECT * FROM Evaluation WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end ORDER BY time DESC")
+    List<Evaluation> getEvaluationByHidAndTimeDESC(int p_hid, long p_start, long p_end);
+
     @Query("SELECT * FROM Evaluation WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end ORDER BY time ASC")
     List<Evaluation> getEvaluationByHidAndTime(int p_hid, long p_start, long p_end);
 
