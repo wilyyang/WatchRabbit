@@ -41,6 +41,9 @@ public interface EvaluationDao {
     @Query("DELETE FROM Evaluation WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end")
     int deleteEvaluationByTime(int p_hid, long p_start, long p_end);
 
+    @Query("DELETE FROM Evaluation WHERE hid=:p_hid AND time =:p_time")
+    int deleteEvaluationByTime(int p_hid, long p_time);
+
     @Query("UPDATE Evaluation SET resultCost=:p_result, achiveRate=:p_achive WHERE id = :p_id")
     Single<Integer> updateEvaluationResult(long p_id, int p_result, int p_achive);
 

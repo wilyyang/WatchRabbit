@@ -1,4 +1,4 @@
-package wily.apps.watchrabbit.service;
+package wily.apps.watchrabbit;
 
 import android.content.Context;
 
@@ -17,16 +17,12 @@ import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
 
-public class EvaluateThread extends Thread{
+public class EvaluateWork{
 
     private Context mContext = null;
     private HabbitDao habbitDao = null;
     private EvaluationDao evalDao = null;
     private RecordDao recordDao = null;
-
-    private int workType = -1;
-    private int hid = -1;
-    private long date = -1;
 
     public static final int WORK_TYPE_REPLACE_ALL = 1;
     public static final int WORK_TYPE_UPDATE_ALL  = 2;
@@ -34,20 +30,15 @@ public class EvaluateThread extends Thread{
     public static final int WORK_TYPE_UPDATE_HABBIT  = 4;
     public static final int WORK_TYPE_REPLACE_EVALUATION = 5;
 
-    public EvaluateThread(Context context, int workType, int hid, long date){
+    public EvaluateWork(Context context){
         mContext = context;
 
         habbitDao = HabbitDatabase.getAppDatabase(mContext).habbitDao();
         evalDao = EvaluationDatabase.getAppDatabase(mContext).evaluationDao();
         recordDao = RecordDatabase.getAppDatabase(mContext).recordDao();
-        this.workType = workType;
-        this.hid = hid;
-        this.date = date;
     }
 
-    @Override
-    public void run() {
-        super.run();
+    public void work(int workType, int hid, long date) {
         int numOfDay = 30;
         List<Habbit> habbits = null;
         Evaluation evaluation = null;
@@ -56,7 +47,7 @@ public class EvaluateThread extends Thread{
                 habbits = habbitDao.getAll();
                 for(Habbit habbit : habbits) {
                     replaceEvaluationByHabbit(habbit, numOfDay);
-                    updateHabbitResult(habbits.get(0), numOfDay);
+                    updateHabbitResult(habbit, numOfDay);
                 }
                 break;
             case WORK_TYPE_UPDATE_ALL:
@@ -64,7 +55,7 @@ public class EvaluateThread extends Thread{
                 for(Habbit habbit : habbits) {
                     updateEvaluationByHabbit(habbit, numOfDay);
                     replaceEvaluationByHabbit(habbit, 2);
-                    updateHabbitResult(habbits.get(0), numOfDay);
+                    updateHabbitResult(habbit, numOfDay);
                 }
                 break;
             case WORK_TYPE_REPLACE_HABBIT:

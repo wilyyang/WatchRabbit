@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.adapter.RecordAdapter;
@@ -158,15 +159,20 @@ public class EvaluationRecordActivity extends AppCompatActivity {
 
         List<Long> list = recordAdapter.getCheckedIds();
         RecordDatabase recordDB = RecordDatabase.getAppDatabase(EvaluationRecordActivity.this);
-        recordDB.recordDao().deleteRecordByIds(list).subscribeOn(Schedulers.io())
+
+        Completable.create(subscriber -> {
+            recordDB.recordDao().deleteRecordByIds(list);
+            EvaluateWork work = new EvaluateWork(EvaluationRecordActivity.this);
+            work.work(EvaluateWork.WORK_TYPE_REPLACE_EVALUATION, habbit.getId(), date);
+            subscriber.onComplete();
+        }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> {
-                            setSelectableMode(false);
-                            recordAdapter.setSelectableMode(false);
-                            dialog.dismiss();
-                            onResume();
-                        }
-                );
+                .subscribe(() -> {
+                    setSelectableMode(false);
+                    recordAdapter.setSelectableMode(false);
+                    dialog.dismiss();
+                    onResume();
+                });
     }
 
     // Listener

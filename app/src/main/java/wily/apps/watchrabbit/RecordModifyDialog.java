@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Calendar;
 
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
@@ -88,23 +88,31 @@ public class RecordModifyDialog extends Dialog {
             long time = DateUtil.getDateLong(DateUtil.getDateNum(recordTime, Calendar.YEAR), DateUtil.getDateNum(recordTime, Calendar.MONTH), DateUtil.getDateNum(recordTime, Calendar.DATE),
                     timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
             Log.d(AppConst.TAG, ""+habbitId+" "+habbitTitle+" " +DateUtil.getDateString(time)+ " - "+DateUtil.getDateString(recordTime));
-            if(isAdd){
-                if(mType == Habbit.TYPE_HABBIT_CHECK){
-                    recordDB.recordDao().insert(new Record(habbitId, mType, time, -1))
-                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item ->{ mDialog.dismiss(); });
-                }else if(mType == Habbit.TYPE_HABBIT_TIMER){
-                    recordDB.recordDao().insert(new Record(habbitId, mType, time, (numberPickerRecord.getValue()*DateUtil.MILLISECOND_TO_MINUTE)))
-                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> {mDialog.dismiss(); });
+
+            Completable.create(subscriber -> {
+
+                if(isAdd){
+                    if(mType == Habbit.TYPE_HABBIT_CHECK){
+                        recordDB.recordDao().insert(new Record(habbitId, mType, time, -1));
+                    }else if(mType == Habbit.TYPE_HABBIT_TIMER){
+                        recordDB.recordDao().insert(new Record(habbitId, mType, time, (numberPickerRecord.getValue()*DateUtil.MILLISECOND_TO_MINUTE)));
+                    }
+                }else{
+                    if(mType == Habbit.TYPE_HABBIT_CHECK){
+                        recordDB.recordDao().updateTime(recordId, time);
+                    }else if(mType == Habbit.TYPE_HABBIT_TIMER){
+                        recordDB.recordDao().updateTimeAndTerm(recordId, time, (numberPickerRecord.getValue()*DateUtil.MILLISECOND_TO_MINUTE));
+                    }
                 }
-            }else{
-                if(mType == Habbit.TYPE_HABBIT_CHECK){
-                    recordDB.recordDao().updateTime(recordId, time)
-                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> {mDialog.dismiss(); });
-                }else if(mType == Habbit.TYPE_HABBIT_TIMER){
-                    recordDB.recordDao().updateTimeAndTerm(recordId, time, (numberPickerRecord.getValue()*DateUtil.MILLISECOND_TO_MINUTE))
-                            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> {mDialog.dismiss(); });
-                }
-            }
+
+                EvaluateWork work = new EvaluateWork(mContext);
+                work.work(EvaluateWork.WORK_TYPE_REPLACE_EVALUATION, habbitId, DateUtil.convertDate(recordTime));
+                subscriber.onComplete();
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(() -> {
+                        mDialog.dismiss();
+                    });
         }
     };
 

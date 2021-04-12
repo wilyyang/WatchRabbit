@@ -20,13 +20,16 @@ public interface HabbitDao {
     List<Habbit> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<Long> insert(Habbit habbit);
+    Single<Long> insertSingle(Habbit habbit);
 
     @Query("SELECT * FROM Habbit WHERE id=:p_id")
-    Single<List<Habbit>> getHabbit(int p_id);
+    List<Habbit> getHabbit(int p_id);
+
+    @Query("SELECT * FROM Habbit WHERE id=:p_id")
+    Single<List<Habbit>> getHabbitSingle(int p_id);
 
     @Query("UPDATE Habbit SET type=:p_type, title=:p_title, priority=:p_prio, active=:p_act, goalCost=:p_goalCost, initCost=:p_initCost, perCost=:p_perCost WHERE id = :p_id")
-    Single<Integer> updateHabbit(int p_id, int p_type, String p_title, int p_prio, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
+    int updateHabbit(int p_id, int p_type, String p_title, int p_prio, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
 
     @Query("SELECT state FROM Habbit WHERE id=:p_id")
     Single<Integer> getHabbitState(int p_id);

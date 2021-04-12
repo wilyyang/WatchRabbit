@@ -16,6 +16,8 @@ import android.widget.Switch;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
@@ -152,7 +154,7 @@ public class HabbitModifyActivity extends AppCompatActivity {
     private void setUIData(int id){
         btnSave.setText(getString(R.string.base_btn_update));
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(this);
-        habbitDB.habbitDao().getHabbit(id).subscribeOn(Schedulers.io())
+        habbitDB.habbitDao().getHabbitSingle(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> afterGetHabbit(item));
     }
@@ -228,13 +230,22 @@ public class HabbitModifyActivity extends AppCompatActivity {
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
         if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
             long currentTime = System.currentTimeMillis();
-            habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost, state, -1)).subscribeOn(Schedulers.io())
+            habbitDB.habbitDao().insertSingle(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost, state, -1)).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(item -> afterUpdateHabbit(item, type, title, priority, active));
-        }else if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
-            habbitDB.habbitDao().updateHabbit(id, type, title, priority, active, goalCost, initCost, perCost).subscribeOn(Schedulers.io())
+        } else if (mode == AppConst.HABBIT_MODIFY_MODE_UPDATE) {
+
+            int finalPerCost = perCost;
+            Completable.create(subscriber -> {
+                habbitDB.habbitDao().updateHabbit(id, type, title, priority, active, goalCost, initCost, finalPerCost);
+                EvaluateWork work = new EvaluateWork(HabbitModifyActivity.this);
+                work.work(EvaluateWork.WORK_TYPE_REPLACE_HABBIT, id, -1);
+                subscriber.onComplete();
+            }).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(item -> afterUpdateHabbit(id, type, title, priority, active));
+                    .subscribe(() -> {
+                        afterUpdateHabbit(id, type, title, priority, active);
+                    });
         }
     }
 

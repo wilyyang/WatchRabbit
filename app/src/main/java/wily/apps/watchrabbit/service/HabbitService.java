@@ -4,12 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.AppConst;
@@ -196,14 +194,14 @@ public class HabbitService extends Service {
                 .subscribe(state -> {
                     switch(state){
                         case Habbit.STATE_CHECK:
-                            recordDB.recordDao().insert(new Record(hid, type, now, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(res ->
+                            recordDB.recordDao().insertSingle(new Record(hid, type, now, -1)).observeOn(AndroidSchedulers.mainThread()).subscribe(res ->
                             {
                                 String message = "#"+hid+" "+ DateUtil.getDateString(now)+" checked";
                                 noti.sendNotification(message);
                             });
                             break;
                         case Habbit.STATE_TIMER_WAIT:
-                            recordDB.recordDao().insert(new Record(hid, type, now, -1)).subscribe(id->{
+                            recordDB.recordDao().insertSingle(new Record(hid, type, now, -1)).subscribe(id->{
                                 habbitDB.habbitDao().updateHabbitState(hid, Habbit.STATE_TIMER_INPROGRESS).subscribe();
                                 habbitDB.habbitDao().updateCurRecordId(hid, id).observeOn(AndroidSchedulers.mainThread()).subscribe(res ->
                                 {
@@ -237,10 +235,10 @@ public class HabbitService extends Service {
                     }});
     }
 
-    // 8. HABBIT_SERVICE_RECORDING
+    // 8. HABBIT_SERVICE_EVALUATE
     private void evaluateUpdate(){
-        EvaluateThread evaluateThread = new EvaluateThread(HabbitService.this, false);
-        evaluateThread.start();
+//        EvaluateThread evaluateThread = new EvaluateThread(HabbitService.this, false);
+//        evaluateThread.start();
     }
 
     @Override

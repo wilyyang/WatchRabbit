@@ -21,19 +21,22 @@ public interface RecordDao {
     Single<List<Record>> getRecord(int p_id);
 
     @Query("DELETE FROM Record WHERE id IN (:p_ids)")
-    Single<Integer> deleteRecordByIds(List<Long> p_ids);
+    int deleteRecordByIds(List<Long> p_ids);
 
     @Query("DELETE FROM Record WHERE hid IN (:p_hids)")
     Single<Integer> deleteRecordByHids(List<Integer> p_hids);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<Long> insert(Record record);
+    Single<Long> insertSingle(Record record);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insert(Record record);
 
     @Query("UPDATE Record SET time=:p_time WHERE id = :p_id")
-    Single<Integer> updateTime(long p_id, long p_time);
+    int updateTime(long p_id, long p_time);
 
     @Query("UPDATE Record SET time=:p_time, term=:p_term WHERE id = :p_id")
-    Single<Integer> updateTimeAndTerm(long p_id, long p_time, long p_term);
+    int updateTimeAndTerm(long p_id, long p_time, long p_term);
 
     @Query("UPDATE Record SET term=:p_term WHERE id = :p_id")
     Single<Integer> updateTerm(long p_id, long p_term);
