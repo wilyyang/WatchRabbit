@@ -49,13 +49,16 @@ public class SplashActivity extends AppCompatActivity {
                     dialog.dismiss();
                     Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 });
     }
 
     private void createHabbitService() {
-        Intent intent = new Intent(SplashActivity.this, HabbitService.class);
-        intent.setAction(HabbitService.HABBIT_SERVICE_CREATE);
-        startService(intent);
+        if(!Utils.isServiceRunning(SplashActivity.this, HabbitService.class.getName())){
+            Intent intent = new Intent(SplashActivity.this, HabbitService.class);
+            intent.setAction(HabbitService.HABBIT_SERVICE_CREATE);
+            startService(intent);
+        }
     }
 
     private void onBackgroundWork(){
@@ -102,6 +105,12 @@ public class SplashActivity extends AppCompatActivity {
             }
             // 3.2) insert records
             recordDao.insertAll(records);
+        }
+
+        if(Utils.isServiceRunning(SplashActivity.this, HabbitService.class.getName())){
+            Intent intent = new Intent(SplashActivity.this, HabbitService.class);
+            intent.setAction(HabbitService.HABBIT_SERVICE_INIT);
+            startService(intent);
         }
     }
 }

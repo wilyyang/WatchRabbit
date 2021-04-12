@@ -106,7 +106,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         ((TextView)view.findViewById(R.id.text_view_evaluation_date_id)).setText(""+evaluation.getId());
         ((TextView)view.findViewById(R.id.text_view_evaluation_date_date)).setText(DateUtil.getDateStringDayLimit(evaluation.getTime()));
         ((TextView)view.findViewById(R.id.text_view_evaluation_date_result)).setText(""+evaluation.getResultCost());
-        ((TextView)view.findViewById(R.id.text_view_evaluation_date_achive)).setText(""+evaluation.getAchiveRate()+"%");
+        ((TextView)view.findViewById(R.id.text_view_evaluation_date_achive)).setText(""+evaluation.getAchiveRate());
     }
 
     private void setSelectableMode(boolean mode){

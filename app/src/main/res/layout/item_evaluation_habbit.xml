@@ -99,10 +99,17 @@
                 android:id="@+id/text_view_evaluation_habbit_day_30_achive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.6"
                 android:text="0"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="%"
+                android:textSize="@dimen/sp_base_s2"/>
         </LinearLayout>
 
         <LinearLayout
@@ -152,10 +159,17 @@
                 android:id="@+id/text_view_evaluation_habbit_day_7_achive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.6"
                 android:text="0"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="%"
+                android:textSize="@dimen/sp_base_s2"/>
         </LinearLayout>
 
         <LinearLayout
@@ -205,10 +219,17 @@
                 android:id="@+id/text_view_evaluation_habbit_today_achive"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.6"
                 android:text="0"
                 android:textAlignment="center"
                 android:textSize="@dimen/sp_base_s2" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="%"
+                android:textSize="@dimen/sp_base_s2"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
