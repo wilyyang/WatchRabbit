@@ -1,6 +1,8 @@
 package wily.apps.watchrabbit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,8 @@ import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class EvaluateWork{
 
     private Context mContext = null;
@@ -25,10 +29,10 @@ public class EvaluateWork{
     private RecordDao recordDao = null;
 
     public static final int WORK_TYPE_REPLACE_ALL = 1;
+
     public static final int WORK_TYPE_UPDATE_ALL  = 2;
     public static final int WORK_TYPE_REPLACE_HABBIT = 3;
-    public static final int WORK_TYPE_UPDATE_HABBIT  = 4;
-    public static final int WORK_TYPE_REPLACE_EVALUATION = 5;
+    public static final int WORK_TYPE_REPLACE_EVALUATION = 4;
 
     public EvaluateWork(Context context){
         mContext = context;
@@ -49,14 +53,11 @@ public class EvaluateWork{
                     replaceEvaluationByHabbit(habbit, numOfDay);
                     updateHabbitResult(habbit, numOfDay);
                 }
+                setPrefCurrentDate();
                 break;
             case WORK_TYPE_UPDATE_ALL:
-                habbits = habbitDao.getAll();
-                for(Habbit habbit : habbits) {
-                    updateEvaluationByHabbit(habbit, numOfDay);
-                    replaceEvaluationByHabbit(habbit, 2);
-                    updateHabbitResult(habbit, numOfDay);
-                }
+                updateEvaluationAll(numOfDay);
+                setPrefCurrentDate();
                 break;
             case WORK_TYPE_REPLACE_HABBIT:
                 habbits = habbitDao.getHabbit(hid);
@@ -65,24 +66,51 @@ public class EvaluateWork{
                     updateHabbitResult(habbits.get(0), numOfDay);
                 }
                 break;
-            case WORK_TYPE_UPDATE_HABBIT:
-                habbits = habbitDao.getHabbit(hid);
-                if(habbits.size() > 0){
-                    updateEvaluationByHabbit(habbits.get(0), numOfDay);
-                    updateHabbitResult(habbits.get(0), numOfDay);
-                }
-                break;
             case WORK_TYPE_REPLACE_EVALUATION:
                 evalDao.deleteEvaluationByTime(hid, date);
                 habbits = habbitDao.getHabbit(hid);
                 if(habbits.size() > 0){
-                    evaluation = makeEvaluationByDay(habbits.get(0), date);
+                    evaluation = makeEvaluationByDate(habbits.get(0), date);
                     evalDao.insert(evaluation);
 
                     updateHabbitResult(habbits.get(0), numOfDay);
                 }
                 break;
         }
+    }
+
+    private void updateEvaluationAll(int numOfDay) {
+        // 1. Get recent update date
+        SharedPreferences pref = mContext.getSharedPreferences(AppConst.WORK_PREF, MODE_PRIVATE);
+        long recentUpdate = pref.getLong(AppConst.WORK_PREF_RECENT_UPDATE_KEY, -1);
+
+        // 2. Update evaluation per Habbit
+        List<Habbit> habbits = habbitDao.getAll();
+        for(Habbit habbit : habbits) {
+
+            // 2.1 Update and Replace
+            updateEvaluationByHabbit(habbit, numOfDay);
+            replaceEvaluationByHabbit(habbit, 2);
+
+            // 2.2 Update old evaluation
+            if(recentUpdate != -1){
+//                Log.d(AppConst.TAG, "Recent Update Date : "+DateUtil.getDateString(recentUpdate));
+                Evaluation evaluation = makeEvaluationByDate(habbits.get(0), recentUpdate);
+                evalDao.insert(evaluation);
+            }
+
+            // 2.3 Update habbit result
+            updateHabbitResult(habbit, numOfDay);
+        }
+    }
+
+    private void setPrefCurrentDate() {
+        long currentTime = System.currentTimeMillis();
+        SharedPreferences pref = mContext.getSharedPreferences(AppConst.WORK_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        editor.putLong(AppConst.WORK_PREF_RECENT_UPDATE_KEY, DateUtil.convertDate(currentTime));
+        editor.commit();
     }
 
     private void updateEvaluationByHabbit(final Habbit habbit, int numOfDay) {
@@ -97,9 +125,11 @@ public class EvaluateWork{
 
         int size = oldList.size();
         Evaluation temp = null;
-        ArrayList<Evaluation> evalList = new ArrayList<>();
+
         // 2) Per Evaluation at date
-        for(long cur = startDate; cur < (endDate + DateUtil.ONEDAY_TO_MILLISECOND); cur += DateUtil.ONEDAY_TO_MILLISECOND) {
+        ArrayList<Evaluation> evalList = new ArrayList<>();
+        long limitedTime = (endDate + DateUtil.ONEDAY_TO_MILLISECOND);
+        for(long cur = startDate; cur < limitedTime; cur += DateUtil.ONEDAY_TO_MILLISECOND) {
             if(temp == null && idx < size){
                 temp = oldList.get(idx);
             }
@@ -110,7 +140,7 @@ public class EvaluateWork{
                 ++idx;
                 continue;
             }else{  // 2.2) Evaluation not exist, make Evaluation
-                Evaluation evaluation = makeEvaluationByDay(habbit, cur);
+                Evaluation evaluation = makeEvaluationByDate(habbit, cur);
                 evalList.add(evaluation);
             }
         }
@@ -128,17 +158,18 @@ public class EvaluateWork{
 
         // 2) Make evaluation by term all
         ArrayList<Evaluation> evalList = new ArrayList<>();
-        for(long cur = startDate; cur <= endDate; cur += DateUtil.ONEDAY_TO_MILLISECOND) {
-            Evaluation evaluation = makeEvaluationByDay(habbit, cur);
+        long limitedTime = (endDate + DateUtil.ONEDAY_TO_MILLISECOND);
+        for(long cur = startDate; cur < limitedTime; cur += DateUtil.ONEDAY_TO_MILLISECOND) {
+            Evaluation evaluation = makeEvaluationByDate(habbit, cur);
             evalList.add(evaluation);
         }
         // 3) Insert evaluation
         evalDao.insertAll(evalList);
     }
 
-    private Evaluation makeEvaluationByDay(final Habbit habbit, long day) {
+    private Evaluation makeEvaluationByDate(final Habbit habbit, long date) {
         // - 1 record list
-        List<Record> recordList = recordDao.getRecordByHidAndTime(habbit.getId(), day, day + DateUtil.ONEDAY_TO_MILLISECOND-1);
+        List<Record> recordList = recordDao.getRecordByHidAndTime(habbit.getId(), date, date + DateUtil.ONEDAY_TO_MILLISECOND-1);
 
         // - 2 sum
         int sum = 0;
@@ -148,7 +179,7 @@ public class EvaluateWork{
                 break;
             case Habbit.TYPE_HABBIT_TIMER:
                 for (Record record : recordList) {
-                    if(record.getTerm() >0) {
+                    if(record.getTerm() > 0) {
                         sum += record.getTerm();
                     }
                 }
@@ -159,7 +190,7 @@ public class EvaluateWork{
         // - 3 calculate
         int result = habbit.getInitCost() + (sum * habbit.getPerCost());
         int rate = (int) ((result / (double) habbit.getGoalCost()) * 100);
-        return new Evaluation(habbit.getId(), day, result, rate);
+        return new Evaluation(habbit.getId(), date, result, rate);
     }
 
     private void updateHabbitResult(final Habbit habbit, int numOfDay) {

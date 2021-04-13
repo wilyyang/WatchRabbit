@@ -33,4 +33,7 @@ public final class AppConst {
 
     public static final int EVALUATION_30_DAYS = 30;
     public static final int EVALUATION_7_DAYS = 7;
+
+    public static final String WORK_PREF = "watchrabbit.pref.work";
+    public static final String WORK_PREF_RECENT_UPDATE_KEY = "watchrabbit.pref.work.recent";
 }
