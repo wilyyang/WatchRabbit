@@ -36,7 +36,7 @@ public interface EvaluationDao {
     Single<Integer> deleteEvaluationByIds(List<Integer> p_ids);
 
     @Query("DELETE FROM Evaluation WHERE hid IN (:p_hids)")
-    Single<Integer> deleteEvaluationByHids(List<Integer> p_hids);
+    int deleteEvaluationByHids(List<Integer> p_hids);
 
     @Query("DELETE FROM Evaluation WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end")
     int deleteEvaluationByTime(int p_hid, long p_start, long p_end);

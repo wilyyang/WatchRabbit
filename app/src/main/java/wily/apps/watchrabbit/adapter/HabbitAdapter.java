@@ -207,7 +207,6 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
                         if (mListener != null) {
                             mListener.onItemLongClick(Integer.parseInt(txId.getText().toString()));
                         }
-
                     }
                     return true;
                 }

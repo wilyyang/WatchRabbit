@@ -2,8 +2,6 @@ package wily.apps.watchrabbit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -11,22 +9,8 @@ import android.widget.LinearLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import io.reactivex.schedulers.Schedulers;
-import wily.apps.watchrabbit.data.dao.HabbitDao;
-import wily.apps.watchrabbit.data.dao.RecordDao;
-import wily.apps.watchrabbit.data.database.HabbitDatabase;
-import wily.apps.watchrabbit.data.database.RecordDatabase;
-import wily.apps.watchrabbit.data.entity.Habbit;
-import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.fragment.HabbitFragment;
 import wily.apps.watchrabbit.fragment.EvaluationFragment;
-import wily.apps.watchrabbit.service.HabbitService;
-import wily.apps.watchrabbit.util.DateUtil;
-import wily.apps.watchrabbit.util.DialogGetter;
-import wily.apps.watchrabbit.util.Utils;
 
 public class MainActivity extends AppCompatActivity {
     private FrameLayout frameLayout;

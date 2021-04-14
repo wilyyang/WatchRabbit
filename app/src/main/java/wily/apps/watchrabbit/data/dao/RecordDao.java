@@ -24,7 +24,7 @@ public interface RecordDao {
     int deleteRecordByIds(List<Long> p_ids);
 
     @Query("DELETE FROM Record WHERE hid IN (:p_hids)")
-    Single<Integer> deleteRecordByHids(List<Integer> p_hids);
+    int deleteRecordByHids(List<Integer> p_hids);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<Long> insertSingle(Record record);

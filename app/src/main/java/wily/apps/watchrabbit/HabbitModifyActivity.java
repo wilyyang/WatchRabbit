@@ -16,7 +16,6 @@ import android.widget.Switch;
 
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -48,7 +47,6 @@ public class HabbitModifyActivity extends AppCompatActivity {
     private int type = Habbit.TYPE_HABBIT_CHECK;
     private int mode = AppConst.HABBIT_MODIFY_MODE_ADD;
     private int id = -1;
-    private int state = -1;
 
     private final int maxPickerValue = 100;
     private final int minPickerValue = -100;
@@ -110,14 +108,11 @@ public class HabbitModifyActivity extends AppCompatActivity {
         btnCancel = findViewById(R.id.btn_habbit_modify_cancel);
         btnCancel.setOnClickListener(onClickListener);
 
-        changeViewAtType(Habbit.TYPE_HABBIT_CHECK);
+        radioBtn_check.setChecked(true);
+        radioBtn_timer.setChecked(false);
         if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
             setUIData(id);
         }
-
-        // Event Start
-        radioBtn_check.setChecked(true);
-        radioBtn_timer.setChecked(false);
     }
 
     private void numberPickerInit(NumberPicker numberPicker){
@@ -184,8 +179,6 @@ public class HabbitModifyActivity extends AppCompatActivity {
             }
             radioBtn_check.setEnabled(false);
             radioBtn_timer.setEnabled(false);
-
-            state = habbit.getState();
         }
     }
 
@@ -205,6 +198,8 @@ public class HabbitModifyActivity extends AppCompatActivity {
     };
 
     private void addOrUpdateHabbit(){
+
+        // 1) attribute set
         int type = this.type;
         String title = (!etTitleHabbit.getText().toString().equals("") ? etTitleHabbit.getText().toString() : "Unknown");
         boolean active = switchHabbit.isChecked();
@@ -222,55 +217,47 @@ public class HabbitModifyActivity extends AppCompatActivity {
                 perCost = numberPickerPer_timer.getValue()+ minPickerValue;
                 break;
         }
+        final int finalPerCost = perCost;
 
-        if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
-            state = (type == Habbit.TYPE_HABBIT_CHECK) ? Habbit.STATE_CHECK : Habbit.STATE_TIMER_WAIT;
-        }
-
+        // 2) process DB
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
-        if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
-            long currentTime = System.currentTimeMillis();
-            habbitDB.habbitDao().insertSingle(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost, state, -1)).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(item -> afterUpdateHabbit(item, type, title, priority, active));
-        } else if (mode == AppConst.HABBIT_MODIFY_MODE_UPDATE) {
-
-            int finalPerCost = perCost;
-            Completable.create(subscriber -> {
+        Single.create(subscriber -> {
+            if (mode == AppConst.HABBIT_MODIFY_MODE_UPDATE) {
                 habbitDB.habbitDao().updateHabbit(id, type, title, priority, active, goalCost, initCost, finalPerCost);
+
                 EvaluateWork work = new EvaluateWork(HabbitModifyActivity.this);
                 work.work(EvaluateWork.WORK_TYPE_REPLACE_HABBIT, id, -1);
-                subscriber.onComplete();
-            }).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(() -> {
-                        afterUpdateHabbit(id, type, title, priority, active);
-                    });
-        }
+
+            }else if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
+                long currentTime = System.currentTimeMillis();
+                int state = (type == Habbit.TYPE_HABBIT_CHECK) ? Habbit.STATE_CHECK : Habbit.STATE_TIMER_WAIT;
+                id = (int) habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, finalPerCost, state, -1));
+            }
+
+            List<Habbit> habbits = habbitDB.habbitDao().getHabbit(id);
+            if(!habbits.isEmpty()){
+                subscriber.onSuccess(habbits.get(0));
+            }else{
+                subscriber.onError(new Throwable());
+            }
+
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(habbit -> afterUpdateHabbit((Habbit) habbit));
     }
 
-    private void afterUpdateHabbit(long id, int type, String title, int priority, boolean active){
-        sendServiceHabbit(id, type, title, priority, active);
-        finish();
-    }
+    private void afterUpdateHabbit(Habbit habbit){
+        if(Utils.isServiceRunning(HabbitModifyActivity.this, HabbitService.class.getName())) {
+            Intent intent = new Intent(HabbitModifyActivity.this, HabbitService.class);
+            intent.putExtra(AppConst.INTENT_SERVICE_HABBIT, habbit);
 
-    private void sendServiceHabbit(long id, int type, String title, int priority, boolean active){
-        if(Utils.isServiceRunning(HabbitModifyActivity.this, HabbitService.class.getName())){
-            Intent intent = new Intent(getApplicationContext(), HabbitService.class);
-            intent.putExtra(AppConst.INTENT_SERVICE_HABBIT_ID, (int)id);
-            intent.putExtra(AppConst.INTENT_SERVICE_TYPE, type);
-            intent.putExtra(AppConst.INTENT_SERVICE_TITLE, title);
-            intent.putExtra(AppConst.INTENT_SERVICE_PRIORITY, priority);
-            intent.putExtra(AppConst.INTENT_SERVICE_ACTIVE, active);
-            intent.putExtra(AppConst.INTENT_SERVICE_STATE, state);
-
-            if(mode == AppConst.HABBIT_MODIFY_MODE_ADD && active == true){
+            if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
                 intent.setAction(HabbitService.HABBIT_SERVICE_ADD);
-                startService(intent);
             }else if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
                 intent.setAction(HabbitService.HABBIT_SERVICE_UPDATE);
-                startService(intent);
             }
+            startService(intent);
         }
+        finish();
     }
 }

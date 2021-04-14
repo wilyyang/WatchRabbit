@@ -18,10 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.HabbitModifyActivity;
 import wily.apps.watchrabbit.MainActivity;
@@ -52,6 +51,7 @@ public class HabbitFragment extends Fragment {
     private Button btnDeleteCancel;
 
     private AlertDialog dialog;
+
     // UI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,14 +75,6 @@ public class HabbitFragment extends Fragment {
         btnSelectMode = view.findViewById(R.id.btn_habbit_select_mode);
         btnSelectMode.setOnClickListener(onClickListener);
 
-        layoutDeleteBtn = view.findViewById(R.id.layout_habbit_btn_delete);
-
-        btnHabbitDelete = view.findViewById(R.id.btn_habbit_delete);
-        btnHabbitDelete.setOnClickListener(onClickListener);
-
-        btnDeleteCancel = view.findViewById(R.id.btn_habbit_delete_cancel);
-        btnDeleteCancel.setOnClickListener(onClickListener);
-
         checkboxHabbitAll = view.findViewById(R.id.check_box_habbit_all);
         checkboxHabbitAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -92,6 +84,14 @@ public class HabbitFragment extends Fragment {
                 }
             }
         });
+
+        layoutDeleteBtn = view.findViewById(R.id.layout_habbit_btn_delete);
+
+        btnHabbitDelete = view.findViewById(R.id.btn_habbit_delete);
+        btnHabbitDelete.setOnClickListener(onClickListener);
+
+        btnDeleteCancel = view.findViewById(R.id.btn_habbit_delete_cancel);
+        btnDeleteCancel.setOnClickListener(onClickListener);
     }
 
     private void setSelectableMode(boolean mode){
@@ -130,7 +130,6 @@ public class HabbitFragment extends Fragment {
         habbitDB.habbitDao().getAllSingle()
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> afterGetHabbit((ArrayList<Habbit>) item));
-
     }
 
     private void afterGetHabbit(ArrayList<Habbit> list){
@@ -151,13 +150,14 @@ public class HabbitFragment extends Fragment {
         RecordDatabase recordDB = RecordDatabase.getAppDatabase(getContext());
         EvaluationDatabase evalDB = EvaluationDatabase.getAppDatabase(getContext());
 
-        Single singleHabbit = habbitDB.habbitDao().deleteHabbitByIds(list);
-        Single singleRecord = recordDB.recordDao().deleteRecordByHids(list);
-        Single singleEval = evalDB.evaluationDao().deleteEvaluationByHids(list);
-        Single.concat(singleHabbit, singleRecord, singleEval)
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(item -> afterDeleteHabbit(list));
-
+        Completable.create(subscriber -> {
+            habbitDB.habbitDao().deleteHabbitByIds(list);
+            recordDB.recordDao().deleteRecordByHids(list);
+            evalDB.evaluationDao().deleteEvaluationByHids(list);
+            subscriber.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> afterDeleteHabbit(list));
     }
 
     private void afterDeleteHabbit(List<Integer> list){

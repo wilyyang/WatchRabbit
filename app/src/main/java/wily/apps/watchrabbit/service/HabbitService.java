@@ -46,21 +46,12 @@ public class HabbitService extends Service {
                     exitService();
                     break;
                 case HABBIT_SERVICE_ADD:
-                    int add_id = intent.getIntExtra(AppConst.INTENT_SERVICE_HABBIT_ID, -1);
-                    int add_type = intent.getIntExtra(AppConst.INTENT_SERVICE_TYPE, -1);
-                    String add_title = intent.getStringExtra(AppConst.INTENT_SERVICE_TITLE);
-                    int add_priority = intent.getIntExtra(AppConst.INTENT_SERVICE_PRIORITY, -1);
-                    int add_state = intent.getIntExtra(AppConst.INTENT_SERVICE_STATE, -1);
-                    addNotification(add_id, add_type, add_title, add_priority, add_state);
+                    Habbit habbitAdd = (Habbit) intent.getSerializableExtra(AppConst.INTENT_SERVICE_HABBIT);
+                    addNotification(habbitAdd);
                     break;
                 case HABBIT_SERVICE_UPDATE:
-                    int up_id = intent.getIntExtra(AppConst.INTENT_SERVICE_HABBIT_ID, -1);
-                    int up_type = intent.getIntExtra(AppConst.INTENT_SERVICE_TYPE, -1);
-                    String up_title = intent.getStringExtra(AppConst.INTENT_SERVICE_TITLE);
-                    int up_priority = intent.getIntExtra(AppConst.INTENT_SERVICE_PRIORITY, -1);
-                    boolean up_active = intent.getBooleanExtra(AppConst.INTENT_SERVICE_ACTIVE, false);
-                    int up_state = intent.getIntExtra(AppConst.INTENT_SERVICE_STATE, -1);
-                    updateNotification(up_id, up_type, up_title, up_priority, up_active, up_state);
+                    Habbit habbitUpdate = (Habbit) intent.getSerializableExtra(AppConst.INTENT_SERVICE_HABBIT);
+                    updateNotification(habbitUpdate.getId(), habbitUpdate.getType(), habbitUpdate.getTitle(), habbitUpdate.getPriority(), habbitUpdate.isActive(), habbitUpdate.getState());
                     break;
                 case HABBIT_SERVICE_DELETE:
                     ArrayList<Integer> delete_list = intent.getIntegerArrayListExtra(AppConst.INTENT_SERVICE_DELETE_LIST);
@@ -126,12 +117,12 @@ public class HabbitService extends Service {
     }
 
     // 4. HABBIT_SERVICE_ADD
-    private void addNotification(int id, int type, String title, int priority, int state){
-        if(id != -1){
-            HabbitNotification noti = new HabbitNotification(HabbitService.this, id, type, title, priority, state);
+    private void addNotification(Habbit habbit){
+        if(habbit.getId() != -1 && habbit.isActive()){
+            HabbitNotification noti = new HabbitNotification(HabbitService.this, habbit.getId(), habbit.getType(), habbit.getTitle(), habbit.getPriority(), habbit.getState());
             notiList.add(noti);
             noti.sendNotification("Notification init");
-            mainNoti.sendNotification("#"+id+" "+title+" noti added");
+            mainNoti.sendNotification("#"+habbit.getId()+" "+habbit.getTitle()+" noti added");
         }
     }
 

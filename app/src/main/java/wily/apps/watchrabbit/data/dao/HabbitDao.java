@@ -20,6 +20,9 @@ public interface HabbitDao {
     List<Habbit> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insert(Habbit habbit);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     Single<Long> insertSingle(Habbit habbit);
 
     @Query("SELECT * FROM Habbit WHERE id=:p_id")
@@ -50,7 +53,7 @@ public interface HabbitDao {
     Single<Integer> getCurRecordId(int p_id);
 
     @Query("DELETE FROM Habbit WHERE id IN (:p_ids)")
-    Single<Integer> deleteHabbitByIds(List<Integer> p_ids);
+    int deleteHabbitByIds(List<Integer> p_ids);
 
     @Query("SELECT * FROM Habbit WHERE active=:p_active")
     Single<List<Habbit>> getHabbitActive(boolean p_active);

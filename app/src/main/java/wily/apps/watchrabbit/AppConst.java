@@ -8,6 +8,7 @@ public final class AppConst {
     public static final int HABBIT_MODIFY_MODE_ADD = 0;
     public static final int HABBIT_MODIFY_MODE_UPDATE = 1;
 
+    public static final String INTENT_SERVICE_HABBIT = "habbit";
     public static final String INTENT_SERVICE_HABBIT_ID = "habbit_id";
     public static final String INTENT_SERVICE_TITLE = "title";
     public static final String INTENT_SERVICE_TYPE = "type";

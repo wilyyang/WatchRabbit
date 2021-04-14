@@ -89,6 +89,7 @@ public class EvaluateWork{
         for(Habbit habbit : habbits) {
 
             // 2.1 Update and Replace
+            evalDao.deleteEvaluationByTime(habbits.get(0).getId(), recentUpdate);
             updateEvaluationByHabbit(habbit, numOfDay);
             replaceEvaluationByHabbit(habbit, 2);
 

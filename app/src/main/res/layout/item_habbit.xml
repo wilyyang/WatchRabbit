@@ -69,15 +69,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:textAlignment="center"
-            android:text="go"
-            android:textSize="@dimen/sp_base_s2"/>
-
+            android:text="init"
+            android:textSize="@dimen/sp_base_s3"/>
         <TextView
-            android:id="@+id/text_view_habbit_goal_cost"
+            android:id="@+id/text_view_habbit_init_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:text="0"
+            android:textAlignment="center"
             android:textSize="@dimen/sp_base_s2"/>
 
         <TextView
@@ -85,14 +85,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:textAlignment="center"
-            android:text="init"
-            android:textSize="@dimen/sp_base_s2"/>
+            android:text="goal"
+            android:textSize="@dimen/sp_base_s3"/>
+
         <TextView
-            android:id="@+id/text_view_habbit_init_cost"
+            android:id="@+id/text_view_habbit_goal_cost"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:text="0"
+            android:textAlignment="center"
             android:textSize="@dimen/sp_base_s2"/>
 
         <TextView
@@ -101,7 +103,7 @@
             android:layout_weight="0.4"
             android:textAlignment="center"
             android:text="per"
-            android:textSize="@dimen/sp_base_s2"/>
+            android:textSize="@dimen/sp_base_s3"/>
 
         <TextView
             android:id="@+id/text_view_habbit_per_cost"
@@ -109,6 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:text="0"
+            android:textAlignment="center"
             android:textSize="@dimen/sp_base_s2"/>
     </LinearLayout>
 

@@ -11,8 +11,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.data.dao.HabbitDao;
@@ -28,7 +26,6 @@ import wily.apps.watchrabbit.util.Utils;
 
 public class SplashActivity extends AppCompatActivity {
     private Dialog dialog;
-    boolean init = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +42,7 @@ public class SplashActivity extends AppCompatActivity {
             subscriber.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                    dialog.dismiss();
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
+                .subscribe(() -> afterBackgroundWork());
     }
 
     private void createHabbitService() {
@@ -62,16 +54,20 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void onBackgroundWork(){
-        if(init == false){
-            init = true;
+        long sTime = DateUtil.getDateLong(2021, Calendar.APRIL, 4, 0, 0, 0);
+        long cTime = System.currentTimeMillis();
+        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
+        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
 
-            long sTime = DateUtil.getDateLong(2021, Calendar.APRIL, 4, 0, 0, 0);
-            long cTime = System.currentTimeMillis();
-            addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
-            addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
-        }
         EvaluateWork work = new EvaluateWork(SplashActivity.this);
         work.work(EvaluateWork.WORK_TYPE_UPDATE_ALL, -1, -1);
+    }
+
+    private void afterBackgroundWork(){
+        dialog.dismiss();
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     // TEMPO
