@@ -44,7 +44,6 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        initTopEvaluationHabbit();
         dialog = DialogGetter.getProgressDialog(EvaluationHabbitActivity.this, getString(R.string.base_dialog_database_inprogress));
 
         LinearLayoutManager layoutMgr = new LinearLayoutManager(EvaluationHabbitActivity.this);
@@ -52,16 +51,16 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
         evaluationRecyclerView.setLayoutManager(layoutMgr);
     }
 
-    private void initTopEvaluationHabbit(){
+    private void initTopEvaluationHabbit(Habbit habbit){
         View view = findViewById(R.id.include_eval_habbit_top);
-        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_title)).setText(""+evaluationHabbit.getTitle());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_title)).setText(""+habbit.getTitle());
 
-        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_30_result)).setText(""+evaluationHabbit.getDay30ResultCost());
-        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_30_achive)).setText(""+evaluationHabbit.getDay30AchiveRate());
-        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_7_result)).setText(""+evaluationHabbit.getDay7ResultCost());
-        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_7_achive)).setText(""+evaluationHabbit.getDay7AchiveRate());
-        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_today_result)).setText(""+evaluationHabbit.getCurrentResultCost());
-        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_today_achive)).setText(""+evaluationHabbit.getCurrentAchiveRate());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_30_result)).setText(""+habbit.getDay30ResultCost());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_30_achive)).setText(""+habbit.getDay30AchiveRate());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_7_result)).setText(""+habbit.getDay7ResultCost());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_day_7_achive)).setText(""+habbit.getDay7AchiveRate());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_today_result)).setText(""+habbit.getCurrentResultCost());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_habbit_today_achive)).setText(""+habbit.getCurrentAchiveRate());
     }
 
     @Override

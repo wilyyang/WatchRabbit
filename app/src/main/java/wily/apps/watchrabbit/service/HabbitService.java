@@ -1,6 +1,7 @@
 package wily.apps.watchrabbit.service;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -51,7 +52,7 @@ public class HabbitService extends Service {
                     break;
                 case HABBIT_SERVICE_UPDATE:
                     Habbit habbitUpdate = (Habbit) intent.getSerializableExtra(AppConst.INTENT_SERVICE_HABBIT);
-                    updateNotification(habbitUpdate.getId(), habbitUpdate.getType(), habbitUpdate.getTitle(), habbitUpdate.getPriority(), habbitUpdate.isActive(), habbitUpdate.getState());
+                    updateNotification(habbitUpdate);
                     break;
                 case HABBIT_SERVICE_DELETE:
                     ArrayList<Integer> delete_list = intent.getIntegerArrayListExtra(AppConst.INTENT_SERVICE_DELETE_LIST);
@@ -127,25 +128,24 @@ public class HabbitService extends Service {
     }
 
     // 5. HABBIT_SERVICE_UPDATE
-    private void updateNotification(int id, int type, String title, int priority, boolean active, int state){
-        if(id != -1){
-            int idx = notiList.indexOf(HabbitNotification.getDummy(id));
-            HabbitNotification noti = notiList.get(idx);
-            if(noti != null){
-                if(active){
-                    noti.changeNotiInfo(title, priority);
+    private void updateNotification(Habbit habbit){
+        if(habbit.getId() != -1){
+            int idx = notiList.indexOf(HabbitNotification.getDummy(habbit.getId()));
+
+            if(idx > -1){
+                HabbitNotification noti = notiList.get(idx);
+                if(habbit.isActive()){
+                    noti.changeNotiInfo(habbit.getTitle(), habbit.getPriority());
                 }else{
                     noti.cancel();
                     notiList.remove(idx);
-                    mainNoti.sendNotification("#"+id+" "+title+" noti disabled");
+                    mainNoti.sendNotification("#"+habbit.getId()+" "+habbit.getTitle()+" noti disabled");
                 }
-            }else{
-                if(active){
-                    HabbitNotification newNoti = new HabbitNotification(HabbitService.this, id, type, title, priority, state);
-                    notiList.add(newNoti);
-                    noti.sendNotification("Notification init");
-                    mainNoti.sendNotification("#"+id+" "+title+" noti actived");
-                }
+            }else if(habbit.isActive()){
+                HabbitNotification newNoti = new HabbitNotification(HabbitService.this, habbit.getId(), habbit.getType(), habbit.getTitle(), habbit.getPriority(), habbit.getState());
+                notiList.add(newNoti);
+                newNoti.sendNotification("Notification init");
+                mainNoti.sendNotification("#"+habbit.getId()+" "+habbit.getTitle()+" noti actived");
             }
         }
     }
