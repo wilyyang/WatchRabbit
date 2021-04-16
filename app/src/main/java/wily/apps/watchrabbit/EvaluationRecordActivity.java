@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,13 +15,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.adapter.RecordAdapter;
+import wily.apps.watchrabbit.data.database.EvaluationDatabase;
+import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
@@ -46,9 +47,10 @@ public class EvaluationRecordActivity extends AppCompatActivity {
 
     private AlertDialog dialog;
 
-    private Evaluation evaluation;
-    private Habbit habbit;
-    private long date;
+    private Evaluation mEvaluation;
+    private Habbit mHabbit;
+    private long eid;
+    private int hid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +58,14 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_evaluation_record);
 
         Intent intent = getIntent();
-        evaluation = (Evaluation) intent.getSerializableExtra(AppConst.INTENT_EVAL_EVALUATION);
-        habbit = (Habbit) intent.getSerializableExtra(AppConst.INTENT_EVAL_HABBIT);
-        date = evaluation.getTime();
+        eid = intent.getLongExtra(AppConst.INTENT_EVAL_EVALUATION_ID, -1);
+        hid = intent.getIntExtra(AppConst.INTENT_EVAL_HABBIT_ID, -1);
 
         initView();
     }
 
     private void initView() {
-        initTopEvaluation();
-
         dialog = DialogGetter.getProgressDialog(EvaluationRecordActivity.this, getString(R.string.base_dialog_database_inprogress));
-
-        ((TextView)findViewById(R.id.text_view_eval_record_title)).setText("일일 기록 : "+habbit.getTitle());
 
         recordLayoutRecycler = findViewById(R.id.layout_eval_record_recycler);
 
@@ -101,16 +98,66 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         });
     }
 
-    private void initTopEvaluation(){
-        View view = findViewById(R.id.include_eval_record_top);
-        ((TextView)view.findViewById(R.id.text_view_evaluation_date_id)).setText(""+evaluation.getId());
-        ((TextView)view.findViewById(R.id.text_view_evaluation_date_date)).setText(DateUtil.getDateStringDayLimit(evaluation.getTime()));
-        ((TextView)view.findViewById(R.id.text_view_evaluation_date_result)).setText(""+evaluation.getResultCost());
-        ((TextView)view.findViewById(R.id.text_view_evaluation_date_achive)).setText(""+evaluation.getAchiveRate());
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // if Selectable mode, not load data
+        if( !(recordAdapter != null && recordAdapter.isSelectableMode()) ){
+            loadRecords();
+        }
     }
 
-    private void setSelectableMode(boolean mode){
+    // Access Data
+    private void loadRecords(){
+        dialog.show();
 
+        HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(EvaluationRecordActivity.this);
+        EvaluationDatabase evalDB = EvaluationDatabase.getAppDatabase(EvaluationRecordActivity.this);
+        RecordDatabase recordDB = RecordDatabase.getAppDatabase(EvaluationRecordActivity.this);
+
+        Single.create(subscriber -> {
+            List<Habbit> habbits = habbitDB.habbitDao().getHabbit(hid);
+            if(!habbits.isEmpty()){
+                mHabbit = habbits.get(0);
+            }
+            List<Evaluation> evaluations = evalDB.evaluationDao().getEvaluation(eid);
+            if(!evaluations.isEmpty()){
+                mEvaluation = evaluations.get(0);
+            }
+
+            List<Record> recordList = recordDB.recordDao().getRecordByHidAndTime(mHabbit.getId(), mEvaluation.getTime(), (mEvaluation.getTime()+ DateUtil.ONEDAY_TO_MILLISECOND-1));
+            subscriber.onSuccess(recordList);
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(recordList -> {
+                    initTopEvaluation(mEvaluation);
+                    afterRecordGetAll((List<Record>) recordList);
+                    dialog.dismiss();
+                });
+        }
+
+    private void initTopEvaluation(Evaluation eval){
+        ((TextView)findViewById(R.id.text_view_eval_record_title)).setText("일일 기록 : "+mHabbit.getTitle());
+
+        View view = findViewById(R.id.include_eval_record_top);
+        ((TextView)view.findViewById(R.id.text_view_evaluation_date_id)).setText(""+eval.getId());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_date_date)).setText(DateUtil.getDateStringDayLimit(mEvaluation.getTime()));
+        ((TextView)view.findViewById(R.id.text_view_evaluation_date_result)).setText(""+mEvaluation.getResultCost());
+        ((TextView)view.findViewById(R.id.text_view_evaluation_date_achive)).setText(""+mEvaluation.getAchiveRate());
+    }
+
+    private void afterRecordGetAll(List<Record> recordList){
+        recordAdapter = new RecordAdapter(EvaluationRecordActivity.this, (ArrayList<Record>)recordList);
+        recordAdapter.setOnItemClickListener(onItemClickListener);
+        recordRecyclerView.setAdapter(recordAdapter);
+        recordAdapter.notifyDataSetChanged();
+        dialog.dismiss();
+    }
+
+
+    // Record Item
+    private void setSelectableMode(boolean mode){
         if(mode){
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 16f);
             recordLayoutRecycler.setLayoutParams(params);
@@ -131,29 +178,6 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if( !(recordAdapter != null && recordAdapter.isSelectableMode()) ){
-            loadRecords();
-        }
-    }
-
-    // Access Data
-    private void loadRecords(){
-        dialog.show();
-        RecordDatabase recordDB = RecordDatabase.getAppDatabase(EvaluationRecordActivity.this);
-        recordDB.recordDao().getRecordByHidAndTimeSingle(habbit.getId(), date, (date+ DateUtil.ONEDAY_TO_MILLISECOND-1) ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(item -> afterRecordGetAll(item));
-    }
-
-    private void afterRecordGetAll(List<Record> recordList){
-        recordAdapter = new RecordAdapter(EvaluationRecordActivity.this, (ArrayList<Record>)recordList);
-        recordAdapter.setOnItemClickListener(onItemClickListener);
-        recordRecyclerView.setAdapter(recordAdapter);
-        recordAdapter.notifyDataSetChanged();
-        dialog.dismiss();
-    }
-
     private void deleteSelectRecord() {
         dialog.show();
 
@@ -163,7 +187,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         Completable.create(subscriber -> {
             recordDB.recordDao().deleteRecordByIds(list);
             EvaluateWork work = new EvaluateWork(EvaluationRecordActivity.this);
-            work.work(EvaluateWork.WORK_TYPE_REPLACE_EVALUATION, habbit.getId(), date);
+            work.work(EvaluateWork.WORK_TYPE_REPLACE_EVALUATION, mHabbit.getId(), mEvaluation.getTime());
             subscriber.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -181,7 +205,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.btn_eval_record_add:
-                    RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, habbit.getId(), habbit.getType(), habbit.getTitle()+" ("+DateUtil.getDateStringDayLimit(date)+")", -1, date, -1, true);
+                    RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, mHabbit.getId(), mHabbit.getType(), mHabbit.getTitle()+" ("+DateUtil.getDateStringDayLimit(mEvaluation.getTime())+")", -1, mEvaluation.getTime(), -1, true);
                     recordModifyDialog.show();
                     break;
                 case R.id.btn_eval_record_select_mode:
@@ -214,7 +238,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
             if(type == Habbit.TYPE_HABBIT_TIMER && term == -1){
                 return;
             }
-            RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, habbit.getId(), habbit.getType(),  habbit.getTitle()+" ("+DateUtil.getDateStringDayLimit(date)+")", id, time, term, false);
+            RecordModifyDialog recordModifyDialog = new RecordModifyDialog(EvaluationRecordActivity.this, mHabbit.getId(), mHabbit.getType(),  mHabbit.getTitle()+" ("+DateUtil.getDateStringDayLimit(mEvaluation.getTime())+")", id, time, term, false);
             recordModifyDialog.show();
         }
 

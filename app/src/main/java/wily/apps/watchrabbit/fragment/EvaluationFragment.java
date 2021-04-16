@@ -25,14 +25,13 @@ import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.util.DateUtil;
 import wily.apps.watchrabbit.util.DialogGetter;
 
-import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_FRAG_EVALUATION_HABBIT;
+import static wily.apps.watchrabbit.AppConst.INTENT_EVAL_FRAG_ID;
 
 public class EvaluationFragment extends Fragment {
     private EvaluationHabbitAdapter evaluationHabbitAdapter;
     private RecyclerView evaluationHabbitRecyclerView;
 
     private AlertDialog dialog;
-
     private View includeEvalTotalTop;
 
     @Override
@@ -109,9 +108,9 @@ public class EvaluationFragment extends Fragment {
     private EvaluationHabbitAdapter.OnEvaluationHabbitItemClickListener onItemClickListener = new EvaluationHabbitAdapter.OnEvaluationHabbitItemClickListener() {
 
         @Override
-        public void onItemClick(Habbit evaluationHabbit) {
+        public void onItemClick(int hid) {
             Intent intent = new Intent(getActivity(), EvaluationHabbitActivity.class);
-            intent.putExtra(INTENT_EVAL_FRAG_EVALUATION_HABBIT, evaluationHabbit);
+            intent.putExtra(INTENT_EVAL_FRAG_ID, hid);
             startActivity(intent);
         }
 

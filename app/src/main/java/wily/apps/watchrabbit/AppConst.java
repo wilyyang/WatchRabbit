@@ -25,7 +25,7 @@ public final class AppConst {
     public static final String INTENT_EVAL_FRAG_TYPE = "type";
     public static final String INTENT_EVAL_FRAG_TITLE = "title";
 
-    public static final String INTENT_EVAL_EVALUATION= "evaluation";
+    public static final String INTENT_EVAL_EVALUATION_ID= "evaluation_id";
     public static final String INTENT_EVAL_HABBIT = "habbit";
     public static final String INTENT_EVAL_HABBIT_ID = "hid";
     public static final String INTENT_EVAL_HABBIT_TYPE = "type";

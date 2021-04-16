@@ -18,7 +18,7 @@ public interface EvaluationDao {
     Single<List<Evaluation>> getAll();
 
     @Query("SELECT * FROM Evaluation WHERE id=:p_id")
-    Single<List<Evaluation>> getEvaluation(int p_id);
+    List<Evaluation> getEvaluation(long p_id);
 
     @Query("SELECT * FROM Evaluation WHERE hid=:p_hid")
     Single<List<Evaluation>> getEvaluationByHid(int p_hid);

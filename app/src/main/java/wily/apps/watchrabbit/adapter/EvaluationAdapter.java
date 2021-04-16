@@ -29,8 +29,8 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
 
     // Listener
     public interface OnEvaluationItemClickListener{
-        void onItemClick(Evaluation eval);
-        void onItemLongClick(int pos);
+        void onItemClick(long id);
+        void onItemLongClick(long id);
     }
 
     // Base
@@ -95,12 +95,11 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
             this.txInitCost = view.findViewById(R.id.text_view_evaluation_date_result);
             this.txAchive = view.findViewById(R.id.text_view_evaluation_date_achive);
 
-
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mListener != null) {
-                        mListener.onItemClick(evaluation);
+                        mListener.onItemClick(evaluation.getId());
                     }
                 }
             });
@@ -109,7 +108,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
                 @Override
                 public boolean onLongClick(View view) {
                     if (mListener != null) {
-                        mListener.onItemLongClick(Integer.parseInt(txId.getText().toString()));
+                        mListener.onItemLongClick(evaluation.getId());
                     }
                     return true;
                 }
