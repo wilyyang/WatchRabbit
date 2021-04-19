@@ -19,6 +19,7 @@ import java.util.List;
 import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.util.Utils;
 
 public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitViewHolder>{
     private ArrayList<Habbit> mList;
@@ -62,7 +63,7 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         holder.habbit = pHabbit;
 
         holder.txId.setText(""+pHabbit.getId());
-        setIcon(holder.imageType, pHabbit.getType());
+        Utils.setIcon(holder.imageType, pHabbit.getType());
         holder.txTitle.setText(pHabbit.getTitle());
         holder.txPriority.setText(""+pHabbit.getPriority());
         holder.txGoalCost.setText(""+pHabbit.getGoalCost());
@@ -88,17 +89,6 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
             holder.checkBoxSelect.setChecked(true);
         } else {
             holder.checkBoxSelect.setChecked(false);
-        }
-    }
-
-    private void setIcon(ImageView image, int type){
-        switch (type){
-            case Habbit.TYPE_HABBIT_CHECK:
-                image.setImageResource(R.drawable.ic_type_check);
-                break;
-            case Habbit.TYPE_HABBIT_TIMER:
-                image.setImageResource(R.drawable.ic_type_timer);
-                break;
         }
     }
 

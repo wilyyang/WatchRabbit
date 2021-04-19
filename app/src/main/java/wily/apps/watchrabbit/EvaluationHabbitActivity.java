@@ -107,9 +107,9 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
     private EvaluationAdapter.OnEvaluationItemClickListener onItemClickListener = new EvaluationAdapter.OnEvaluationItemClickListener() {
 
         @Override
-        public void onItemClick(long id) {
+        public void onItemClick(long date) {
             Intent intent = new Intent(EvaluationHabbitActivity.this, EvaluationRecordActivity.class);
-            intent.putExtra(AppConst.INTENT_EVAL_EVALUATION_ID, id);
+            intent.putExtra(AppConst.INTENT_EVAL_EVALUATION_DATE, date);
             intent.putExtra(AppConst.INTENT_EVAL_HABBIT_ID, evaluationHabbit.getId());
             startActivity(intent);
         }

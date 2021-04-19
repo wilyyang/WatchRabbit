@@ -1,7 +1,6 @@
 package wily.apps.watchrabbit.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
+import wily.apps.watchrabbit.util.Utils;
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordViewHolder>{
     private ArrayList<Record> mList;
@@ -64,7 +62,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         holder.record = pRecord;
 
         holder.txId.setText(""+pRecord.getId());
-        setIcon(holder.imageType, pRecord.getType());
+        Utils.setIcon(holder.imageType, pRecord.getType());
         holder.txHid.setText(""+pRecord.getHid());
         holder.txTime.setText(DateUtil.getDateString(pRecord.getTime()));
 
@@ -93,17 +91,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
             holder.checkBoxSelect.setChecked(true);
         } else {
             holder.checkBoxSelect.setChecked(false);
-        }
-    }
-
-    private void setIcon(ImageView image, int type){
-        switch (type){
-            case Habbit.TYPE_HABBIT_CHECK:
-                image.setImageResource(R.drawable.ic_type_check);
-                break;
-            case Habbit.TYPE_HABBIT_TIMER:
-                image.setImageResource(R.drawable.ic_type_timer);
-                break;
         }
     }
 

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -27,6 +26,7 @@ import wily.apps.watchrabbit.data.database.RecordDatabase;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
+import wily.apps.watchrabbit.util.Utils;
 
 public class RecordModifyDialog extends Dialog {
     private RecordModifyDialog mDialog;
@@ -81,13 +81,87 @@ public class RecordModifyDialog extends Dialog {
         initUIComponent();
     }
 
+    // UI
+    private void initUIComponent(){
+        // Parent Layout
+        WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width  = (int)(size.x * 0.95f);
+        int height = (int)(size.y * 0.7f);
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        layoutParams.dimAmount = 0.8f;
+        layoutParams.width = width;
+        layoutParams.height = height;
+
+        Window window = getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        window.setAttributes(layoutParams);
+
+        // Child UI
+        recordType = findViewById(R.id.image_view_record_dialog_type);
+        Utils.setIcon(recordType, mType);
+
+        recordTitle = findViewById(R.id.text_view_record_dialog_title);
+        recordTitle.setText(habbitTitle);
+
+        timePickerRecord = findViewById(R.id.time_picker_record_dialog);
+
+        txTermLabel = findViewById(R.id.text_view_record_dialog_term_label);
+        numberPickerRecord = findViewById(R.id.number_picker_record_dialog_term);
+        Utils.numberPickerInit(numberPickerRecord, minPickerMinuteValue, maxPickerMinuteValue);
+
+        if(mType == Habbit.TYPE_HABBIT_CHECK){
+            txTermLabel.setVisibility(View.GONE);
+            numberPickerRecord.setVisibility(View.GONE);
+        }else if(mType == Habbit.TYPE_HABBIT_TIMER){
+            txTermLabel.setVisibility(View.VISIBLE);
+            numberPickerRecord.setVisibility(View.VISIBLE);
+        }
+
+
+        btnCancel = findViewById(R.id.btn_record_dialog_cancel);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+
+        btnAdd = findViewById(R.id.btn_record_dialog_add);
+        if(isAdd){
+            btnAdd.setText(R.string.base_btn_add);
+            setRecord(mType, System.currentTimeMillis(), 1);
+        }
+        else {
+            btnAdd.setText(R.string.base_btn_update);
+            setRecord(mType, recordTime, (recordTerm/DateUtil.MILLISECOND_TO_MINUTE) );
+        }
+        btnAdd.setOnClickListener(addUpdateClickListener);
+    }
+
+    private void setRecord(int type, long time, long minuteTerm){
+        int hour = DateUtil.getDateNum(time, Calendar.HOUR_OF_DAY);
+        int minute = DateUtil.getDateNum(time, Calendar.MINUTE);
+
+        timePickerRecord.setHour(hour);
+        timePickerRecord.setMinute(minute);
+
+        if(type == Habbit.TYPE_HABBIT_TIMER){
+            numberPickerRecord.setValue((int)minuteTerm);
+        }
+    }
+
+    // Listener
     private View.OnClickListener addUpdateClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             RecordDatabase recordDB = RecordDatabase.getAppDatabase(mContext);
             long time = DateUtil.getDateLong(DateUtil.getDateNum(recordTime, Calendar.YEAR), DateUtil.getDateNum(recordTime, Calendar.MONTH), DateUtil.getDateNum(recordTime, Calendar.DATE),
                     timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
-            Log.d(AppConst.TAG, ""+habbitId+" "+habbitTitle+" " +DateUtil.getDateString(time)+ " - "+DateUtil.getDateString(recordTime));
 
             Completable.create(subscriber -> {
 
@@ -115,95 +189,4 @@ public class RecordModifyDialog extends Dialog {
                     });
         }
     };
-
-    // UI
-    private void initUIComponent(){
-        // Parent Layout
-        WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width  = (int)(size.x * 0.95f);
-        int height = (int)(size.y * 0.7f);
-
-        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        layoutParams.dimAmount = 0.8f;
-        layoutParams.width = width;
-        layoutParams.height = height;
-
-        Window window = getWindow();
-        window.setBackgroundDrawableResource(android.R.color.transparent);
-        window.setAttributes(layoutParams);
-
-        // Child UI
-        recordType = findViewById(R.id.image_view_record_dialog_type);
-        setIcon(recordType, mType);
-
-        recordTitle = findViewById(R.id.text_view_record_dialog_title);
-        recordTitle.setText(habbitTitle);
-
-        timePickerRecord = findViewById(R.id.time_picker_record_dialog);
-
-        txTermLabel = findViewById(R.id.text_view_record_dialog_term_label);
-        numberPickerRecord = findViewById(R.id.number_picker_record_dialog_term);
-        numberPickerInit(numberPickerRecord);
-
-        if(mType == Habbit.TYPE_HABBIT_CHECK){
-            txTermLabel.setVisibility(View.GONE);
-            numberPickerRecord.setVisibility(View.GONE);
-        }else if(mType == Habbit.TYPE_HABBIT_TIMER){
-            txTermLabel.setVisibility(View.VISIBLE);
-            numberPickerRecord.setVisibility(View.VISIBLE);
-        }
-
-        btnAdd = findViewById(R.id.btn_record_dialog_add);
-        btnCancel = findViewById(R.id.btn_record_dialog_cancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDialog.dismiss();
-            }
-        });
-
-        if(isAdd){
-            btnAdd.setText(R.string.base_btn_add);
-            setRecord(mType, System.currentTimeMillis(), 1);
-        }
-        else {
-            btnAdd.setText(R.string.base_btn_update);
-            setRecord(mType, recordTime, (recordTerm/DateUtil.MILLISECOND_TO_MINUTE) );
-        }
-        btnAdd.setOnClickListener(addUpdateClickListener);
-    }
-
-    private void setIcon(ImageView image, int type){
-        switch (type){
-            case Habbit.TYPE_HABBIT_CHECK:
-                image.setImageResource(R.drawable.ic_type_check);
-                break;
-            case Habbit.TYPE_HABBIT_TIMER:
-                image.setImageResource(R.drawable.ic_type_timer);
-                break;
-        }
-    }
-
-    private void numberPickerInit(NumberPicker numberPicker){
-        numberPicker.setMaxValue(maxPickerMinuteValue);
-        numberPicker.setMinValue(minPickerMinuteValue);
-        numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setValue(10);
-    }
-
-    private void setRecord(int type, long time, long minuteTerm){
-        int hour = DateUtil.getDateNum(time, Calendar.HOUR_OF_DAY);
-        int minute = DateUtil.getDateNum(time, Calendar.MINUTE);
-
-        timePickerRecord.setHour(hour);
-        timePickerRecord.setMinute(minute);
-
-        if(type == Habbit.TYPE_HABBIT_TIMER){
-            numberPickerRecord.setValue((int)minuteTerm);
-        }
-    }
 }

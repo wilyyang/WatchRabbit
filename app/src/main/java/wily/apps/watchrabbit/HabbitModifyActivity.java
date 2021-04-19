@@ -48,7 +48,6 @@ public class HabbitModifyActivity extends AppCompatActivity {
     private int mode = AppConst.HABBIT_MODIFY_MODE_ADD;
     private int id = -1;
 
-    private final int maxPickerValue = 100;
     private final int minPickerValue = -100;
 
     // UI
@@ -86,22 +85,20 @@ public class HabbitModifyActivity extends AppCompatActivity {
         });
 
         numberPickerPrio = findViewById(R.id.number_picker_habbit_prio);
-        numberPickerPrio.setMinValue(1);
-        numberPickerPrio.setMaxValue(9);
-        numberPickerPrio.setWrapSelectorWheel(false);
+        Utils.numberPickerInit(numberPickerPrio, 1, 9);
 
         numberPickerInit = findViewById(R.id.number_picker_habbit_init);
-        numberPickerInit(numberPickerInit);
+        Utils.numberPickerInitMinus50(numberPickerInit);
         numberPickerGoal = findViewById(R.id.number_picker_habbit_goal);
-        numberPickerInit(numberPickerGoal);
+        Utils.numberPickerInitMinus50(numberPickerGoal);
 
         layoutChild_check = findViewById(R.id.include_child_habbit_modify_check);
         layoutChild_timer = findViewById(R.id.include_child_habbit_modify_timer);
 
         numberPickerPer_check = findViewById(R.id.number_picker_check_per);
-        numberPickerInit(numberPickerPer_check);
+        Utils.numberPickerInitMinus50(numberPickerPer_check);
         numberPickerPer_timer = findViewById(R.id.number_picker_timer_per);
-        numberPickerInit(numberPickerPer_timer);
+        Utils.numberPickerInitMinus50(numberPickerPer_timer);
 
         btnSave = findViewById(R.id.btn_habbit_modify_save);
         btnSave.setOnClickListener(onClickListener);
@@ -113,19 +110,6 @@ public class HabbitModifyActivity extends AppCompatActivity {
         if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
             setUIData(id);
         }
-    }
-
-    private void numberPickerInit(NumberPicker numberPicker){
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(maxPickerValue - minPickerValue);
-        numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setFormatter(new NumberPicker.Formatter() {
-            @Override
-            public String format(int index) {
-                return Integer.toString(index + minPickerValue);
-            }
-        });
-        numberPicker.setValue((maxPickerValue - minPickerValue)/2);
     }
 
     private void changeViewAtType(int type){

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -49,7 +50,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
 
     private Evaluation mEvaluation;
     private Habbit mHabbit;
-    private long eid;
+    private long date;
     private int hid;
 
     @Override
@@ -58,7 +59,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_evaluation_record);
 
         Intent intent = getIntent();
-        eid = intent.getLongExtra(AppConst.INTENT_EVAL_EVALUATION_ID, -1);
+        date = intent.getLongExtra(AppConst.INTENT_EVAL_EVALUATION_DATE, -1);
         hid = intent.getIntExtra(AppConst.INTENT_EVAL_HABBIT_ID, -1);
 
         initView();
@@ -121,7 +122,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
             if(!habbits.isEmpty()){
                 mHabbit = habbits.get(0);
             }
-            List<Evaluation> evaluations = evalDB.evaluationDao().getEvaluation(eid);
+            List<Evaluation> evaluations = evalDB.evaluationDao().getEvaluationByTime(hid, date);
             if(!evaluations.isEmpty()){
                 mEvaluation = evaluations.get(0);
             }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.util.Utils;
 
 public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabbitAdapter.EvaluationHabbitViewHolder>{
     private ArrayList<Habbit> mList;
@@ -53,7 +54,7 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
     protected void setContent(EvaluationHabbitViewHolder holder, Habbit pEvalHabbit){
         holder.evaluationHabbit = pEvalHabbit;
         holder.txId.setText(""+pEvalHabbit.getId());
-        setIcon(holder.imageType, pEvalHabbit.getType());
+        Utils.setIcon(holder.imageType, pEvalHabbit.getType());
         holder.txTitle.setText(pEvalHabbit.getTitle());
 
         holder.txDay30Result.setText(""+pEvalHabbit.getDay30ResultCost());
@@ -62,17 +63,6 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
         holder.txDay7Achive.setText(""+pEvalHabbit.getDay7AchiveRate());
         holder.txTodayResult.setText(""+pEvalHabbit.getCurrentResultCost());
         holder.txTodayAchive.setText(""+pEvalHabbit.getCurrentAchiveRate());
-    }
-
-    private void setIcon(ImageView image, int type){
-        switch (type){
-            case Habbit.TYPE_HABBIT_CHECK:
-                image.setImageResource(R.drawable.ic_type_check);
-                break;
-            case Habbit.TYPE_HABBIT_TIMER:
-                image.setImageResource(R.drawable.ic_type_timer);
-                break;
-        }
     }
 
     @Override

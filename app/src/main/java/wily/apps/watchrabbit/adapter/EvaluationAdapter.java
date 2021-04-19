@@ -29,7 +29,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
 
     // Listener
     public interface OnEvaluationItemClickListener{
-        void onItemClick(long id);
+        void onItemClick(long date);
         void onItemLongClick(long id);
     }
 
@@ -99,7 +99,7 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
                 @Override
                 public void onClick(View view) {
                     if (mListener != null) {
-                        mListener.onItemClick(evaluation.getId());
+                        mListener.onItemClick(evaluation.getTime());
                     }
                 }
             });

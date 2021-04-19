@@ -35,13 +35,13 @@ public interface HabbitDao {
     int updateHabbit(int p_id, int p_type, String p_title, int p_prio, boolean p_act, int p_goalCost, int p_initCost, int p_perCost);
 
     @Query("SELECT state FROM Habbit WHERE id=:p_id")
-    Single<Integer> getHabbitState(int p_id);
+    int getHabbitState(int p_id);
 
     @Query("UPDATE Habbit SET state=:p_state WHERE id = :p_id")
-    Single<Integer> updateHabbitState(int p_id, int p_state);
+    int updateHabbitState(int p_id, int p_state);
 
     @Query("UPDATE Habbit SET curRecordId=:p_recordId WHERE id = :p_id")
-    Single<Integer> updateCurRecordId(int p_id, long p_recordId);
+    int updateCurRecordId(int p_id, long p_recordId);
 
     @Query("UPDATE Habbit SET currentResultCost=:p_currentResultCost, currentAchiveRate=:p_currentAchiveRate, day7ResultCost=:p_day7ResultCost, day7AchiveRate=:p_day7AchiveRate, day30ResultCost=:p_day30ResultCost, day30AchiveRate=:p_day30AchiveRate WHERE id = :p_id")
     int updateHabbitEvaluation(int p_id, long p_currentResultCost, long p_currentAchiveRate, long p_day7ResultCost, long p_day7AchiveRate, long p_day30ResultCost, long p_day30AchiveRate);
@@ -50,7 +50,7 @@ public interface HabbitDao {
     int updateHabbitEvaluationToday(int p_id, long p_currentResultCost, long p_currentAchiveRate);
 
     @Query("SELECT curRecordId FROM Habbit WHERE id=:p_id")
-    Single<Integer> getCurRecordId(int p_id);
+    long getCurRecordId(int p_id);
 
     @Query("DELETE FROM Habbit WHERE id IN (:p_ids)")
     int deleteHabbitByIds(List<Integer> p_ids);
