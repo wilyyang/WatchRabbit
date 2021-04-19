@@ -72,7 +72,7 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
             if(!habbits.isEmpty()){
                 evaluationHabbit = habbits.get(0);
             }
-            List<Evaluation> evalList = evalDB.evaluationDao().getEvaluationByHidAndTime(evaluationHabbit.getId(), startDate, endDate);
+            List<Evaluation> evalList = evalDB.evaluationDao().getEvaluationByHidAndTerm(evaluationHabbit.getId(), startDate, endDate);
             subscriber.onSuccess(evalList);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

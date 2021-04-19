@@ -2,7 +2,6 @@ package wily.apps.watchrabbit;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +66,7 @@ public class EvaluateWork{
                 }
                 break;
             case WORK_TYPE_REPLACE_EVALUATION:
-                evalDao.deleteEvaluationByTime(hid, date);
+                evalDao.deleteEvaluationByTerm(hid, date);
                 habbits = habbitDao.getHabbit(hid);
                 if(habbits.size() > 0){
                     evaluation = makeEvaluationByDate(habbits.get(0), date);
@@ -89,7 +88,7 @@ public class EvaluateWork{
         for(Habbit habbit : habbits) {
 
             // 2.1 Update and Replace
-            evalDao.deleteEvaluationByTime(habbits.get(0).getId(), recentUpdate);
+            evalDao.deleteEvaluationByTerm(habbits.get(0).getId(), recentUpdate);
             updateEvaluationByHabbit(habbit, numOfDay);
             replaceEvaluationByHabbit(habbit, 2);
 
@@ -122,7 +121,7 @@ public class EvaluateWork{
 
         // 1) Get evaluation by term all
         int idx = 0;
-        List<Evaluation> oldList = evalDao.getEvaluationByHidAndTime(habbit.getId(), startDate, endDate);
+        List<Evaluation> oldList = evalDao.getEvaluationByHidAndTerm(habbit.getId(), startDate, endDate);
 
         int size = oldList.size();
         Evaluation temp = null;
@@ -155,7 +154,7 @@ public class EvaluateWork{
         long startDate = Math.max(habbitDate, beforeDate);
 
         // 1) Delete evaluation by term all
-        evalDao.deleteEvaluationByTime(habbit.getId(), startDate, endDate);
+        evalDao.deleteEvaluationByTerm(habbit.getId(), startDate, endDate);
 
         // 2) Make evaluation by term all
         ArrayList<Evaluation> evalList = new ArrayList<>();
@@ -201,7 +200,7 @@ public class EvaluateWork{
         long startDate = Math.max(habbitDate, beforeDate);
 
         // 1) Get evaluation (numOfDay)
-        List<Evaluation> evalList = evalDao.getEvaluationByHidAndTimeDESC(habbit.getId(), startDate, endDate);
+        List<Evaluation> evalList = evalDao.getEvaluationByHidAndTermDESC(habbit.getId(), startDate, endDate);
 
         long p_currentResultCost = 0;
         long p_currentAchiveRate = 0;

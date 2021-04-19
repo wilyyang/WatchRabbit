@@ -86,7 +86,7 @@ public class HabbitService extends Service {
     // 2. HABBIT_SERVICE_INIT
     private void initService(){
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitService.this);
-        habbitDB.habbitDao().getHabbitActive(true).subscribeOn(Schedulers.io())
+        habbitDB.habbitDao().getHabbitActiveSingle(true).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(item -> afterGetHabbitActive(item));
     }
