@@ -8,6 +8,7 @@ import androidx.room.Query;
 import java.util.List;
 
 import wily.apps.watchrabbit.data.entity.Alarm;
+import wily.apps.watchrabbit.data.entity.Record;
 
 @Dao
 public interface AlarmDao {
@@ -31,6 +32,9 @@ public interface AlarmDao {
     // 2) Insert
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(Alarm alarm);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    List<Long> insertAll(List<Alarm> alarms);
 
     // 3) Update
     @Query("UPDATE Alarm SET time=:p_time, range=:p_range, cost=:p_cost WHERE id = :p_id")

@@ -13,10 +13,13 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import wily.apps.watchrabbit.data.dao.AlarmDao;
 import wily.apps.watchrabbit.data.dao.HabbitDao;
 import wily.apps.watchrabbit.data.dao.RecordDao;
+import wily.apps.watchrabbit.data.database.AlarmDatabase;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
+import wily.apps.watchrabbit.data.entity.Alarm;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.service.HabbitService;
@@ -56,8 +59,8 @@ public class SplashActivity extends AppCompatActivity {
     private void onBackgroundWork(){
         long sTime = DateUtil.getDateLong(2021, Calendar.APRIL, 4, 0, 0, 0);
         long cTime = System.currentTimeMillis();
-//        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
-//        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
+        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
+        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
 
         EvaluateWork work = new EvaluateWork(SplashActivity.this);
         work.work(EvaluateWork.WORK_TYPE_UPDATE_ALL, -1, -1);
@@ -75,6 +78,7 @@ public class SplashActivity extends AppCompatActivity {
         // 1) init
         HabbitDao habbitDao = HabbitDatabase.getAppDatabase(SplashActivity.this).habbitDao();
         RecordDao recordDao = RecordDatabase.getAppDatabase(SplashActivity.this).recordDao();
+        AlarmDao alarmDao = AlarmDatabase.getAppDatabase(SplashActivity.this).alarmDao();
         int count = 0;
 
         String typeStr = (type== Habbit.TYPE_HABBIT_CHECK)?"체크":"타임";
@@ -91,6 +95,11 @@ public class SplashActivity extends AppCompatActivity {
 
         // 3) insert habbits
         List<Long> idList = habbitDao.insertAll(habbits);
+        long[] sampleAlarm = {DateUtil.getDateLong(2021, 4, 20, 8, 30, 10),
+                DateUtil.getDateLong(2021, 4, 20, 11, 45, 14),
+                DateUtil.getDateLong(2021, 4, 20, 13, 25, 22),
+                DateUtil.getDateLong(2021, 4, 20, 16, 0, 10),
+                DateUtil.getDateLong(2021, 4, 20, 20, 11, 10)};
 
         for(long hhid : idList){
             // 3.1) Record sample
@@ -99,8 +108,17 @@ public class SplashActivity extends AppCompatActivity {
             for(int j = 0; j< recordNum; ++j){
                 records.add(new Record((int)hhid, type,start+(divTerm*j), 10 * DateUtil.MILLISECOND_TO_MINUTE));
             }
-            // 3.2) insert records
+            // insert records
             recordDao.insertAll(records);
+
+            // 3.2) Alarm sample
+            ArrayList<Alarm> alarms = new ArrayList<Alarm>();
+            for(int j = 0; j< 5; ++j){
+                alarms.add(new Alarm((int)hhid, sampleAlarm[j],30, 20));
+            }
+
+            // insert alarms
+            alarmDao.insertAll(alarms);
         }
 
         if(Utils.isServiceRunning(SplashActivity.this, HabbitService.class.getName())){

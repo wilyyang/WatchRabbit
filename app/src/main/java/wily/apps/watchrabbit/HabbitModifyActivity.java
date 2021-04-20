@@ -23,16 +23,9 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.adapter.AlarmAdapter;
-import wily.apps.watchrabbit.adapter.RecordAdapter;
-import wily.apps.watchrabbit.data.database.AlarmDatabase;
-import wily.apps.watchrabbit.data.database.EvaluationDatabase;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
-import wily.apps.watchrabbit.data.database.RecordDatabase;
-import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
-import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.service.HabbitService;
-import wily.apps.watchrabbit.util.DateUtil;
 import wily.apps.watchrabbit.util.Utils;
 
 public class HabbitModifyActivity extends AppCompatActivity {
@@ -61,8 +54,6 @@ public class HabbitModifyActivity extends AppCompatActivity {
 
     private AlarmAdapter alarmAdapter;
     private RecyclerView alarmRecyclerView;
-
-    private Button btnAlarmAdd;
 
     // UI
     @Override
@@ -122,12 +113,10 @@ public class HabbitModifyActivity extends AppCompatActivity {
         }
 
         // TEMP
-        LinearLayoutManager layoutMgr = new LinearLayoutManager(HabbitModifyActivity.this);
-        alarmRecyclerView = findViewById(R.id.recycler_view_alarm);
-        alarmRecyclerView.setLayoutManager(layoutMgr);
+//        LinearLayoutManager layoutMgr = new LinearLayoutManager(HabbitModifyActivity.this);
+//        alarmRecyclerView = findViewById(R.id.recycler_view_alarm);
+//        alarmRecyclerView.setLayoutManager(layoutMgr);
 
-        btnAlarmAdd = findViewById(R.id.btn_habbit_modify_alarm_add);
-        btnAlarmAdd.setOnClickListener(onClickListener);
     }
 
     private void changeViewAtType(int type){
