@@ -20,7 +20,7 @@ public interface RecordDao {
     List<Record> getAll();
 
     @Query("SELECT * FROM Record WHERE hid=:p_hid AND time BETWEEN :p_start AND :p_end ORDER BY time ASC")
-    List<Record> getRecordByHidAndTime(int p_hid, long p_start, long p_end);
+    List<Record> getRecordByHidAndTerm(int p_hid, long p_start, long p_end);
 
     // 1.2) Get
     @Query("SELECT * FROM Record WHERE id=:p_id")

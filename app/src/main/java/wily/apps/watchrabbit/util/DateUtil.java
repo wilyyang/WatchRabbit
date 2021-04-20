@@ -20,6 +20,11 @@ public class DateUtil {
         return format.format(new Date(time));
     }
 
+    public static String getTimeString(long time){
+        DateFormat format = new SimpleDateFormat("HH:mm:ss");
+        return format.format(new Date(time));
+    }
+
     public static String getDateStringDayLimit(long time){
         DateFormat format = new SimpleDateFormat("yy/MM/dd");
         return format.format(new Date(time));

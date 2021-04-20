@@ -169,7 +169,7 @@ public class EvaluateWork{
 
     private Evaluation makeEvaluationByDate(final Habbit habbit, long date) {
         // - 1 record list
-        List<Record> recordList = recordDao.getRecordByHidAndTime(habbit.getId(), date, date + DateUtil.ONEDAY_TO_MILLISECOND-1);
+        List<Record> recordList = recordDao.getRecordByHidAndTerm(habbit.getId(), date, date + DateUtil.ONEDAY_TO_MILLISECOND-1);
 
         // - 2 sum
         int sum = 0;

@@ -1,6 +1,8 @@
 package wily.apps.watchrabbit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -13,15 +15,24 @@ import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import java.util.List;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import wily.apps.watchrabbit.adapter.AlarmAdapter;
+import wily.apps.watchrabbit.adapter.RecordAdapter;
+import wily.apps.watchrabbit.data.database.AlarmDatabase;
+import wily.apps.watchrabbit.data.database.EvaluationDatabase;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
+import wily.apps.watchrabbit.data.database.RecordDatabase;
+import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
+import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.service.HabbitService;
+import wily.apps.watchrabbit.util.DateUtil;
 import wily.apps.watchrabbit.util.Utils;
 
 public class HabbitModifyActivity extends AppCompatActivity {
@@ -35,11 +46,9 @@ public class HabbitModifyActivity extends AppCompatActivity {
     private NumberPicker numberPickerPrio = null;
     private NumberPicker numberPickerInit = null;
     private NumberPicker numberPickerGoal = null;
+    private NumberPicker numberPickerPer = null;
 
-    private LinearLayout layoutChild_check = null;
-    private LinearLayout layoutChild_timer = null;
-    private NumberPicker numberPickerPer_check = null;
-    private NumberPicker numberPickerPer_timer = null;
+    private TextView textViewHabbitPer = null;
 
     private Button btnSave = null;
     private Button btnCancel = null;
@@ -49,6 +58,11 @@ public class HabbitModifyActivity extends AppCompatActivity {
     private int id = -1;
 
     private final int minPickerValue = -100;
+
+    private AlarmAdapter alarmAdapter;
+    private RecyclerView alarmRecyclerView;
+
+    private Button btnAlarmAdd;
 
     // UI
     @Override
@@ -91,14 +105,10 @@ public class HabbitModifyActivity extends AppCompatActivity {
         Utils.numberPickerInitMinus50(numberPickerInit);
         numberPickerGoal = findViewById(R.id.number_picker_habbit_goal);
         Utils.numberPickerInitMinus50(numberPickerGoal);
+        numberPickerPer = findViewById(R.id.number_picker_habbit_per);
+        Utils.numberPickerInitMinus50(numberPickerPer);
 
-        layoutChild_check = findViewById(R.id.include_child_habbit_modify_check);
-        layoutChild_timer = findViewById(R.id.include_child_habbit_modify_timer);
-
-        numberPickerPer_check = findViewById(R.id.number_picker_check_per);
-        Utils.numberPickerInitMinus50(numberPickerPer_check);
-        numberPickerPer_timer = findViewById(R.id.number_picker_timer_per);
-        Utils.numberPickerInitMinus50(numberPickerPer_timer);
+        textViewHabbitPer = findViewById(R.id.text_view_habbit_per_label);
 
         btnSave = findViewById(R.id.btn_habbit_modify_save);
         btnSave.setOnClickListener(onClickListener);
@@ -110,23 +120,28 @@ public class HabbitModifyActivity extends AppCompatActivity {
         if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
             setUIData(id);
         }
+
+        // TEMP
+        LinearLayoutManager layoutMgr = new LinearLayoutManager(HabbitModifyActivity.this);
+        alarmRecyclerView = findViewById(R.id.recycler_view_alarm);
+        alarmRecyclerView.setLayoutManager(layoutMgr);
+
+        btnAlarmAdd = findViewById(R.id.btn_habbit_modify_alarm_add);
+        btnAlarmAdd.setOnClickListener(onClickListener);
     }
 
     private void changeViewAtType(int type){
         switch (type){
             case Habbit.TYPE_HABBIT_CHECK:
                 this.type = Habbit.TYPE_HABBIT_CHECK;
-                layoutChild_check.setVisibility(View.VISIBLE);
-                layoutChild_timer.setVisibility(View.GONE);
-                numberPickerPer_check.setValue(0 - minPickerValue);
+                textViewHabbitPer.setText(R.string.habbit_modify_check_per_text);
                 break;
             case Habbit.TYPE_HABBIT_TIMER:
                 this.type = Habbit.TYPE_HABBIT_TIMER;
-                layoutChild_check.setVisibility(View.GONE);
-                layoutChild_timer.setVisibility(View.VISIBLE);
-                numberPickerPer_timer.setValue(0 - minPickerValue);
+                textViewHabbitPer.setText(R.string.habbit_modify_timer_per_text);
                 break;
         }
+        numberPickerPer.setValue(0 - minPickerValue);
     }
 
     @SuppressLint("ResourceType")
@@ -153,17 +168,34 @@ public class HabbitModifyActivity extends AppCompatActivity {
             switch(type){
                 case Habbit.TYPE_HABBIT_CHECK:
                     radioBtn_check.setChecked(true);
-                    numberPickerPer_check.setValue(habbit.getPerCost()- minPickerValue);
+
                     break;
 
                 case Habbit.TYPE_HABBIT_TIMER:
                     radioBtn_timer.setChecked(true);
-                    numberPickerPer_timer.setValue(habbit.getPerCost()- minPickerValue);
                     break;
             }
+            numberPickerPer.setValue(habbit.getPerCost()- minPickerValue);
             radioBtn_check.setEnabled(false);
             radioBtn_timer.setEnabled(false);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+//        AlarmDatabase recordDB = AlarmDatabase.getAppDatabase(HabbitModifyActivity.this);
+//
+//        Single.create(subscriber -> {
+//
+//
+//            subscriber.onSuccess();
+//        }).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(recordList -> {
+//
+//                });
     }
 
     // Listener
@@ -191,23 +223,13 @@ public class HabbitModifyActivity extends AppCompatActivity {
         int priority  = numberPickerPrio.getValue();
         int goalCost  = numberPickerGoal.getValue()+ minPickerValue;
         int initCost  = numberPickerInit.getValue()+ minPickerValue;
-        int perCost = 0;
-
-        switch (type){
-            case Habbit.TYPE_HABBIT_CHECK:
-                perCost = numberPickerPer_check.getValue()+ minPickerValue;
-                break;
-            case Habbit.TYPE_HABBIT_TIMER:
-                perCost = numberPickerPer_timer.getValue()+ minPickerValue;
-                break;
-        }
-        final int finalPerCost = perCost;
+        final int perCost   = numberPickerPer.getValue() + minPickerValue;
 
         // 2) process DB
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
         Single.create(subscriber -> {
             if (mode == AppConst.HABBIT_MODIFY_MODE_UPDATE) {
-                habbitDB.habbitDao().updateHabbit(id, type, title, priority, active, goalCost, initCost, finalPerCost);
+                habbitDB.habbitDao().updateHabbit(id, type, title, priority, active, goalCost, initCost, perCost);
 
                 EvaluateWork work = new EvaluateWork(HabbitModifyActivity.this);
                 work.work(EvaluateWork.WORK_TYPE_REPLACE_HABBIT, id, -1);
@@ -215,7 +237,7 @@ public class HabbitModifyActivity extends AppCompatActivity {
             }else if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
                 long currentTime = System.currentTimeMillis();
                 int state = (type == Habbit.TYPE_HABBIT_CHECK) ? Habbit.STATE_CHECK : Habbit.STATE_TIMER_WAIT;
-                id = (int) habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, finalPerCost, state, -1));
+                id = (int) habbitDB.habbitDao().insert(new Habbit(type, currentTime, title, priority, active, goalCost, initCost, perCost, state, -1));
             }
 
             List<Habbit> habbits = habbitDB.habbitDao().getHabbit(id);

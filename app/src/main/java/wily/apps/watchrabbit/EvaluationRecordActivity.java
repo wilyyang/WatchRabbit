@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -127,7 +126,7 @@ public class EvaluationRecordActivity extends AppCompatActivity {
                 mEvaluation = evaluations.get(0);
             }
 
-            List<Record> recordList = recordDB.recordDao().getRecordByHidAndTime(mHabbit.getId(), mEvaluation.getTime(), (mEvaluation.getTime()+ DateUtil.ONEDAY_TO_MILLISECOND-1));
+            List<Record> recordList = recordDB.recordDao().getRecordByHidAndTerm(mHabbit.getId(), mEvaluation.getTime(), (mEvaluation.getTime()+ DateUtil.ONEDAY_TO_MILLISECOND-1));
             subscriber.onSuccess(recordList);
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
