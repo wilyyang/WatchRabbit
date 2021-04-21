@@ -8,7 +8,6 @@ import androidx.room.Query;
 import java.util.List;
 
 import wily.apps.watchrabbit.data.entity.Alarm;
-import wily.apps.watchrabbit.data.entity.Record;
 
 @Dao
 public interface AlarmDao {
@@ -37,8 +36,8 @@ public interface AlarmDao {
     List<Long> insertAll(List<Alarm> alarms);
 
     // 3) Update
-    @Query("UPDATE Alarm SET time=:p_time, range=:p_range, cost=:p_cost WHERE id = :p_id")
-    int updateAlarm(int p_id, long p_time, long p_range, int p_cost);
+    @Query("UPDATE Alarm SET title=:p_title, time=:p_time, range=:p_range, cost=:p_cost WHERE id = :p_id")
+    int updateAlarm(int p_id, String p_title, long p_time, long p_range, int p_cost);
 
     // 4) Delete
     @Query("DELETE FROM Alarm WHERE id IN (:p_ids)")

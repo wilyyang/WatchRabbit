@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,10 +16,7 @@ import java.util.List;
 
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.data.entity.Alarm;
-import wily.apps.watchrabbit.data.entity.Habbit;
-import wily.apps.watchrabbit.data.entity.Record;
 import wily.apps.watchrabbit.util.DateUtil;
-import wily.apps.watchrabbit.util.Utils;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>{
     private ArrayList<Alarm> mList;
@@ -30,8 +26,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
 
     // Listener
     public interface OnAlarmItemClickListener{
-        void onItemClick(long id, long time, long range, int cost);
-        void onItemLongClick(long id);
+        void onItemClick(long id, String title, long time, long range, int cost);
+        void onItemLongClick(long id, String title);
         void onItemCheckChanged(boolean flag);
     }
 
@@ -62,6 +58,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
     protected void setContent(AlarmViewHolder holder, Alarm pAlarm){
         holder.alarm = pAlarm;
 
+        holder.txTitle.setText(pAlarm.getTitle());
         holder.txTime.setText(DateUtil.getTimeString(pAlarm.getTime()));
         holder.txRange.setText(""+pAlarm.getRange());
         holder.txCost.setText(""+pAlarm.getCost());
@@ -121,6 +118,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         protected View itemView;
         protected CheckBox checkBoxSelect;
 
+        protected TextView txTitle;
         protected TextView txTime;
         protected TextView txRange;
         protected TextView txCost;
@@ -130,6 +128,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
             this.itemView = view;
             this.checkBoxSelect = view.findViewById(R.id.check_box_item_alarm_select);
 
+            this.txTitle = view.findViewById(R.id.text_view_alarm_title);
             this.txTime = view.findViewById(R.id.text_view_alarm_time);
             this.txRange = view.findViewById(R.id.text_view_alarm_range);
             this.txCost = view.findViewById(R.id.text_view_alarm_cost);
@@ -158,7 +157,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                         checkBoxSelect.setChecked(!checkBoxSelect.isChecked());
                     } else {
                         if (mListener != null) {
-                            mListener.onItemClick(alarm.getId(), alarm.getTime(), alarm.getRange(), alarm.getCost());
+                            mListener.onItemClick(alarm.getId(), alarm.getTitle(), alarm.getTime(), alarm.getRange(), alarm.getCost());
                         }
                     }
                 }
@@ -171,10 +170,10 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                         checkBoxSelect.setPressed(true);
                         checkBoxSelect.setChecked(!checkBoxSelect.isChecked());
                     } else {
-                        setSelectableMode(true);
-                        checkBoxSelect.setChecked(!checkBoxSelect.isChecked());
+//                        setSelectableMode(true);
+//                        checkBoxSelect.setChecked(!checkBoxSelect.isChecked());
                         if (mListener != null) {
-                            mListener.onItemLongClick(alarm.getId());
+                            mListener.onItemLongClick(alarm.getId(), alarm.getTitle());
                         }
                     }
                     return true;

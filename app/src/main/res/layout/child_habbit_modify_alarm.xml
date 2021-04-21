@@ -5,60 +5,34 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_layout_round_enabled"
     android:orientation="vertical"
-    android:weightSum="3">
+    android:weightSum="5">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="1"
         android:orientation="horizontal"
-        android:weightSum="9">
-        <CheckBox
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginLeft="5dp" />
+        android:weightSum="9"
+        android:layout_marginLeft="@dimen/margin_layout_mid"
+        android:layout_marginRight="@dimen/margin_layout_mid">
 
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="7"
             android:gravity="center_vertical"
             android:text="알람 시간 : " />
-
-        <Button
-            android:id="@+id/btn_habbit_modify_alarm_delete"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bg_btn_round"
-            android:text="-"
-            android:textColor="@color/color_text_btn"
-            android:textSize="@dimen/sp_btn_mid"
-            android:textAlignment="center"
-            android:typeface="monospace" />
 
         <Button
             android:id="@+id/btn_habbit_modify_alarm_add"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:background="@drawable/bg_btn_round"
             android:text="+"
             android:textColor="@color/color_text_btn"
-            android:textSize="@dimen/sp_btn_mid"
-            android:textAlignment="center"
-            android:typeface="monospace" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bg_btn_round"
-            android:text=":"
-            android:textColor="@color/color_text_btn"
-            android:textSize="@dimen/sp_btn_mid"
+            android:textSize="@dimen/sp_btn_big"
             android:textAlignment="center"
             android:typeface="monospace" />
 
@@ -71,9 +45,10 @@
         android:id="@+id/recycler_view_alarm"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2.5"
+        android:layout_weight="4"
         android:scrollbarFadeDuration="0"
         android:scrollbarSize="5dp"
         android:scrollbarThumbVertical="@android:color/darker_gray"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:layout_margin="@dimen/margin_layout_narr"/>
 </LinearLayout>

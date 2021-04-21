@@ -27,6 +27,7 @@ import wily.apps.watchrabbit.MainActivity;
 import wily.apps.watchrabbit.R;
 import wily.apps.watchrabbit.adapter.HabbitAdapter;
 import wily.apps.watchrabbit.AppConst;
+import wily.apps.watchrabbit.data.database.AlarmDatabase;
 import wily.apps.watchrabbit.data.database.EvaluationDatabase;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
@@ -149,11 +150,12 @@ public class HabbitFragment extends Fragment {
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(getContext());
         RecordDatabase recordDB = RecordDatabase.getAppDatabase(getContext());
         EvaluationDatabase evalDB = EvaluationDatabase.getAppDatabase(getContext());
-
+        AlarmDatabase alarmDB = AlarmDatabase.getAppDatabase(getContext());
         Completable.create(subscriber -> {
             habbitDB.habbitDao().deleteHabbitByIds(list);
             recordDB.recordDao().deleteRecordByHids(list);
             evalDB.evaluationDao().deleteEvaluationByHids(list);
+            alarmDB.alarmDao().deleteAlarmByHids(list);
             subscriber.onComplete();
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

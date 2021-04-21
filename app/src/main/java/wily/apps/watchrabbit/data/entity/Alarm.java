@@ -10,6 +10,7 @@ public class Alarm {
     private long id;
 
     private int hid;
+    private String title;
     private long time;
     private long range;
     private int cost;
@@ -17,8 +18,9 @@ public class Alarm {
     @Ignore
     private boolean check;
 
-    public Alarm(int hid, long time, long range, int cost) {
+    public Alarm(int hid, String title, long time, long range, int cost) {
         this.hid = hid;
+        this.title = title;
         this.time = time;
         this.range = range;
         this.cost = cost;
@@ -38,6 +40,14 @@ public class Alarm {
 
     public void setHid(int hid) {
         this.hid = hid;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public long getTime() {
@@ -77,6 +87,7 @@ public class Alarm {
         return "Alarm{" +
                 "id=" + id +
                 ", hid=" + hid +
+                ", title='" + title + '\'' +
                 ", time=" + time +
                 ", range=" + range +
                 ", cost=" + cost +

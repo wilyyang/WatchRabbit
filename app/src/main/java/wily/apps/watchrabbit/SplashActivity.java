@@ -114,7 +114,7 @@ public class SplashActivity extends AppCompatActivity {
             // 3.2) Alarm sample
             ArrayList<Alarm> alarms = new ArrayList<Alarm>();
             for(int j = 0; j< 5; ++j){
-                alarms.add(new Alarm((int)hhid, sampleAlarm[j],30, 20));
+                alarms.add(new Alarm((int)hhid, "아침"+j, sampleAlarm[j],30, 20));
             }
 
             // insert alarms
