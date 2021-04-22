@@ -24,15 +24,11 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import wily.apps.watchrabbit.adapter.AlarmAdapter;
-import wily.apps.watchrabbit.adapter.EvaluationAdapter;
 import wily.apps.watchrabbit.data.database.AlarmDatabase;
-import wily.apps.watchrabbit.data.database.EvaluationDatabase;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.entity.Alarm;
-import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.service.HabbitService;
-import wily.apps.watchrabbit.util.DateUtil;
 import wily.apps.watchrabbit.util.DialogGetter;
 import wily.apps.watchrabbit.util.Utils;
 
@@ -149,8 +145,9 @@ public class HabbitModifyActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        dialog.show();
+
         if(mode == AppConst.HABBIT_MODIFY_MODE_UPDATE){
+            dialog.show();
             HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
             AlarmDatabase alarmDB = AlarmDatabase.getAppDatabase(HabbitModifyActivity.this);
 
@@ -200,15 +197,28 @@ public class HabbitModifyActivity extends AppCompatActivity {
         alarmAdapter.setOnItemClickListener(onAlarmItemClickListener);
         alarmRecyclerView.setAdapter(alarmAdapter);
         alarmAdapter.notifyDataSetChanged();
-        dialog.dismiss();
     }
 
     // Listener
+    private AlarmModifyDialog.NoticeDialogCallback dialogCallback = new AlarmModifyDialog.NoticeDialogCallback() {
+        @Override
+        public void onDialogAddClick(Alarm alarm) {
+
+        }
+
+        @Override
+        public void onDialogUpdateClick(long id, Alarm alarm) {
+
+        }
+    };
+
+
     private AlarmAdapter.OnAlarmItemClickListener onAlarmItemClickListener = new AlarmAdapter.OnAlarmItemClickListener(){
 
         @Override
         public void onItemClick(long id, String title, long time, long range, int cost) {
-
+            AlarmModifyDialog alarmModifyDialog = new AlarmModifyDialog(HabbitModifyActivity.this, hid, id, title, time, range, cost, false);
+            alarmModifyDialog.show();
         }
 
         @Override
@@ -233,8 +243,7 @@ public class HabbitModifyActivity extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.btn_habbit_modify_alarm_add:
-
-                    AlarmModifyDialog alarmModifyDialog = new AlarmModifyDialog(HabbitModifyActivity.this);
+                    AlarmModifyDialog alarmModifyDialog = new AlarmModifyDialog(HabbitModifyActivity.this, hid, -1, "", -1, -1, -1, true);
                     alarmModifyDialog.show();
                     break;
             }

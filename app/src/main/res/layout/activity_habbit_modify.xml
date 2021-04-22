@@ -32,7 +32,7 @@
                 android:layout_weight="8"
                 android:backgroundTint="@color/color_text_layout_back"
                 android:hint="@string/habbit_modify_title_hint"
-                android:textColorHint="@color/color_text_layout_back" />
+                android:textColorHint="@color/color_text_layout_back"/>
 
             <Switch
                 android:id="@+id/switch_habbit"
