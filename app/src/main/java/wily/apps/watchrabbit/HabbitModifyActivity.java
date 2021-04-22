@@ -32,6 +32,7 @@ import wily.apps.watchrabbit.data.entity.Alarm;
 import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.service.HabbitService;
+import wily.apps.watchrabbit.util.DateUtil;
 import wily.apps.watchrabbit.util.DialogGetter;
 import wily.apps.watchrabbit.util.Utils;
 
@@ -64,6 +65,8 @@ public class HabbitModifyActivity extends AppCompatActivity {
 
     private AlarmAdapter alarmAdapter;
     private RecyclerView alarmRecyclerView;
+
+    private Button btnAlarmDialog = null;
 
     // UI
     @Override
@@ -124,6 +127,9 @@ public class HabbitModifyActivity extends AppCompatActivity {
         LinearLayoutManager layoutMgr = new LinearLayoutManager(HabbitModifyActivity.this);
         alarmRecyclerView = findViewById(R.id.include_habbit_modify_alarm).findViewById(R.id.recycler_view_alarm);
         alarmRecyclerView.setLayoutManager(layoutMgr);
+
+        btnAlarmDialog = findViewById(R.id.include_habbit_modify_alarm).findViewById(R.id.btn_habbit_modify_alarm_add);
+        btnAlarmDialog.setOnClickListener(onClickListener);
     }
 
     private void changeViewAtType(int type){
@@ -191,13 +197,31 @@ public class HabbitModifyActivity extends AppCompatActivity {
 
     private void afterAlarmGet(List<Alarm> alarmList){
         alarmAdapter = new AlarmAdapter(HabbitModifyActivity.this, (ArrayList<Alarm>)alarmList);
-//        alarmAdapter.setOnItemClickListener(onClickListener);
+        alarmAdapter.setOnItemClickListener(onAlarmItemClickListener);
         alarmRecyclerView.setAdapter(alarmAdapter);
         alarmAdapter.notifyDataSetChanged();
         dialog.dismiss();
     }
 
     // Listener
+    private AlarmAdapter.OnAlarmItemClickListener onAlarmItemClickListener = new AlarmAdapter.OnAlarmItemClickListener(){
+
+        @Override
+        public void onItemClick(long id, String title, long time, long range, int cost) {
+
+        }
+
+        @Override
+        public void onItemLongClick(long id, String title) {
+
+        }
+
+        @Override
+        public void onItemCheckChanged(boolean flag) {
+
+        }
+    };
+
     private Button.OnClickListener onClickListener = new Button.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -207,6 +231,11 @@ public class HabbitModifyActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_habbit_modify_cancel:
                     finish();
+                    break;
+                case R.id.btn_habbit_modify_alarm_add:
+
+                    AlarmModifyDialog alarmModifyDialog = new AlarmModifyDialog(HabbitModifyActivity.this);
+                    alarmModifyDialog.show();
                     break;
             }
         }

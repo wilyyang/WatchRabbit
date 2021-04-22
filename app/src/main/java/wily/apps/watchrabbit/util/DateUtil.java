@@ -21,7 +21,7 @@ public class DateUtil {
     }
 
     public static String getTimeString(long time){
-        DateFormat format = new SimpleDateFormat("HH:mm:ss");
+        DateFormat format = new SimpleDateFormat("HH:mm");
         return format.format(new Date(time));
     }
 

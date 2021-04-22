@@ -21,6 +21,12 @@
     <string name="habbit_modify_check_per_text">체크 점수 : </string>
     <string name="habbit_modify_timer_per_text">분당 점수 : </string>
 
+    <string name="alarm_dialog_top_title">알람 설정</string>
+    <string name="alarm_dialog_title_text">알람 제목 : </string>
+    <string name="alarm_dialog_time_text">알람 시간 : </string>
+    <string name="alarm_dialog_range_text">시간 범위 : </string>
+    <string name="alarm_dialog_cost_text">부여 점수 : </string>
+
     <string name="record_timer_term">시간(분):</string>
     <string name="record_state_check">체크</string>
     <string name="record_state_timer_complete">타임</string>

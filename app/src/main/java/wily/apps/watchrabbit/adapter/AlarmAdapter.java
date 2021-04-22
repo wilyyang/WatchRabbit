@@ -81,6 +81,16 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         return (null != mList ? mList.size() : 0);
     }
 
+
+    // Data insert / remove
+    public void removeAlarm(Alarm alarm){
+        int idx = mList.indexOf(alarm);
+        if(idx > -1){
+            mList.remove(idx);
+            this.notifyItemRemoved(idx);
+        }
+    }
+
     // Select Mode
     public boolean isSelectableMode() {
         return selectableMode;
@@ -156,6 +166,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                         checkBoxSelect.setPressed(true);
                         checkBoxSelect.setChecked(!checkBoxSelect.isChecked());
                     } else {
+
                         if (mListener != null) {
                             mListener.onItemClick(alarm.getId(), alarm.getTitle(), alarm.getTime(), alarm.getRange(), alarm.getCost());
                         }
@@ -170,11 +181,10 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                         checkBoxSelect.setPressed(true);
                         checkBoxSelect.setChecked(!checkBoxSelect.isChecked());
                     } else {
-//                        setSelectableMode(true);
-//                        checkBoxSelect.setChecked(!checkBoxSelect.isChecked());
-                        if (mListener != null) {
-                            mListener.onItemLongClick(alarm.getId(), alarm.getTitle());
-                        }
+                        removeAlarm(alarm);
+//                        if (mListener != null) {
+//                            mListener.onItemLongClick(alarm.getId(), alarm.getTitle());
+//                        }
                     }
                     return true;
                 }
