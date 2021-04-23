@@ -4,11 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -124,6 +122,9 @@ public class HabbitModifyActivity extends AppCompatActivity {
         LinearLayoutManager layoutMgr = new LinearLayoutManager(HabbitModifyActivity.this);
         alarmRecyclerView = findViewById(R.id.include_habbit_modify_alarm).findViewById(R.id.recycler_view_alarm);
         alarmRecyclerView.setLayoutManager(layoutMgr);
+        alarmAdapter = new AlarmAdapter(HabbitModifyActivity.this, new ArrayList<Alarm>());
+        alarmAdapter.setOnItemClickListener(onAlarmItemClickListener);
+        alarmRecyclerView.setAdapter(alarmAdapter);
 
         btnAlarmDialog = findViewById(R.id.include_habbit_modify_alarm).findViewById(R.id.btn_habbit_modify_alarm_add);
         btnAlarmDialog.setOnClickListener(onClickListener);
@@ -181,7 +182,6 @@ public class HabbitModifyActivity extends AppCompatActivity {
         switch(type){
             case Habbit.TYPE_HABBIT_CHECK:
                 radioBtn_check.setChecked(true);
-
                 break;
 
             case Habbit.TYPE_HABBIT_TIMER:
@@ -194,14 +194,11 @@ public class HabbitModifyActivity extends AppCompatActivity {
     }
 
     private void afterAlarmGet(List<Alarm> alarmList){
-        alarmAdapter = new AlarmAdapter(HabbitModifyActivity.this, (ArrayList<Alarm>)alarmList);
-        alarmAdapter.setOnItemClickListener(onAlarmItemClickListener);
-        alarmRecyclerView.setAdapter(alarmAdapter);
+        alarmAdapter.setAalarmList((ArrayList<Alarm>) alarmList);
         alarmAdapter.notifyDataSetChanged();
     }
 
     // Listener
-
     private AlarmAdapter.OnAlarmItemClickListener onAlarmItemClickListener = new AlarmAdapter.OnAlarmItemClickListener(){
 
         @Override
@@ -245,12 +242,16 @@ public class HabbitModifyActivity extends AppCompatActivity {
     {
         @Override
         public void onDialogAddClick(Alarm alarm) {
-            alarmAdapter.insertAlarm(alarm);
+            if(alarmAdapter != null){
+                alarmAdapter.insertAlarm(alarm);
+            }
         }
 
         @Override
         public void onDialogUpdateClick(Alarm alarm) {
-            alarmAdapter.updateAlarm(alarm);
+            if(alarmAdapter != null){
+                alarmAdapter.updateAlarm(alarm);
+            }
         }
     };
 
@@ -264,17 +265,15 @@ public class HabbitModifyActivity extends AppCompatActivity {
         int priority  = numberPickerPrio.getValue();
         int goalCost  = numberPickerGoal.getValue()+ minPickerValue;
         int initCost  = numberPickerInit.getValue()+ minPickerValue;
-        final int perCost   = numberPickerPer.getValue() + minPickerValue;
+        final int perCost = numberPickerPer.getValue() + minPickerValue;
 
         // 2) process DB
         HabbitDatabase habbitDB = HabbitDatabase.getAppDatabase(HabbitModifyActivity.this);
+        AlarmDatabase alarmDB = AlarmDatabase.getAppDatabase(HabbitModifyActivity.this);
         Single.create(subscriber -> {
             if (mode == AppConst.HABBIT_MODIFY_MODE_UPDATE) {
+                alarmDB.alarmDao().deleteAlarmByHid(hid);
                 habbitDB.habbitDao().updateHabbit(hid, type, title, priority, active, goalCost, initCost, perCost);
-
-                EvaluateWork work = new EvaluateWork(HabbitModifyActivity.this);
-                work.work(EvaluateWork.WORK_TYPE_REPLACE_HABBIT, hid, -1);
-
             }else if(mode == AppConst.HABBIT_MODIFY_MODE_ADD){
                 long currentTime = System.currentTimeMillis();
                 int state = (type == Habbit.TYPE_HABBIT_CHECK) ? Habbit.STATE_CHECK : Habbit.STATE_TIMER_WAIT;
@@ -283,6 +282,15 @@ public class HabbitModifyActivity extends AppCompatActivity {
 
             List<Habbit> habbits = habbitDB.habbitDao().getHabbit(hid);
             if(!habbits.isEmpty()){
+                List<Alarm> alarmList = alarmAdapter.getAlarmList();
+                for(Alarm alarm : alarmList){
+                    alarm.setHid(hid);
+                }
+                alarmDB.alarmDao().insertAll(alarmList);
+
+                EvaluateWork work = new EvaluateWork(HabbitModifyActivity.this);
+                work.work(EvaluateWork.WORK_TYPE_REPLACE_HABBIT, hid, -1);
+
                 subscriber.onSuccess(habbits.get(0));
             }else{
                 subscriber.onError(new Throwable());

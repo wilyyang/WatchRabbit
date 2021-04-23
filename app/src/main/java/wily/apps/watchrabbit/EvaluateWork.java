@@ -2,17 +2,22 @@ package wily.apps.watchrabbit;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import wily.apps.watchrabbit.data.dao.AlarmDao;
 import wily.apps.watchrabbit.data.dao.EvaluationDao;
 import wily.apps.watchrabbit.data.dao.HabbitDao;
 import wily.apps.watchrabbit.data.dao.RecordDao;
+import wily.apps.watchrabbit.data.database.AlarmDatabase;
 import wily.apps.watchrabbit.data.database.EvaluationDatabase;
 import wily.apps.watchrabbit.data.database.HabbitDatabase;
 import wily.apps.watchrabbit.data.database.RecordDatabase;
+import wily.apps.watchrabbit.data.entity.Alarm;
 import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.data.entity.Record;
@@ -26,6 +31,7 @@ public class EvaluateWork{
     private HabbitDao habbitDao = null;
     private EvaluationDao evalDao = null;
     private RecordDao recordDao = null;
+    private AlarmDao alarmDao = null;
 
     public static final int WORK_TYPE_REPLACE_ALL = 1;
 
@@ -39,6 +45,7 @@ public class EvaluateWork{
         habbitDao = HabbitDatabase.getAppDatabase(mContext).habbitDao();
         evalDao = EvaluationDatabase.getAppDatabase(mContext).evaluationDao();
         recordDao = RecordDatabase.getAppDatabase(mContext).recordDao();
+        alarmDao = AlarmDatabase.getAppDatabase(mContext).alarmDao();
     }
 
     public void work(int workType, int hid, long date) {
@@ -187,8 +194,21 @@ public class EvaluateWork{
                 break;
         }
 
-        // - 3 calculate
+        // - 3 calculate per
         int result = habbit.getInitCost() + (sum * habbit.getPerCost());
+
+        // - 4 calculate alarm
+        List<Alarm> alarmList = alarmDao.getAlarmByHid(habbit.getId());
+        for(Alarm alarm : alarmList){
+
+            long start = DateUtil.convertDateAndTime(date, alarm.getTime());
+            long end = start + alarm.getRange()*DateUtil.MILLISECOND_TO_MINUTE;
+
+//            Log.d("WILYWILY", DateUtil.getDateString(date)+" : "+DateUtil.getDateString(start)+" ~ "+DateUtil.getDateString(end));
+            long count = IntStream.range(0, recordList.size()).mapToObj(i -> recordList.get(i)).mapToLong(o -> o.getTime()).filter(time -> (time>=start && time <=end)).count();
+            result += alarm.getCost()*count;
+        }
+
         int rate = (int) ((result / (double) habbit.getGoalCost()) * 100);
         return new Evaluation(habbit.getId(), date, result, rate);
     }

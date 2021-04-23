@@ -160,7 +160,7 @@ public class RecordModifyDialog extends Dialog {
         @Override
         public void onClick(View view) {
             RecordDatabase recordDB = RecordDatabase.getAppDatabase(mContext);
-            long time = DateUtil.getDateLong(DateUtil.getDateNum(recordTime, Calendar.YEAR), DateUtil.getDateNum(recordTime, Calendar.MONTH), DateUtil.getDateNum(recordTime, Calendar.DATE),
+            long time = DateUtil.getDateLong(DateUtil.getDateNum(recordTime, Calendar.YEAR), DateUtil.getDateNum(recordTime, Calendar.MONTH), DateUtil.getDateNum(recordTime, Calendar.DAY_OF_MONTH),
                     timePickerRecord.getHour(), timePickerRecord.getMinute(), 0);
 
             Completable.create(subscriber -> {

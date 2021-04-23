@@ -41,7 +41,6 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MILLISECOND, 0);
         cal.set(year, month, day, hour, minute, second);
-
         return cal.getTimeInMillis();
     }
 
@@ -62,6 +61,13 @@ public class DateUtil {
     public static long convertDate(long time){
         Calendar cal = Calendar.getInstance();
         cal.set(getDateNum(time, Calendar.YEAR),getDateNum(time, Calendar.MONTH),getDateNum(time, Calendar.DAY_OF_MONTH),0,0,0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTimeInMillis();
+    }
+
+    public static long convertDateAndTime(long date, long time){
+        Calendar cal = Calendar.getInstance();
+        cal.set(getDateNum(date, Calendar.YEAR),getDateNum(date, Calendar.MONTH),getDateNum(date, Calendar.DAY_OF_MONTH),getDateNum(time, Calendar.HOUR_OF_DAY),getDateNum(time, Calendar.MINUTE),getDateNum(time, Calendar.SECOND));
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTimeInMillis();
     }

@@ -45,6 +45,10 @@ public class HabbitAdapter extends RecyclerView.Adapter<HabbitAdapter.HabbitView
         this.mListener = listener;
     }
 
+    public void setHabbitList(ArrayList<Habbit> habbitList){
+        mList = habbitList;
+    }
+
     // Item Init
     @NonNull
     @Override

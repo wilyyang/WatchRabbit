@@ -41,6 +41,14 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         this.mListener = listener;
     }
 
+    public void setAalarmList(ArrayList<Alarm> alarmList){
+        mList = alarmList;
+    }
+
+    public ArrayList<Alarm> getAlarmList(){
+        return mList;
+    }
+
     // Item Init
     @NonNull
     @Override

@@ -69,6 +69,9 @@ public class HabbitFragment extends Fragment {
         LinearLayoutManager layoutMgr = new LinearLayoutManager(getContext());
         habbitRecyclerView = view.findViewById(R.id.recycler_view_habbit);
         habbitRecyclerView.setLayoutManager(layoutMgr);
+        habbitAdapter = new HabbitAdapter(getContext(), new ArrayList<Habbit>());
+        habbitAdapter.setOnItemClickListener(onItemClickListener);
+        habbitRecyclerView.setAdapter(habbitAdapter);
 
         btnHabbitAdd = view.findViewById(R.id.btn_habbit_add);
         btnHabbitAdd.setOnClickListener(onClickListener);
@@ -135,10 +138,7 @@ public class HabbitFragment extends Fragment {
 
     private void afterGetHabbit(ArrayList<Habbit> list){
         habbitList = list;
-        habbitAdapter = new HabbitAdapter(getContext(), habbitList);
-        habbitAdapter.setOnItemClickListener(onItemClickListener);
-
-        habbitRecyclerView.setAdapter(habbitAdapter);
+        habbitAdapter.setHabbitList(list);
         habbitAdapter.notifyDataSetChanged();
         dialog.dismiss();
     }

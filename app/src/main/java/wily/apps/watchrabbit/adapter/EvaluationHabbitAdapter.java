@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import wily.apps.watchrabbit.R;
+import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.util.Utils;
 
@@ -35,6 +36,10 @@ public class EvaluationHabbitAdapter extends RecyclerView.Adapter<EvaluationHabb
 
     public void setOnItemClickListener(OnEvaluationHabbitItemClickListener listener){
         this.mListener = listener;
+    }
+
+    public void setEvaluationHabbitList(ArrayList<Habbit> habbitList){
+        mList = habbitList;
     }
 
     // Item Init

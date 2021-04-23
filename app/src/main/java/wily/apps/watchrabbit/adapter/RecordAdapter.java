@@ -44,6 +44,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.RecordView
         this.mListener = listener;
     }
 
+    public void setRecordList(ArrayList<Record> recordList){
+        mList = recordList;
+    }
+
     // Item Init
     @NonNull
     @Override

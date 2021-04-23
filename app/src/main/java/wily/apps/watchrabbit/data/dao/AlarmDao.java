@@ -43,6 +43,9 @@ public interface AlarmDao {
     @Query("DELETE FROM Alarm WHERE id IN (:p_ids)")
     int deleteAlarmByIds(List<Long> p_ids);
 
+    @Query("DELETE FROM Alarm WHERE hid=:p_hid")
+    int deleteAlarmByHid(int p_hid);
+
     @Query("DELETE FROM Alarm WHERE hid IN (:p_hids)")
     int deleteAlarmByHids(List<Integer> p_hids);
 }

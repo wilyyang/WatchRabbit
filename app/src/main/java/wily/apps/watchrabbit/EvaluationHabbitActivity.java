@@ -50,6 +50,9 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
         LinearLayoutManager layoutMgr = new LinearLayoutManager(EvaluationHabbitActivity.this);
         evaluationRecyclerView = findViewById(R.id.recycler_view_eval_habbit);
         evaluationRecyclerView.setLayoutManager(layoutMgr);
+        evaluationAdapter = new EvaluationAdapter(EvaluationHabbitActivity.this, new ArrayList<Evaluation>());
+        evaluationAdapter.setOnItemClickListener(onItemClickListener);
+        evaluationRecyclerView.setAdapter(evaluationAdapter);
     }
 
     @Override
@@ -96,9 +99,7 @@ public class EvaluationHabbitActivity extends AppCompatActivity {
     }
 
     private void afterEvaluationGet(List<Evaluation> evalList){
-        evaluationAdapter = new EvaluationAdapter(EvaluationHabbitActivity.this, (ArrayList<Evaluation>)evalList);
-        evaluationAdapter.setOnItemClickListener(onItemClickListener);
-        evaluationRecyclerView.setAdapter(evaluationAdapter);
+        evaluationAdapter.setEvaluationList((ArrayList<Evaluation>) evalList);
         evaluationAdapter.notifyDataSetChanged();
         dialog.dismiss();
     }

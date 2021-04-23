@@ -50,6 +50,9 @@ public class EvaluationFragment extends Fragment {
         LinearLayoutManager layoutMgr = new LinearLayoutManager(getActivity());
         evaluationHabbitRecyclerView = view.findViewById(R.id.recycler_view_eval_total);
         evaluationHabbitRecyclerView.setLayoutManager(layoutMgr);
+        evaluationHabbitAdapter = new EvaluationHabbitAdapter(getActivity(), new ArrayList<Habbit>());
+        evaluationHabbitAdapter.setOnItemClickListener(onItemClickListener);
+        evaluationHabbitRecyclerView.setAdapter(evaluationHabbitAdapter);
     }
 
     @Override
@@ -67,9 +70,7 @@ public class EvaluationFragment extends Fragment {
     }
 
     private void afterGetHabbit(List<Habbit> habbitList){
-        evaluationHabbitAdapter = new EvaluationHabbitAdapter(getActivity(), (ArrayList<Habbit>) habbitList);
-        evaluationHabbitAdapter.setOnItemClickListener(onItemClickListener);
-        evaluationHabbitRecyclerView.setAdapter(evaluationHabbitAdapter);
+        evaluationHabbitAdapter.setEvaluationHabbitList((ArrayList<Habbit>) habbitList);
         evaluationHabbitAdapter.notifyDataSetChanged();
 
         initTopEvaluationTotal(habbitList);

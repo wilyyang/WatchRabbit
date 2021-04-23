@@ -57,10 +57,10 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void onBackgroundWork(){
-        long sTime = DateUtil.getDateLong(2021, Calendar.APRIL, 4, 0, 0, 0);
+        long sTime = DateUtil.getDateLong(2021, Calendar.APRIL, 23, 0, 0, 0);
         long cTime = System.currentTimeMillis();
-//        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
-//        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
+        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
+        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
 
         EvaluateWork work = new EvaluateWork(SplashActivity.this);
         work.work(EvaluateWork.WORK_TYPE_UPDATE_ALL, -1, -1);
@@ -95,11 +95,11 @@ public class SplashActivity extends AppCompatActivity {
 
         // 3) insert habbits
         List<Long> idList = habbitDao.insertAll(habbits);
-        long[] sampleAlarm = {DateUtil.getDateLong(2021, 4, 20, 8, 30, 10),
-                DateUtil.getDateLong(2021, 4, 20, 11, 45, 14),
-                DateUtil.getDateLong(2021, 4, 20, 13, 25, 22),
-                DateUtil.getDateLong(2021, 4, 20, 16, 0, 10),
-                DateUtil.getDateLong(2021, 4, 20, 20, 11, 10)};
+        long[] sampleAlarm = {DateUtil.getDateLong(2020, 0, 8, 8, 30, 10),
+                DateUtil.getDateLong(2020, 0, 8, 11, 45, 14),
+                DateUtil.getDateLong(2020, 0, 8, 13, 25, 22),
+                DateUtil.getDateLong(2020, 0, 8, 16, 0, 10),
+                DateUtil.getDateLong(2020, 0, 8, 20, 11, 10)};
 
         for(long hhid : idList){
             // 3.1) Record sample
@@ -113,7 +113,7 @@ public class SplashActivity extends AppCompatActivity {
 
             // 3.2) Alarm sample
             ArrayList<Alarm> alarms = new ArrayList<Alarm>();
-            for(int j = 0; j< 5; ++j){
+            for(int j = 0; j< 1; ++j){
                 alarms.add(new Alarm((int)hhid, "아침"+j, sampleAlarm[j],30, 20));
             }
 

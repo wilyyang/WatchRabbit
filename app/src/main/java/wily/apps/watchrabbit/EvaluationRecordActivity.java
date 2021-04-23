@@ -72,6 +72,9 @@ public class EvaluationRecordActivity extends AppCompatActivity {
         LinearLayoutManager layoutMgr = new LinearLayoutManager(EvaluationRecordActivity.this);
         recordRecyclerView = findViewById(R.id.recycler_view_eval_record);
         recordRecyclerView.setLayoutManager(layoutMgr);
+        recordAdapter = new RecordAdapter(EvaluationRecordActivity.this, new ArrayList<Record>());
+        recordAdapter.setOnItemClickListener(onItemClickListener);
+        recordRecyclerView.setAdapter(recordAdapter);
 
         btnRecordAdd = findViewById(R.id.btn_eval_record_add);
         btnRecordAdd.setOnClickListener(onClickListener);
@@ -148,9 +151,8 @@ public class EvaluationRecordActivity extends AppCompatActivity {
     }
 
     private void afterRecordGetAll(List<Record> recordList){
-        recordAdapter = new RecordAdapter(EvaluationRecordActivity.this, (ArrayList<Record>)recordList);
-        recordAdapter.setOnItemClickListener(onItemClickListener);
-        recordRecyclerView.setAdapter(recordAdapter);
+
+        recordAdapter.setRecordList((ArrayList<Record>) recordList);
         recordAdapter.notifyDataSetChanged();
         dialog.dismiss();
     }

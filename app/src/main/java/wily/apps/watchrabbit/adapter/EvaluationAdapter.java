@@ -18,6 +18,7 @@ import java.util.List;
 
 import wily.apps.watchrabbit.AppConst;
 import wily.apps.watchrabbit.R;
+import wily.apps.watchrabbit.data.entity.Alarm;
 import wily.apps.watchrabbit.data.entity.Evaluation;
 import wily.apps.watchrabbit.data.entity.Habbit;
 import wily.apps.watchrabbit.util.DateUtil;
@@ -41,6 +42,10 @@ public class EvaluationAdapter extends RecyclerView.Adapter<EvaluationAdapter.Ev
 
     public void setOnItemClickListener(OnEvaluationItemClickListener listener){
         this.mListener = listener;
+    }
+
+    public void setEvaluationList(ArrayList<Evaluation> evaluationList){
+        mList = evaluationList;
     }
 
     // Item Init
