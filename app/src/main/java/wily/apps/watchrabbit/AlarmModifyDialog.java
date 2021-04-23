@@ -34,12 +34,8 @@ public class AlarmModifyDialog extends Dialog {
     private AlarmModifyDialog mDialog;
 
     private Context mContext;
-    private int hid;
-    private long alarmId;
-    private String alarmTitle;
-    private long time;
-    private long range;
-    private int cost;
+
+    private Alarm mAlarm;
 
     private boolean isAdd;
 
@@ -56,26 +52,15 @@ public class AlarmModifyDialog extends Dialog {
 
     private NoticeDialogCallback noticeDialogCallback;
 
-    public AlarmModifyDialog(@NonNull Context context, int hid, long alarmId, String alarmTitle, long time, long range, int cost, boolean isAdd) {
+    public AlarmModifyDialog(@NonNull Context context, Alarm alarm, boolean isAdd) {
         super(context);
         setContentView(R.layout.dialog_alarm_modify);
         this.mDialog = this;
 
         this.mContext = context;
-        this.hid = hid;
-        this.alarmId = alarmId;
-        this.alarmTitle = alarmTitle;
-        this.time = time;
-        this.range = range;
-        this.cost = cost;
+        this.mAlarm = alarm;
 
         this.isAdd = isAdd;
-
-        this.setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-            }
-        });
 
         initUIComponent();
     }
@@ -126,7 +111,7 @@ public class AlarmModifyDialog extends Dialog {
         }
         else {
             btnAdd.setText(R.string.base_btn_update);
-            setRecord(alarmTitle, time, range, cost);
+            setRecord(mAlarm.getTitle(), mAlarm.getTime(), mAlarm.getRange(), mAlarm.getCost());
         }
         btnAdd.setOnClickListener(addUpdateClickListener);
     }
@@ -148,12 +133,32 @@ public class AlarmModifyDialog extends Dialog {
     private View.OnClickListener addUpdateClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            String getTitle = editTextTile.getText().toString();
 
+            int hour=timePickerAlarm.getHour();
+            int minute=timePickerAlarm.getMinute();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            long getTime = calendar.getTimeInMillis();
+            long getRange = numberPickerRange.getValue();
+            int getCost = numberPickerCost.getValue() - 100;
+
+            mAlarm.setTitle(getTitle);
+            mAlarm.setTime(getTime);
+            mAlarm.setRange(getRange);
+            mAlarm.setCost(getCost);
             if(isAdd){
-//                noticeDialogCallback.onDialogAddClick(alarm);
+                noticeDialogCallback.onDialogAddClick(mAlarm);
+
             }else{
-//                noticeDialogCallback.onDialogUpdateClick(alarmId, alarm);
+                noticeDialogCallback.onDialogUpdateClick(mAlarm);
             }
+            mDialog.dismiss();
         }
     };
 
@@ -163,6 +168,6 @@ public class AlarmModifyDialog extends Dialog {
 
     public interface NoticeDialogCallback {
         public void onDialogAddClick(Alarm alarm);
-        public void onDialogUpdateClick(long id, Alarm alarm);
+        public void onDialogUpdateClick(Alarm alarm);
     }
 }

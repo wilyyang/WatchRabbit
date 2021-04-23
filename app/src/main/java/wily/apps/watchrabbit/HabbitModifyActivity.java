@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -200,24 +201,13 @@ public class HabbitModifyActivity extends AppCompatActivity {
     }
 
     // Listener
-    private AlarmModifyDialog.NoticeDialogCallback dialogCallback = new AlarmModifyDialog.NoticeDialogCallback() {
-        @Override
-        public void onDialogAddClick(Alarm alarm) {
-
-        }
-
-        @Override
-        public void onDialogUpdateClick(long id, Alarm alarm) {
-
-        }
-    };
-
 
     private AlarmAdapter.OnAlarmItemClickListener onAlarmItemClickListener = new AlarmAdapter.OnAlarmItemClickListener(){
 
         @Override
-        public void onItemClick(long id, String title, long time, long range, int cost) {
-            AlarmModifyDialog alarmModifyDialog = new AlarmModifyDialog(HabbitModifyActivity.this, hid, id, title, time, range, cost, false);
+        public void onItemClick(Alarm alarm) {
+            AlarmModifyDialog alarmModifyDialog = new AlarmModifyDialog(HabbitModifyActivity.this, alarm, false);
+            alarmModifyDialog.setNoticeDialogCallback(noticeDialogCallback);
             alarmModifyDialog.show();
         }
 
@@ -243,10 +233,24 @@ public class HabbitModifyActivity extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.btn_habbit_modify_alarm_add:
-                    AlarmModifyDialog alarmModifyDialog = new AlarmModifyDialog(HabbitModifyActivity.this, hid, -1, "", -1, -1, -1, true);
+                    AlarmModifyDialog alarmModifyDialog = new AlarmModifyDialog(HabbitModifyActivity.this, new Alarm(hid, "", -1, -1, -1), true);
+                    alarmModifyDialog.setNoticeDialogCallback(noticeDialogCallback);
                     alarmModifyDialog.show();
                     break;
             }
+        }
+    };
+
+    private AlarmModifyDialog.NoticeDialogCallback noticeDialogCallback = new AlarmModifyDialog.NoticeDialogCallback()
+    {
+        @Override
+        public void onDialogAddClick(Alarm alarm) {
+            alarmAdapter.insertAlarm(alarm);
+        }
+
+        @Override
+        public void onDialogUpdateClick(Alarm alarm) {
+            alarmAdapter.updateAlarm(alarm);
         }
     };
 

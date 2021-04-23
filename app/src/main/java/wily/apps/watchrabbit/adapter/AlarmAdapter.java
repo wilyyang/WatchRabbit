@@ -26,7 +26,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
 
     // Listener
     public interface OnAlarmItemClickListener{
-        void onItemClick(long id, String title, long time, long range, int cost);
+        void onItemClick(Alarm alarm);
         void onItemLongClick(long id, String title);
         void onItemCheckChanged(boolean flag);
     }
@@ -83,6 +83,21 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
 
 
     // Data insert / remove
+    public void insertAlarm(Alarm alarm){
+        mList.add(alarm);
+        int idx = mList.indexOf(alarm);
+        if(idx>-1){
+            this.notifyItemInserted(idx);
+        }
+    }
+
+    public void updateAlarm(Alarm alarm){
+        int idx = mList.indexOf(alarm);
+        if(idx>-1){
+            this.notifyItemChanged(idx);
+        }
+    }
+
     public void removeAlarm(Alarm alarm){
         int idx = mList.indexOf(alarm);
         if(idx > -1){
@@ -168,7 +183,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                     } else {
 
                         if (mListener != null) {
-                            mListener.onItemClick(alarm.getId(), alarm.getTitle(), alarm.getTime(), alarm.getRange(), alarm.getCost());
+                            mListener.onItemClick(alarm);
                         }
                     }
                 }

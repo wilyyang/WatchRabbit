@@ -59,8 +59,8 @@ public class SplashActivity extends AppCompatActivity {
     private void onBackgroundWork(){
         long sTime = DateUtil.getDateLong(2021, Calendar.APRIL, 4, 0, 0, 0);
         long cTime = System.currentTimeMillis();
-        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
-        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
+//        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_CHECK);
+//        addSamples(2, 10, sTime, cTime, Habbit.TYPE_HABBIT_TIMER);
 
         EvaluateWork work = new EvaluateWork(SplashActivity.this);
         work.work(EvaluateWork.WORK_TYPE_UPDATE_ALL, -1, -1);
